@@ -26,6 +26,7 @@ def play_sound(user_id):
     pygame.mixer.music.load(os.path.join("sounds", sound_file))
     # Play the sound
     pygame.mixer.music.play()
+    print("Playing sound", sound_file)
 
     # Wait for the sound to finish playing
     while pygame.mixer.music.get_busy():
