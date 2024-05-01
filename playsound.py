@@ -1,7 +1,8 @@
 import sys
+import os
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
-import os
 
 def play_sound(user_id):
     # Map user IDs to sound files

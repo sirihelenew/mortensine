@@ -48,8 +48,15 @@ exec('./setup.sh', (error, stdout, stderr) => {
               const tid = admin.firestore.Timestamp.now();
               const metode = 'RFID';
               const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
+              console.log("Spawned sound")
               sound.stdout.on('data', (data) => {
                 console.log(`stdout: ${data}`);
+              });
+              sound.stderr.on('data', (data) => {
+                console.error(`stderr: ${data}`);
+               });
+              sound.on('error', (error) => {
+                console.error('Error starting Python script:', error);
               });
               db.collection('Innlogginger').add({
                   userID,
