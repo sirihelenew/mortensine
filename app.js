@@ -17,7 +17,7 @@ const app = express();
 const port = 3000;
 
 // Pull the latest code from the Git repository
-exec('git pull && source myvenv/bin/activate && pip install -r requirements.txt', (error, stdout, stderr) => {
+exec('./setup.sh', (error, stdout, stderr) => {
   if (error) {
     console.error(`Error pulling code from Git: ${error}`);
     return;
