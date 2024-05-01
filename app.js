@@ -44,8 +44,13 @@ exec('git pull', (error, stdout, stderr) => {
       .then((querySnapshot) => {
           if (!querySnapshot.empty) {
               const userID = querySnapshot.docs[0].id;
+              const navn=querySnapshot.docs[0].data().fornavn+' '+querySnapshot.docs[0].data().etternavn;
               const tid = admin.firestore.Timestamp.now();
               const metode = 'RFID';
+              const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
+              sound.stdout.on('data', (data) => {
+                console.log(`stdout: ${data}`);
+              });
               db.collection('Innlogginger').add({
                   userID,
                   tid,
@@ -63,6 +68,7 @@ exec('git pull', (error, stdout, stderr) => {
           } else {
               //res.json({ status: 'error', error: 'User not found' });
               console.log('User not found');
+              const python = spawn('./venv/bin/python', ['play_sound.py', NaN]);
           }
       });
     } catch (error) {
