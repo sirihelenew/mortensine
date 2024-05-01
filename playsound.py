@@ -19,7 +19,7 @@ def play_sound(user_id):
         sound_file='swamp.mp3'
 
     # Initialize Pygame
-    pygame.mixer.init()
+    pygame.mixer.init(buffer=1024)
 
     # Load the sound file
     pygame.mixer.music.load(os.path.join("sounds", sound_file))
