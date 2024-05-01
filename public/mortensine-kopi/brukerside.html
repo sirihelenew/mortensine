@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Min bruker</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="static/homebutton.css"> 
     <link rel="stylesheet" href="css/loginform.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c110f170bd.js" crossorigin="anonymous"></script>
 <style>
     :root {
         --bold: 700;
@@ -126,6 +128,7 @@
 </style>
 </head>
 <body>
+    <a href="leaderboard.html" class="home-button"><i class="fas fa-arrow-left"></i> Hjem</a>
     <div class="header" style="background-color: var(--white);">
         <h1 style="color: var(--grey); font-size: 50px;" id="brukernavn"></h1>
     </div>
@@ -202,7 +205,7 @@
     var db = firebase.firestore();
     const storage = firebase.storage();
     const auth = firebase.auth();
-    
+
     </script>
     <script src="js/brukerside.js"></script>
 </body>

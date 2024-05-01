@@ -9,37 +9,88 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: var(--white);
-            font-family: "PT Sans Narrow", sans-serif;
-            font-weight: 700;
-            box-sizing: border-box;
-            margin: 0;
-        }
-        .knapp {
-            border: none;
-            font-family: "PT Sans Narrow", sans-serif;
-            font-size: 15px;
-            padding: 15px;
-            padding-right: 30px;
-            padding-left: 30px;
-            background-color: var(--grey);
-            color: var(--white);
-        }
-        .knapp a{ text-decoration: none; color: var(--white); }
+    body {
+        background-color: var(--white);
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: 700;
+        box-sizing: border-box;
+        margin: 0;
+    }
+    .knapp {
+        border: none;
+        font-family: "PT Sans Narrow", sans-serif;
+        font-size: 15px;
+        padding: 15px;
+        padding-right: 30px;
+        padding-left: 30px;
+        background-color: var(--grey);
+        color: var(--white);
+    }
+    .knapp a{ text-decoration: none; color: var(--white); }
 
-        .introsang {
-            width: 90%;
-            padding: 20px;
-            color: var(--grey);
-            /* text-align: left; */
-        }
-        .introsang p{
-            font-weight: 700;
-            font-size: 25px;
-            
-        }
-    </style>
+    .introsang {
+        width: 90%;
+        padding: 20px;
+        color: var(--grey);
+        /* text-align: left; */
+    }
+    .introsang p{
+        font-weight: 700;
+        font-size: 25px;
+        
+    }
+    .ice-stafett {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px auto;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+    }
+
+    form label {
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    form input,
+    form select,
+    form button {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    form button {
+        cursor: pointer;
+        background-color: #f0f0f0;
+        border: none;
+        margin-top: 10px;
+    }
+
+    form input[type="submit"] {
+        background-color: #f8e16a;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+</style>
 </head>
 <body>
     <div class="header" style="background-color: var(--white);">
@@ -50,17 +101,23 @@
         <a href="#" onclick="toggleMenu()"> Oppdater ICE-stafetten</a>
         <a href="#"> jEg sTeMpLa iNn fEiL 🤡</a>
     </div>
-    <div class="ice-stafett hidden">
-        <form>
-            <label for="ice">Hvem har mottatt stafettpinnen?</label>
-            <input type="text" id="ice" name="ice" placeholder="Navn">
+    <div class="ice-stafett">
+        <form id="iceStafettForm">
+            <label for="iceName">Hvem har mottatt stafettpinnen?</label>
+            <input type="text" id="iceName" name="iceName" placeholder="Navn">
+            <button type="button" onclick="searchUsers()">Search</button>
             <br>
-            <label for="ice">Dato og tidspunkt?</label><br>
-            <input type="datetime-local" id="ice" name="ice"><br>
+            <label for="userSelect">Select User:</label>
+            <select id="userSelect" name="userSelect">
+                <option value="">--Select User--</option>
+            </select>
+            <br>
+            <label for="timestamp">Dato og tidspunkt?</label>
+            <input type="datetime-local" id="timestamp" name="timestamp"><br>
             <input type="submit" value="Lagre">
         </form>
-        
     </div>
+    
     <!-- <div class="topnav" style="background-color: var(--blue2); color: var(--white);">
         <a href="minbruker.html" style="color: var(--white);">Min bruker</a>
         <a href="dagenssyndere.html" style="color: var(--white);">Dagens syndere</a>
@@ -86,12 +143,73 @@
                     <p>"Nordmenn er jenter som er glad i jenter, gutter som er glad i gutter, og jenter og gutter som er glad i hverandre. Nordmenn tror på Gud, Allah, Altet og Ingenting."</p>
             </div> -->
     </article>
-
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="js/config.js"></script>
     <script>
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+        const storage = firebase.storage();
+
         function toggleMenu() {
             const iceStafett = document.querySelector('.ice-stafett');
             iceStafett.classList.toggle('hidden');
         }
+        
+
+document.getElementById('iceStafettForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const userSelect = document.getElementById('userSelect');
+    const selectedUserId = userSelect.value;
+    const timestamp = new Date(document.getElementById('timestamp').value);
+
+    if (selectedUserId && timestamp) {
+        // Update icestafett collection
+        db.collection('icestafett').doc('OO6yweoYrlh7mDW5BTLt').update({
+            userID: firebase.firestore.FieldValue.arrayUnion(selectedUserId),
+            tid: timestamp
+        }).then(() => {
+            console.log('Icestafett collection updated successfully!');
+            iceStafett.classList.toggle('hidden');
+        }).catch((error) => {
+            console.error('Error updating icestafett collection:', error);
+        });
+    } else {
+        console.error('Please select a user and enter a timestamp.');
+    }
+});
+
+function searchUsers() {
+    const userSelect = document.getElementById('userSelect');
+    userSelect.innerHTML = '<option value="">--Select User--</option>';
+
+    const iceName = document.getElementById('iceName').value.trim().toLowerCase();
+
+    if (iceName) {
+        db.collection('brukere').get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const userData = doc.data();
+                const firstName = userData.fornavn ? userData.fornavn.toLowerCase() : '';
+                const lastName = userData.etternavn || '';
+
+
+                if (firstName.includes(iceName)) {
+                    const option = document.createElement('option');
+                    option.value = doc.id; // Assuming doc.id is the userID
+                    option.textContent = `${userData.fornavn} ${lastName}`; // Display both first and last names
+                    userSelect.appendChild(option);
+                }
+            });
+        }).catch((error) => {
+            console.error('Error fetching users:', error);
+        });
+    } else {
+        console.error('Please enter a name to search for users.');
+    }
+}
+
     </script>
 </body>
 </html>
