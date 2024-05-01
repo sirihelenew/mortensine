@@ -214,60 +214,73 @@
         var db = firebase.firestore();
         const storage = firebase.storage();
 
-        function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUrl) {
-            const velkommenText = document.getElementById('velkommenText');
-            const loginInfo = document.getElementById('loginInfo');
-            const profileImage = document.getElementById('profileImage');
+        // Function to display the welcome message
+function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUrl) {
+    const velkommenText = document.getElementById('velkommenText');
+    const loginInfo = document.getElementById('loginInfo');
+    const profileImage = document.getElementById('profileImage');
 
-            if (loginMethod === 'RFID') {
-                velkommenText.innerHTML = `Velkommen ${userName}!`;
-                loginInfo.style.display = "none";
-            } else if (loginMethod === 'manual') {
-                loginInfo.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
-                velkommenText.style.display = "none";
-            }
+    if (loginMethod === 'RFID') {
+        velkommenText.innerHTML = `Velkommen ${userName}!`;
+        loginInfo.style.display = "none";
+    } else if (loginMethod === 'manual') {
+        loginInfo.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
+        velkommenText.style.display = "none";
+    }
 
-            profileImage.src = profileImageUrl || '';
+    profileImage.src = profileImageUrl || '';
 
-            document.getElementById('velkommenSide').classList.remove('hidden');
+    document.getElementById('velkommenSide').classList.remove('hidden');
 
-            setTimeout(() => {
-                document.getElementById('velkommenSide').classList.add('hidden');
-            }, 10000); // 10 seconds
-        }
+    setTimeout(() => {
+        document.getElementById('velkommenSide').classList.add('hidden');
+    }, 10000); // 10 seconds
+}
 
-        db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-                if (change.type === 'added' || change.type === 'modified') {
-                    const loginData = change.doc.data();
-                    if (loginData.status === 'inn') {
-                        db.collection('brukere').doc(loginData.userID).get().then(doc => {
-                            const userData = doc.data();
-                            const profilbildePath = userData.profilbilde;
-                            let imageRef;
+// Listen for login events in Firestore
+db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added' || change.type === 'modified') {
+            const loginData = change.doc.data();
 
-                            if (profilbildePath && profilbildePath.startsWith('http')) {
-                                imageRef = storage.refFromURL(profilbildePath);
-                            } else if (profilbildePath) {
-                                imageRef = storage.ref(profilbildePath);
-                            }
+            // Get the timestamp of the last login
+            const lastLoginTime = loginData.tid.toMillis();
 
-                            if (imageRef) {
-                                imageRef.getDownloadURL().then((url) => {
-                                    showWelcomeMessage(userData.fornavn, loginData.metode, loginData.sted, url);
-                                }).catch((error) => {
-                                    console.error("Finner ikke bildet: ", error);
-                                });
-                            } else {
-                                console.error('Filsti for bilde eksisterer ikke');
-                            }
-                        }).catch(error => {
-                            console.error("Feil ved å hente bruker: ", error);
-                        });
+            // Retrieve the last login time stored locally
+            const storedLastLoginTime = parseInt(localStorage.getItem('lastLoginTime')) || 0;
+
+            // If the last login is newer than the stored time, show the message and update the stored time
+            if (lastLoginTime > storedLastLoginTime && loginData.status === 'inn') {
+                localStorage.setItem('lastLoginTime', lastLoginTime);
+
+                db.collection('brukere').doc(loginData.userID).get().then(doc => {
+                    const userData = doc.data();
+                    const profilbildePath = userData.profilbilde;
+                    let imageRef;
+
+                    if (profilbildePath && profilbildePath.startsWith('http')) {
+                        imageRef = storage.refFromURL(profilbildePath);
+                    } else if (profilbildePath) {
+                        imageRef = storage.ref(profilbildePath);
                     }
-                }
-            });
-        });
+
+                    if (imageRef) {
+                        imageRef.getDownloadURL().then((url) => {
+                            showWelcomeMessage(userData.fornavn, loginData.metode, loginData.sted, url);
+                        }).catch((error) => {
+                            console.error("Finner ikke bildet: ", error);
+                        });
+                    } else {
+                        console.error('Filsti for bilde eksisterer ikke');
+                    }
+                }).catch(error => {
+                    console.error("Feil ved å hente bruker: ", error);
+                });
+            }
+        }
+    });
+});
+
 
         function loadLeaderboard() {
         db.collection('brukere').orderBy('totalHours', 'desc').limit(20)
