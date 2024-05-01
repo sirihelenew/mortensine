@@ -79,10 +79,11 @@
             .leaderboard { width: auto;}
             #leaderContent { width: 90% !important; }
             #leaderClass { flex-direction: row; }
-            #linker { flex-direction: row; }
+            #linker { display: none; }
             #pomodoro, #omegakok { width: 40% !important; border: 3px solid var(--white); background-color: var(--gul);}
             /* #topnavPC { display: none;} */
             .topnav { display: flex; flex-wrap: wrap; justify-content: space-around; text-align: left; background-color: var(--white);}
+            #linkerText { font-size: 30px !important; }
         }
         .js-container {
         display: flex;
@@ -187,7 +188,7 @@
         <a href="https://pomofocus.io/" class="hyperlink"><h1 style="color: var(--grey); font-size: 40px;"> POMODORO ⏰</h1></a>
     </div>   
     <div class="box" id="omegakok" style="width: 20%;">
-        <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink"><h1 style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
+        <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink"><h1 id="linkerText" style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
     </div>
 </div>
 <div class="topnav" id="topnavPC">
@@ -225,8 +226,8 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUr
         velkommenText.innerHTML = `Velkommen ${userName}!`;
         loginInfo.style.display = "none";
     } else if (loginMethod === 'manual') {
-        loginInfo.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
-        velkommenText.style.display = "none";
+        velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
+        //velkommenText.style.display = "none";
     }
 
     profileImage.src = profileImageUrl || '';
@@ -243,20 +244,26 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
     snapshot.docChanges().forEach((change) => {
         if (change.type === 'added' || change.type === 'modified') {
             const loginData = change.doc.data();
+            console.log("Login data: ", loginData);
 
             // Get the timestamp of the last login
             const lastLoginTime = loginData.tid.toMillis();
+            console.log("Last login time: ", lastLoginTime);
 
             // Retrieve the last login time stored locally
             const storedLastLoginTime = parseInt(localStorage.getItem('lastLoginTime')) || 0;
+            console.log("Stored last login time: ", storedLastLoginTime);
 
             // Retrieve a session flag to determine if the message was shown in this session
-            const sessionShown = sessionStorage.getItem('welcomeMessageShown') === 'true';
+            //const sessionShown = sessionStorage.getItem('welcomeMessageShown') === 'true';
+            //console.log("Session shown: ", sessionShown);
+            console.log(loginData.status)
 
             // If the last login is newer than the stored time and the message hasn't been shown yet
-            if (lastLoginTime > storedLastLoginTime && !sessionShown && loginData.status === 'inn') {
+            if (lastLoginTime > storedLastLoginTime &&  loginData.status === true) {
                 localStorage.setItem('lastLoginTime', lastLoginTime);
                 sessionStorage.setItem('welcomeMessageShown', 'true');
+                console.log("moren din: ", loginData);
 
                 db.collection('brukere').doc(loginData.userID).get().then(doc => {
                     const userData = doc.data();
@@ -270,6 +277,7 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     }
 
                     if (imageRef) {
+                        console.log("ImageRef: ", imageRef);
                         imageRef.getDownloadURL().then((url) => {
                             showWelcomeMessage(userData.fornavn, loginData.metode, loginData.sted, url);
                         }).catch((error) => {
@@ -287,7 +295,10 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
 });
 
         function loadLeaderboard() {
-        db.collection('brukere').orderBy('totalHours', 'desc').limit(20)
+        db.collection('brukere')
+        .orderBy('totalHours', 'desc')
+        .orderBy('totalMinutes', 'desc')
+        .limit(20)
         .get()
         .then((querySnapshot) => {
             const leaderboardContent = document.getElementById('leaderboardContent');

@@ -114,7 +114,7 @@ document.getElementById('byttpb').addEventListener('click', function() {
                     tid,
                     metode,
                     sted,
-                    status: 'inn'
+                    status: true
                 })
                 .then(() => {
                     console.log('Document updated successfully');
@@ -139,7 +139,7 @@ function stempleUtManuelt () {
             userID,
             tid,
             metode,
-            status: 'ut'
+            status: false
         })
         .then(() => {
             console.log('Document updated successfully');
@@ -178,11 +178,11 @@ function beregnOppholdstid(userID) {
                 const currentTid = data.tid.toDate();
 
                 // Only calculate time difference if current status is 'ut' and there was a preceding 'inn'
-                if (data.status === 'ut' && lastInTime) {
+                if (data.status === false && lastInTime) {
                     const diff = currentTid - lastInTime;
                     totalTid += diff;  // Accumulate the total time correctly
                     lastInTime = null;  // Reset lastInTime after processing 'ut'
-                } else if (data.status === 'inn') {
+                } else if (data.status === true) {
                     lastInTime = currentTid;  // Set lastInTime when status is 'inn'
                 }
             });
