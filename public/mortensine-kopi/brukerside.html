@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min bruker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/loginform.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bold: 700;
+        --light: 400;
+    }
+    
+    body {
+        background-color: var(--white);
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: var(--bold);
+        box-sizing: border-box;
+        margin: 0;
+    }
+    .knapp {
+        border: none;
+        font-family: "PT Sans Narrow", sans-serif;
+        font-size: 15px;
+        padding: 15px;
+        padding-right: 30px;
+        padding-left: 30px;
+        background-color: var(--grey);
+        color: var(--white);
+    }
+    .knapp a{ text-decoration: none; color: var(--white); }
+    .knapp:hover { font-weight: 700; cursor: pointer; }
+
+    #submitButton:hover {
+        color: var(--blue2);
+        font-weight: 700;
+        cursor: pointer;
+    }
+    #kaffeInkrement:hover {
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .introsang {
+        width: 90%;
+        padding: 20px;
+        color: var(--grey);
+        /* text-align: left; */
+    }
+    .introsang p{
+        font-weight: 700;
+        font-size: 25px;
+    }
+
+        
+    .stemple-inn, .kaffe {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background-color: var(--white); 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        border-radius: 8px; 
+        max-width: 400px; 
+        margin: 20px auto;
+    }
+
+    
+    #stempling-inn, #kaffeStats {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    #kaffeStats {
+        align-items: center;
+        justify-content: center;
+    }
+
+    #stempling-inn label {
+        font-weight: var(--bold); 
+        margin-bottom: 10px; 
+        text-align: center;
+    }
+    #kaffeStats label {
+        font-weight: var(--bold); 
+        text-align: center;
+    }
+
+    #stempling-inn input[type="text"], #kaffeStats input[type="submit"]{
+        padding: 10px;
+        margin-bottom: 20px; 
+        border: 1px solid var(--white);
+        border-radius: 4px; 
+        width: calc(100% - 22px); 
+    }
+
+    
+    #stempling-inn input[type="submit"], #kaffeStats input[type="submit"]{
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--blue2); 
+        color: white;
+        text-transform: uppercase; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease; 
+    }
+
+    #stempling-inn input[type="submit"]:hover { background-color: #C0392B; }
+
+    .hidden { display: none; }
+
+    /* MOBIL */
+    @media (max-width: 600px) { 
+    .stemple-inn, .kaffe { width: 100%; margin: auto; }
+
+    #stempling-inn input[type="text"],
+    #stempling-inn input[type="submit"], 
+    #kaffeStats input[type="submit"] { width: 100%; box-sizing: border-box; }
+}  
+</style>
+</head>
+<body>
+    <div class="header" style="background-color: var(--white);">
+        <h1 style="color: var(--grey); font-size: 50px;" id="brukernavn"></h1>
+    </div>
+    <div class="topnav">
+        <!-- <a href="#" onclick="toggleMenu()"> Oppdater ICE-stafetten</a> -->
+        <a href="#" onclick="stempleInnManuelt()"> STEMPLE INN FRA ET ANNET STED</a>
+        <a href="#" onclick="stempleUtManuelt()"> STEMPLE UT MANUELT</a>
+        <a href="#" onclick="kaffe()"> REGISTRER TRAKTING AV KAFFE ☕️</a>
+        <a href="#" onclick="loggut()"> Logg ut</a>
+    </div>
+    <!-- <div class="ice-stafett hidden">
+        <form>
+            <label for="ice">Hvem har mottatt stafettpinnen?</label>
+            <input type="text" id="ice" name="ice" placeholder="Navn">
+            <br>
+            <label for="ice">Dato og tidspunkt?</label><br>
+            <input type="datetime-local" id="ice" name="ice"><br>
+            <input type="submit" value="Lagre">
+        </form> -->
+        
+    <!-- </div> -->
+    <div class="stemple-inn hidden">
+        <form id="stempling-inn" style="align-items: center; justify-content: center;">
+            <label for="sted">Hvor stempler du inn fra?</label>
+            <input type="text" id="sted" name="sted" placeholder="Sted">
+            <br>
+            <input type="submit" id="stempleKnapp" value="Lagre">
+        </form>
+    </div>
+        <div class="kaffe hidden">
+            <form id="kaffeStats" style="text-align: center;">
+                <label for="kaffeInkrement" style="width: auto;">Trykk på knappen hvis du har trakta kaffe😍</label>
+                <br>
+                <input type="submit" id="kaffeInkrement" value="KAFFEEE 🩵" style="font-size: 20px; text-align: center;">
+            </form>
+    </div>
+    <!-- <div class="topnav" style="background-color: var(--blue2); color: var(--white);">
+        <a href="minbruker.html" style="color: var(--white);">Min bruker</a>
+        <a href="dagenssyndere.html" style="color: var(--white);">Dagens syndere</a>
+        <a href="velkommen.html" style="color: var(--white);">Velkommen</a>
+    </div> -->
+    <article>
+        <div class="container" style="background-color: var(--white);">
+            <div class="box" style="width: 40%; padding-left: 0; border-right: 2px solid var(--white); background-color: var(--white);">
+                <!-- <h1>fyyffff slay</h1> -->
+                <img src="" id="profilbilde" style="width: 90%;  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <br>
+                <button class="knapp" id="byttpb"><a href="#">Bytt profilbilde</a></button> 
+                <div class="container">
+                    <form id = "byttprofilbilde" style="display: none;">
+                        <input type="file" name="picture" id="myfile" accept="image/*" style="font-family: 'PT Sans Narrow', sans-serif;">
+                        <button type="submit" id="submitButton" style="font-family: 'PT Sans Narrow', sans-serif;">Bytt bilde</button>
+                    </form>
+                </div>
+            </div>
+            <div class="box" style="width: 50%; background-color: var(--white);">
+                <!-- <button class="knapp" style="background-color: var(--blue2);"><a href="#" style="font-size: 25px; color: var(--grey);">Stemple inn fra et annet sted</a></button><br> -->
+                <h1 style="color: var(--grey);" id="timestatistikk">Antall timer på skolen:</h1><br>
+                <h1 style="color: var(--grey);" id="kaffeStatistikk"></h1>
+                <!-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1lMcrRsRphljbTorQk8Nav?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <button class="knapp"><a href="#">Bytt introsang</a></button>  -->
+            </div>
+    </article>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="js/leaderBoardKaffe.js"></script>
+    <script src="js/config.js"></script>
+    <script>
+
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    const storage = firebase.storage();
+    const auth = firebase.auth();
+    
+    </script>
+    <script src="js/brukerside.js"></script>
+</body>
+</html>
+

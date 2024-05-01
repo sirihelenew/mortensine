@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortensine</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+    body {
+        background-color: var(--white);
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: 700;
+        box-sizing: border-box;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; 
+    }
+
+    .js-container {
+        display: flex;
+        width: 100%; 
+        align-items: center; 
+        justify-content: space-between; 
+        padding: 0 20px; 
+    }
+
+    .text-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /* margin-right: auto;  */
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 90px;
+        text-align: center;
+        margin: 10px 0;
+        margin-left: 50px;
+    }
+
+    img {
+        width: 30%;
+        margin-left: 20px; 
+        margin-right: 20px; 
+    }
+    </style>
+</head>
+<body>
+    <div class="js-container container1">
+        <div class="text-container" style="display: none;"> <!--Må kun vise én av de avhengig av om RFID er scanna eller ikke-->
+          <h1>Velkommen Siri!</h1> <!--Må hente navn fra DB-->
+          <h1 style="font-size: 80px;">Siri har stemplet inn her: A3</h1> <!--Må hente navn og sted fra DB-->
+        </div>
+        <div class="login-container"> <!--Må kun vise én av de avhengig av om RFID er scanna eller ikke-->
+        </div>
+        <img src="#">
+
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+      <script>
+        const firebaseConfig = {
+        apiKey: "AIzaSyBJ0BF5_RqwztdzjIFAqS6eprcO0zvuJv4",
+        authDomain: "mortensine-a58cb.firebaseapp.com",
+        projectId: "mortensine-a58cb",
+        storageBucket: "mortensine-a58cb.appspot.com",
+        messagingSenderId: "37788899408",
+        appId: "1:37788899408:web:20c1314ff1109d5a225955"
+    };
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+        const storage = firebase.storage();
+
+        window.onload = () => {
+        const rfidContainer = document.querySelector('.text-container');
+        const loginContainer = document.querySelector('.login-container');
+        const image = document.querySelector('img');
+
+    db.collection('brukere').onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === 'added' || change.type === 'modified') {
+                const userData = change.doc.data();
+                const loginMetode = userData.loginMetode;
+                const profilbildePath = userData.profilbilde; 
+                console.log("Type of profilbilde:", typeof userData.profilbilde);
+                console.log("Content of profilbilde:", userData.profilbilde);
+                if (profilbildePath) {
+                    let imageRef;
+                    if (profilbildePath.startsWith('http')) {
+                        imageRef = storage.refFromURL(profilbildePath);
+                    } else {
+                        imageRef = storage.ref(profilbildePath);
+                    }
+
+                    imageRef.getDownloadURL().then((url) => {
+                        image.src = url;
+                        if (loginMetode === 'RFID') {
+                            rfidContainer.innerHTML = `<h1>Velkommen ${userData.fornavn}!</h1>`;
+                        } else if (loginMetode === 'manual') {
+                            loginContainer.innerHTML = `<h1>${userData.fornavn} har stemplet inn her: ${userData.sted}!</h1>`;
+                        }
+                    }).catch((error) => {
+                        console.error("Finner ikke bildet: ", error);
+                    });
+                } else {
+                    console.error('Filsti for bilde eksisterer ikke');
+                }
+            }
+        });
+    });
+};
+
+function updateLoginMethod(userId, loginMethod) {
+    const db = firebase.firestore(); 
+
+    db.collection('brukere').doc(userId).get().then(doc => {
+        if (doc.exists) {
+            const userData = doc.data();
+
+            userData.loginMetode = loginMethod;
+            userData.lastLogin = firebase.firestore.FieldValue.serverTimestamp();
+
+            db.collection('brukere').doc(userId).set(userData, { merge: true })
+            .then(() => {
+                console.log("Login method updated successfully!");
+            })
+            .catch((error) => {
+                console.error("Error updating login method:", error);
+            });
+
+        } else {
+            console.log("No such user found!");
+        }
+    }).catch(error => {
+        console.error("Error fetching user data:", error);
+    });
+}
+
+// Example usage to update an RFID login
+//updateLoginMethod('h7payHjcW1rZtRkyeGIz', 'rfid');
+
+// Example usage to update a manual login
+//updateLoginMethod('h7payHjcW1rZtRkyeGIz', 'manual');
+
+      </script>
+    <script src="confetti.js"></script>
+    
+</body>
+</html>

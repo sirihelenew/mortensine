@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/loginform.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@200;400&display=swap" rel="stylesheet">
+    <title>Innlogging</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: "PT Sans Narrow", sans-serif;
+            font-weight: 400;
+            background-color: var(--white);
+        }
+        button {
+            background-color: #f4f4f4;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 10px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+        .infoknapp {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <h2 id="login-tab" class="active"> Logg inn </h2>
+          <h2 id="register-tab" class="inactive underlineHover">Registrer deg</h2>
+          <br>
+          <h1 id="login-tekst">Logg inn her!</h1>
+          <h1 id="registration-tekst" style="display: none;">Registrer deg her!</h1>
+          <button id="info-knapp" style="display: none; justify-content: center; align-items: center;">Info</button>
+      
+          <form id="login-form">
+            <input type="text" id="login-brukernavn" class="fadeIn second" placeholder="Brukernavn">
+            <input type="password" id="login-password" class="fadeIn third" placeholder="Passord">
+            <input type="submit" class="fadeIn fourth" value="Logg inn">
+          </form>
+      
+          <form id="register-form" style="display: none;">
+            <input type="text" id="firstname" class="fadeIn third" placeholder="Fornavn">
+            <input type="text" id="lastname" class="fadeIn third" placeholder="Etternavn">
+            
+            <input type="text" id="register-email" class="fadeIn second" placeholder="Epost">
+            <input type="password" id="register-password" class="fadeIn third" placeholder="Passord">
+            <input type="password" id="confirm-password" class="fadeIn third" placeholder="Bekreft Passord">
+            <br>
+            <input type="checkbox" id="toggle-passwords" style="width: auto;"> Vis passord
+            <br><br>
+            <input type="submit" class="fadeIn fourth" value="Registrer">
+            <div id="error-message"></div>
+          </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJ0BF5_RqwztdzjIFAqS6eprcO0zvuJv4",
+            authDomain: "mortensine-a58cb.firebaseapp.com",
+            projectId: "mortensine-a58cb",
+            storageBucket: "mortensine-a58cb.appspot.com",
+            messagingSenderId: "37788899408",
+            appId: "1:37788899408:web:20c1314ff1109d5a225955"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        window.onload = function() {
+        document.getElementById('login-tab').addEventListener('click', function() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('login-tekst').style.display = 'block';
+            document.getElementById('info-knapp').style.display = 'none';
+            document.getElementById('registration-tekst').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            this.className = 'active';
+            document.getElementById('register-tab').className = 'inactive underlineHover';
+        });
+
+        document.getElementById('register-tab').addEventListener('click', function() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('login-tekst').style.display = 'none';
+            //document.getElementById('info-knapp').style.display = 'inline-block';
+            document.getElementById('register-form').style.display = 'block';
+            document.getElementById('registration-tekst').style.display = 'block';
+            this.className = 'active';
+            document.getElementById('login-tab').className = 'inactive underlineHover';
+        });
+    };
+
+        
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const brukernavn = document.getElementById('login-brukernavn').value;
+            const password = document.getElementById('login-password').value;
+
+            firebase.auth().signInWithEmailAndPassword(brukernavn, password)
+            .then((userCredential) => {
+                var user = userCredential.user;
+                window.location.href = "../brukerside.html"; 
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                document.getElementById('error-message').innerHTML = errorMessage;
+            });
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fornavn = document.getElementById('firstname').value;
+            const etternavn = document.getElementById('lastname').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                document.getElementById('error-message').textContent = "Passordene matcher ikke.";
+                return;
+            }
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                return db.collection('brukere').doc(user.uid).set({
+                    fornavn,
+                    etternavn,
+                    email
+                });
+            })
+            .then(() => {
+                window.location.href = "../brukerside.html"; 
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                document.getElementById('error-message').innerHTML = errorMessage;
+            });
+        });
+
+        document.getElementById('toggle-passwords').addEventListener('change', function() {
+            const passwordField = document.getElementById('register-password');
+            const confirmPasswordField = document.getElementById('confirm-password');
+            const type = this.checked ? 'text' : 'password';
+            passwordField.type = confirmPasswordField.type = type;
+        });
+    </script>
+</body>
+</html>

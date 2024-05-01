@@ -1,0 +1,5 @@
+Regne ut riktig på antall timer 
+Funksjon for dagens earlybird
+Sortere riktig leaderboard + knapp for å velge sorteringsobjekt
+
+Hvem er på skolen!! se sted 

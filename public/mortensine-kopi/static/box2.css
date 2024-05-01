@@ -1,0 +1,148 @@
+:root {
+    --alabaster: #FAFAFA;
+    --frangipani: #FFDCB5;
+    --frostee: #EAF7EB;
+    --lemon-chiffon: #F9EEAB;
+    --sundown: #FFB7BC;
+    --white: #FFF;
+  }
+  *,
+  ::after,
+  ::before {
+    box-sizing: border-box;
+    /*font-family: sans-serif;*/
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--alabaster);
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .card-container2 {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(23rem, 1fr));
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 2rem;
+    width: 55rem;
+  }
+
+  .card2 {
+    align-items: center;
+    border-radius: 0.25rem;
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    height: 23rem;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+
+  .first-card {
+    background-color: #FFC7C7;
+  }
+  .first-card::before {
+    color: #FFC7C7;
+  }
+
+  .first-card .content span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 35px; /* Or any size you want */
+    color: #2B2730; /* Choose the color you prefer */
+    /* Add any other text styles you need */
+    white-space: nowrap;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+
+  .toggle-card1 {
+    background-color: #FFC7C7;
+  }
+  .toggle-card1 .content span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 35px; /* Or any size you want */
+    color: #2B2730; /* Choose the color you prefer */
+/* Add any other text styles you need */
+    white-space: nowrap;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+    
+
+  .second-card {
+    background-color: var(--lemon-chiffon);
+  }
+
+  .second-card .content2 span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 35px; /* Or any size you want */
+    color: #2B2730; /* Choose the color you prefer */
+    /* Add any other text styles you need */
+    font-family: 'Josefin Sans', sans-serif;
+    white-space: nowrap;
+  }
+  .toggle-card2 {
+    background-color: var(--lemon-chiffon);
+  }
+  .toggle-card2 .content span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 35px; /* Or any size you want */
+    color: #2B2730; /* Choose the color you prefer */
+    white-space: nowrap;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+    
+
+  .third-card {
+    background-color: var(--frangipani);
+  }
+
+  .third-card .content span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px; /* Or any size you want */
+    color: rgb(82, 21, 21); /* Choose the color you prefer */
+    /* Add any other text styles you need */
+    white-space: nowrap;
+    font-family: 'Courier New', Courier, monospace, sans-serif;
+  }
+    
+
+  .fourth-card {
+    background-color: var(--sundown);
+  }
+
+  .fourth-card .content span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px; /* Or any size you want */
+    color: white; /* Choose the color you prefer */
+    /* Add any other text styles you need */
+  }
+    
+
+

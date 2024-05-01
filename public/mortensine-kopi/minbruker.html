@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min bruker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--white);
+            font-family: "PT Sans Narrow", sans-serif;
+            font-weight: 700;
+            box-sizing: border-box;
+            margin: 0;
+        }
+        .knapp {
+            border: none;
+            font-family: "PT Sans Narrow", sans-serif;
+            font-size: 15px;
+            padding: 15px;
+            padding-right: 30px;
+            padding-left: 30px;
+            background-color: var(--grey);
+            color: var(--white);
+        }
+        .knapp a{ text-decoration: none; color: var(--white); }
+
+        .introsang {
+            width: 90%;
+            padding: 20px;
+            color: var(--grey);
+            /* text-align: left; */
+        }
+        .introsang p{
+            font-weight: 700;
+            font-size: 25px;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="background-color: var(--white);">
+        <h1 style="color: var(--grey); font-size: 50px;"> HEI SIRI!</h1>
+        <h1 style="color: var(--grey); font-size: 40px;"> Du er den beste i hele verden 🩷🙏🏼😍 queen slay</h1>
+    </div>
+    <div class="topnav">
+        <a href="#" onclick="toggleMenu()"> Oppdater ICE-stafetten</a>
+        <a href="#"> jEg sTeMpLa iNn fEiL 🤡</a>
+    </div>
+    <div class="ice-stafett hidden">
+        <form>
+            <label for="ice">Hvem har mottatt stafettpinnen?</label>
+            <input type="text" id="ice" name="ice" placeholder="Navn">
+            <br>
+            <label for="ice">Dato og tidspunkt?</label><br>
+            <input type="datetime-local" id="ice" name="ice"><br>
+            <input type="submit" value="Lagre">
+        </form>
+        
+    </div>
+    <!-- <div class="topnav" style="background-color: var(--blue2); color: var(--white);">
+        <a href="minbruker.html" style="color: var(--white);">Min bruker</a>
+        <a href="dagenssyndere.html" style="color: var(--white);">Dagens syndere</a>
+        <a href="velkommen.html" style="color: var(--white);">Velkommen</a>
+    </div> -->
+    <article>
+        <div class="container" style="background-color: var(--white);">
+            <div class="box" style="width: 40%; padding-left: 0; border-right: 2px solid var(--white); background-color: var(--white);">
+                <!-- <h1>fyyffff slay</h1> -->
+                <img src="IMG_3422.jpg" style="width: 90%;  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <br>
+                <button class="knapp"><a href="#">Bytt profilbilde</a></button> 
+            </div>
+            <div class="box" style="width: 50%; background-color: var(--white);">
+                <!-- <h1>Din introsang</h1>
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1lMcrRsRphljbTorQk8Nav?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <button class="knapp"><a href="#">Bytt introsang</a></button> 
+            </div> -->
+            <!-- <div class="box" style="width: 40%; padding-left: 0; background-color: var(--pink);">
+                    <h1>Dine quotes</h1>
+                    <p>"The future depends on what we do in the present."</p>
+                    <p>"Our greatest ability as humans is not to change the world, but to change ourselves."</p>
+                    <p>"Nordmenn er jenter som er glad i jenter, gutter som er glad i gutter, og jenter og gutter som er glad i hverandre. Nordmenn tror på Gud, Allah, Altet og Ingenting."</p>
+            </div> -->
+    </article>
+
+    <script>
+        function toggleMenu() {
+            const iceStafett = document.querySelector('.ice-stafett');
+            iceStafett.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
+

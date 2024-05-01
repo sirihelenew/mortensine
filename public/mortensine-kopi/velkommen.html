@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortensine</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+    body {
+        background-color: var(--white);
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: 700;
+        box-sizing: border-box;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; 
+    }
+
+    .js-container {
+        display: flex;
+        width: 100%; 
+        align-items: center; 
+        justify-content: space-between; 
+        padding: 0 20px; 
+    }
+
+    .text-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /* margin-right: auto;  */
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 90px;
+        text-align: center;
+        margin: 10px 0;
+        margin-left: 50px;
+    }
+
+    img {
+        width: 30%;
+        margin-left: 20px; 
+        margin-right: 20px; 
+    }
+    </style>
+</head>
+<body>
+    <div class="js-container container1">
+        <div class="text-container"></div>
+        <div class="login-container"></div>
+        <img src="" id="profileImage">
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="js/config.js"></script>
+    <script>
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    const storage = firebase.storage();
+
+
+window.onload = () => {
+    const rfidContainer = document.querySelector('.text-container');
+    const loginContainer = document.querySelector('.login-container');
+    const image = document.querySelector('img');
+
+    db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === 'added' || change.type === 'modified') {
+                const loginData = change.doc.data();
+                if (loginData.status === 'inn') {
+                    
+            
+
+                db.collection('brukere').doc(loginData.userID).get().then(doc => {
+                    const userData = doc.data();
+                    const profilbildePath = userData.profilbilde;
+                    console.log("Type of profilbilde:", typeof userData.profilbilde);
+                    console.log("Content of profilbilde:", userData.profilbilde);
+
+                    let imageRef;
+                    if (profilbildePath && profilbildePath.startsWith('http')) {
+                        imageRef = storage.refFromURL(profilbildePath);
+                    } else if (profilbildePath) {
+                        imageRef = storage.ref(profilbildePath);
+                    }
+
+                    if (imageRef) {
+                        imageRef.getDownloadURL().then((url) => {
+                            image.src = url;
+                        }).catch((error) => {
+                            console.error("Finner ikke bildet: ", error);
+                        });
+                    } else {
+                        console.error('Filsti for bilde eksisterer ikke');
+                    }
+
+                    if (loginData.metode === 'RFID') {
+                        rfidContainer.innerHTML = `<h1>Velkommen ${userData.fornavn}!</h1>`;
+                        rfidContainer.style.display = "block"; 
+                        loginContainer.style.display = "none";
+                    } else if (loginData.metode === 'manual') {
+                        loginContainer.innerHTML = `<h1>${userData.fornavn} har stemplet inn her: ${loginData.sted}!</h1>`;
+                        loginContainer.style.display = "block"; 
+                        rfidContainer.style.display = "none";
+                    }
+
+                    //timer before redirecting to a page
+                    
+                
+
+                }).catch(error => {
+                    console.error("Feil ved å hente bruker: ", error);
+                });
+            } else {
+                console.log("Ingen nye innstemplinger!");
+                }
+                // setTimeout(function() {
+                //         window.location.href = "leaderboard.html";
+                //     }, 5000);
+            }
+        });
+    });
+};
+    </script>
+    <script src="js/confetti.js"></script>
+</body>
+</html>
