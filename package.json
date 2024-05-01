@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "firebase-admin": "^11.8.0",
+    "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.3.1",
     "pm2": "^5.3.1"
   },

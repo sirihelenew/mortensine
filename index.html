@@ -155,7 +155,7 @@
         <div class="leaderboard" id="leaderClass" style="background-color: var(--white);">
             <div class="box2" style="background-color: var(--white); width: 40%;">
                 <h1 style="color: var(--grey); font-size: 25px;"> Hvem har ICE-en?</h1>
-                <img src="" id="iceimg" style="width: 85%; cursor: pointer;" onclick="icestafett()">
+                <img src="" id="iceimg" style="width: 85%; cursor: pointer;">
             </div>
             <div class="box" style="background-color: var(--white); width: 40%;">
                 <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD ☀️</h1>
@@ -215,6 +215,7 @@
         const storage = firebase.storage();
 
         // Function to display the welcome message
+// Function to display the welcome message
 function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUrl) {
     const velkommenText = document.getElementById('velkommenText');
     const loginInfo = document.getElementById('loginInfo');
@@ -249,9 +250,13 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
             // Retrieve the last login time stored locally
             const storedLastLoginTime = parseInt(localStorage.getItem('lastLoginTime')) || 0;
 
-            // If the last login is newer than the stored time, show the message and update the stored time
-            if (lastLoginTime > storedLastLoginTime && loginData.status === 'inn') {
+            // Retrieve a session flag to determine if the message was shown in this session
+            const sessionShown = sessionStorage.getItem('welcomeMessageShown') === 'true';
+
+            // If the last login is newer than the stored time and the message hasn't been shown yet
+            if (lastLoginTime > storedLastLoginTime && !sessionShown && loginData.status === 'inn') {
                 localStorage.setItem('lastLoginTime', lastLoginTime);
+                sessionStorage.setItem('welcomeMessageShown', 'true');
 
                 db.collection('brukere').doc(loginData.userID).get().then(doc => {
                     const userData = doc.data();
@@ -280,7 +285,6 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
         }
     });
 });
-
 
         function loadLeaderboard() {
         db.collection('brukere').orderBy('totalHours', 'desc').limit(20)

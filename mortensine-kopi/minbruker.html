@@ -101,6 +101,7 @@
         <a href="#" onclick="toggleMenu()"> Oppdater ICE-stafetten</a>
         <a href="#"> jEg sTeMpLa iNn fEiL 🤡</a>
     </div>
+    <button id="rfidTestButton">Test RFID</button>
     <div class="ice-stafett">
         <form id="iceStafettForm">
             <label for="iceName">Hvem har mottatt stafettpinnen?</label>
@@ -156,6 +157,29 @@
             const iceStafett = document.querySelector('.ice-stafett');
             iceStafett.classList.toggle('hidden');
         }
+
+        document.querySelector('#rfidTestButton').addEventListener('click', function(event) {
+    const testRfidTag = '123456'; // Replace with your test RFID tag
+
+    fetch('/rfid', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rfidTag: testRfidTag }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Update the punch in/out status on the page...
+        } else {
+            console.error('Error:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
         
 
 document.getElementById('iceStafettForm').addEventListener('submit', function (e) {
