@@ -640,7 +640,7 @@ function setupDailyUsersListener() {
 window.onload = setupDailyUsersListener;
 
 function checkOvDoor() {
-    fetch('https://omegav.no/api/dooropen.php')
+    fetch('https://mortensine.no/proxy.php')
         .then(response => response.json())
         .then(data => {
             var ovLink = document.querySelector('.hyperlink[href="https://www.omegav.no/"]');
