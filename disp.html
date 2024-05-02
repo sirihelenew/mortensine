@@ -220,7 +220,7 @@ function showGoodbyeMessage(userID, profileImageUrl) {
         const velkommenText = document.getElementById('velkommenText');
         const profileImage = document.getElementById('profileImage');
 
-        velkommenText.innerHTML = `Goodbye! You have been here for ${durationHours} hours and ${durationMinutes % 60} minutes.`;
+        velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
         profileImage.src = profileImageUrl || '';
 
         document.getElementById('velkommenSide').classList.remove('hidden');
@@ -277,7 +277,7 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                                 showWelcomeMessage(userData.fornavn, loginData.metode, loginData.sted, url);
                             }
                             else {
-                                showGoodbyeMessage(loginData.userID, url);
+                                showGoodbyeMessage(loginData.userID, url, userData.fornavn);
                                 console.log('Bruker har stemplet ut');
                             }
                         }).catch((error) => {
