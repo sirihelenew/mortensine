@@ -86,35 +86,35 @@
             #linkerText { font-size: 30px !important; }
         }
         .js-container {
-        display: flex;
-        width: 100%; 
-        align-items: center; 
-        justify-content: space-between; 
-        padding: 0 20px; 
-    }
-    .hidden {display: none;}
+            display: flex;
+            width: 100%; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
+        }
+        .hidden {display: none;}
 
-    .text-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        /* margin-right: auto;  */
-        align-items: center;
-    }
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* margin-right: auto;  */
+            align-items: center;
+        }
 
-    h1 {
-        font-size: 90px;
-        text-align: center;
-        margin: 10px 0;
-        /* margin-left: 50px; */
-    }
+        h1 {
+            font-size: 90px;
+            text-align: center;
+            margin: 10px 0;
+            /* margin-left: 50px; */
+        }
 
-    img {
-        width: 30%;
-        margin-left: 20px; 
-        margin-right: 20px; 
-    }
-    #leaderClass {
+        img {
+            width: 30%;
+            margin-left: 20px; 
+            margin-right: 20px; 
+        }
+        #leaderClass {
             flex-direction: column;
         }
         .earlyBirds {
@@ -124,11 +124,9 @@
             justify-content: center;
             width: 90%;
         }
-    
     </style>
 </head>
 <body>
-    
     
     <div id="velkommenSide" class="js-container container1 hidden">
         <div class="text-container">
@@ -139,131 +137,57 @@
         </div>
         <img src="" id="profileImage">
     </div>
-    <div class="menu-container">
-        <div class="hamburger-menu">
-            <button class="menyknapp" style="background-color: var(--white);" onclick="toggleMenu()">&#9776;</button>
-        </div>
-        <div class="menu-items hidden">
-            <a href="mortensine-kopi/templates/login.html">Min bruker </a>
-        </div>
-        <h1 style="font-size: 60px;">MORTENSINE 🩷</h1>
-        <div class="topnav" id="topnavPC">
-            <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink">Wordle</a>
-            <a href="https://contexto.me/" class="hyperlink">Contexto</a>
-            <a href="https://angle.wtf/" class="hyperlink">Angle</a>
-            <a href="https://www.nytimes.com/games/connections" class="hyperlink">Connections</a>
-            <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink">Mini Crossword</a>
-            <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink">Aftenposten quiz</a>
-        </div>
-        
-    </div>
     <article>
-        <div class="container">
-            <div class="box" id="leaderContent" style="width: 50%; background-color: var(--white);">
-                <h1 style="font-size: 30px;">LEADERBOARD!!!</h1>
-                <div class="leaderboard">
-                    <div class="leaderboardsplit" style="font-weight: 700; background-color: var(--white);">RANK</div>
-                    <div class="leaderboardsplit" style="width: 15%; font-weight: 700; background-color: var(--white);">ANTALL TIMER</div>
-                    <div class="leaderboardsplit" style="width: 15%;font-weight: 700; background-color: var(--white);">ANTALL KANNER TRAKTET</div>
-                    <div class="leaders" style="font-weight: 700; background-color: var(--white);">NAVN</div>
-                </div>
-                <div id="leaderboardContent"></div>
+    <div class="container">
+        <div class="box" id="leaderContent" style="width: 50%; background-color: var(--white);">
+            <h1 style="font-size: 30px;">LEADERBOARD!!!</h1>
+            <div class="leaderboard">
+                <div class="leaderboardsplit" style="font-weight: 700; background-color: var(--white);">RANK</div>
+                <div class="leaderboardsplit" style="width: 15%; font-weight: 700; background-color: var(--white);">ANTALL TIMER</div>
+                <div class="leaderboardsplit" style="width: 15%;font-weight: 700; background-color: var(--white);">ANTALL KANNER TRAKTET</div>
+                <div class="leaders" style="font-weight: 700; background-color: var(--white);">NAVN</div>
             </div>
-        <div class="box" id="leaderContent" style="background-color: var(--white); width: 45%;">
-            <div class="leaderboard" id="leaderClass" style="background-color: var(--white); align-items: center;">
+            <div id="leaderboardContent"></div>
+        </div>
+    <div class="box" id="leaderContent" style="background-color: var(--white); width: 45%;">
+        <div class="leaderboard" id="leaderClass" style="background-color: var(--white); align-items: center;">
+            <div class="box" style="background-color: var(--white); width: 60%;">
+                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD 🥇☀️</h1>
+                <img src="" id="earlybird1" style="width: 85%;">
+                <h1 id="earlybirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>
+            </div>
+            <div class="earlyBirds" style="background-color: var(--white);">
                 <div class="box" style="background-color: var(--white); width: 60%;">
-                    <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD 🥇☀️</h1>
-                    <img src="" id="earlybird1" style="width: 85%;">
-                    <h1 id="earlybirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>
+                    <h1 style="color: var(--grey); font-size: 20px;"> DAGENS EARLYBIRD 🥈☀️</h1>
+                    <img src="" id="earlybird2" style="width: 85%;">
+                    <h1 id="earlybirdTime2" style="color: var(--grey); font-size: 20px;"> </h1>
                 </div>
-                <div class="earlyBirds" style="background-color: var(--white);">
-                    <div class="box" style="background-color: var(--white); width: 60%;">
-                        <h1 style="color: var(--grey); font-size: 20px;"> DAGENS EARLYBIRD 🥈☀️</h1>
-                        <img src="" id="earlybird2" style="width: 85%;">
-                        <h1 id="earlybirdTime2" style="color: var(--grey); font-size: 20px;"> </h1>
-                    </div>
-                    <div class="box" style="background-color: var(--white); width: 60%;">
-                        <h1 id="earlybirdHeader3" style="color: var(--grey); font-size: 20px; display: none;"> DAGENS EARLYBIRD 🥉☀️</h1>
-                        <img src="" id="earlybird3" style="width: 85%;">
-                        <h1 id="earlybirdTime3" style="color: var(--grey); font-size: 20px;"> </h1>
-                    </div>
-                </div>
-                <div class="box2" style="background-color: var(--white); width: 60%;">
-                    <h1 style="color: var(--grey); font-size: 25px;"> Hvem har ICE-en?</h1>
-                    <img src="" id="iceimg" style="width: 85%; cursor: pointer;">
-                    <h1 id="iceCountdown" style="color: var(--grey); font-size: 20px;"> </h1>
+                <div class="box" style="background-color: var(--white); width: 60%;">
+                    <h1 id="earlybirdHeader3" style="color: var(--grey); font-size: 20px; display: none;"> DAGENS EARLYBIRD 🥉☀️</h1>
+                    <img src="" id="earlybird3" style="width: 85%;">
+                    <h1 id="earlybirdTime3" style="color: var(--grey); font-size: 20px;"> </h1>
                 </div>
             </div>
-        </div>  
-    </div>
-            <!-- <div class="container" id="linker" style="width: 90%;">
-                <div class="box" style="text-align: left; width: 80%;">
-                    <h2>Mortensine G's</h2>
-                    <ul id="rfidUsersList" style="justify-content: left;"></ul>
-                </div>
-                <div class="box" style="text-align: left; width: 80%;"></div>
-                <div class="box" style="text-align: left; width: 80%;">
-                    <h2>Andre G's</h2>
-                    <ul id="manualUsersList"></ul>
-                </div>
-            </div> -->
-            
-            <!-- <div class="box2" style="background-color: var(--white); width: 40%;">
-                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS DUMMING👹</h1>
-                <h1 style="color: var(--grey); font-size: 30px;"> RORY 👹</h1>
-            </div> -->
-      
-        <!-- <div class="leaderboard" id="leaderClass" style="background-color: var(--white);">
-            <div class="box" style="background-color: var(--white); width: 40%;">
-                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS SLAYQUEEN 👑</h1>
-                <img src="" id="iceimg3" style="width: 85%;">
+            <div class="box2" style="background-color: var(--white); width: 60%;">
+                <h1 style="color: var(--grey); font-size: 25px;"> Hvem har ICE-en?</h1>
+                <img src="" id="iceimg" style="width: 85%; cursor: pointer;">
+                <h1 id="iceCountdown" style="color: var(--grey); font-size: 20px;"> </h1>
             </div>
-            <div class="box" style="background-color: var(--white); width: 40%;">
-                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD ☀️</h1>
-                <h1 id="earlybirdText" style="color: var(--grey); font-size: 20px;"> </h1>
-                <img src="" id="earlybirdPic" style="width: 85%;">
-            </div>
-        </div> -->
-
-</article>
-
-<div class="container" id="linker">
-    <div class="box" id="pomodoro" style="width: 20%;">
-        <a href="https://pomofocus.io/" class="hyperlink"><h1 style="color: var(--grey); font-size: 40px;"> POMODORO ⏰</h1></a>
-    </div>   
-    <div class="box" id="omegakok" style="width: 20%;">
-        <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink"><h1 id="linkerText" style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
-    </div>
+        </div>
+    </div>  
 </div>
-<!-- <div class="container" id="linker">
-    <div class="box" style="text-align: left; width: 20%;">
-        <h2>Mortensine G's</h2>
-        <ul id="rfidUsersList" style="justify-content: left;"></ul>
-    </div>
-    <div class="box" style="text-align: left; width: 20%;">
-        <h2>Andre G's</h2>
-        <ul id="manualUsersList"></ul>
-    </div>
-</div> -->
+</article>
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+<script src="mortensine-kopi/js/config.js"></script>
+<script>
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
+const storage = firebase.storage();
 
-<!-- <footer>
-    <p style="font-size: 30px;">🩷</p>
-    <p>laget av SIRI</p>
-</footer> -->
-    <!-- Rest of your existing HTML content here -->
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
-    <script src="mortensine-kopi/js/config.js"></script>
-    <script>
-        firebase.initializeApp(firebaseConfig);
-        var db = firebase.firestore();
-        const storage = firebase.storage();
-
-
-
-
-        localStorage.setItem('serverStarted', 'true');
+    
+localStorage.setItem('serverStarted', 'true');
 
 function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUrl) {
     const velkommenText = document.getElementById('velkommenText');
@@ -488,7 +412,6 @@ function displayProfilbilde(profilbildePath) {
 displayLatestProfilbilde();
 loadLeaderboard();
 setupEarlybirdListener();
-setInterval(loadLeaderboard, 60000);
 
 
 function setupEarlybirdListener() {
@@ -628,63 +551,9 @@ function setupDailyUsersListener() {
 window.onload = setupDailyUsersListener;
 
 
-function setupDailyUsersListener() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set to start of today
-
-    const rfidUsersList = document.getElementById('rfidUsersList');
-    const manualUsersList = document.getElementById('manualUsersList');
-
-    db.collection('Innlogginger')
-        .where('tid', '>=', today)
-        .orderBy('tid', 'asc')
-        .onSnapshot(snapshot => {
-            if (snapshot.empty) {
-                console.log("No entries for today yet.");
-                return;
-            }
-
-            let rfidUsers = '';
-            let manualUsers = '';
-
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                const userID = data.userID;
-                const metode = data.metode;
-                const sted = data.sted;
-
-                db.collection('brukere').doc(userID).get().then(userDoc => {
-                    if (!userDoc.exists) {
-                        console.error("User document does not exist.");
-                        return;
-                    }
-
-                    const userData = userDoc.data();
-                    const fornavn = userData.fornavn;
-                    const etternavn = userData.etternavn;
-                    const name = fornavn + ' ' + etternavn;
-
-                    if (metode === 'RFID') {
-                        rfidUsers += '<li>' + name + '</li>';
-                    } else if (metode === 'manual') {
-                        manualUsers += '<li>' + name + ' - ' + sted + '</li>';
-                    }
-                    console.log(rfidUsersList, manualUsersList); 
-
-                    rfidUsersList.innerHTML = rfidUsers;
-                    manualUsersList.innerHTML = manualUsers;
-                });
-            });
-        }, error => {
-            console.error("Error listening to realtime updates: ", error);
-        });
-}
-setupDailyUsersListener();
-
 </script>
 <script src="mortensine-kopi/js/confetti.js"></script>
-
-</script>
+<!-- <script src="icestafett.js"></script> -->
 </body>
 </html>
 
