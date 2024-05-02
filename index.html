@@ -144,7 +144,7 @@
             <button class="menyknapp" style="background-color: var(--white);" onclick="toggleMenu()">&#9776;</button>
         </div>
         <div class="menu-items hidden">
-            <a href="mortensine-kopi/templates/login.html">Min bruker </a>
+            <a id="min-bruker-link" href="mortensine-kopi/brukerside.html">Min bruker </a>
         </div>
         <h1 style="font-size: 60px;">MORTENSINE 🩷</h1>
         <div class="topnav" id="topnavPC">
@@ -259,6 +259,19 @@
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
         const storage = firebase.storage();
+
+        document.getElementById('min-bruker-link').addEventListener('click', (event) => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, redirect to minbruker.html
+                window.location.href = 'mortensine-kopi/brukerside.html';
+            } else {
+                // No user is signed in, redirect to login.html
+                window.location.href = 'mortensine-kopi/templates/login.html';
+                event.preventDefault();
+            }
+        });
+    });
 
 
 
