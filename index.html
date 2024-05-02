@@ -196,17 +196,19 @@
             </div>
         </div>  
     </div>
-            <!-- <div class="container" id="linker" style="width: 90%;">
+            <div class="container" id="linker" style="width: 90%;">
                 <div class="box" style="text-align: left; width: 80%;">
                     <h2>Mortensine G's</h2>
                     <ul id="rfidUsersList" style="justify-content: left;"></ul>
-                </div>
-                <div class="box" style="text-align: left; width: 80%;"></div>
-                <div class="box" style="text-align: left; width: 80%;">
                     <h2>Andre G's</h2>
                     <ul id="manualUsersList"></ul>
                 </div>
-            </div> -->
+                <!-- <div class="box" style="text-align: left; width: 80%;"></div> -->
+                <!-- <div class="box" style="text-align: left; width: 80%;">
+                    <h2>Andre G's</h2>
+                    <ul id="manualUsersList"></ul>
+                </div> -->
+            </div>
             
             <!-- <div class="box2" style="background-color: var(--white); width: 40%;">
                 <h1 style="color: var(--grey); font-size: 25px;"> DAGENS DUMMING👹</h1>
@@ -252,6 +254,7 @@
 </footer> -->
     <!-- Rest of your existing HTML content here -->
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
     <script src="mortensine-kopi/js/config.js"></script>
@@ -261,16 +264,17 @@
         const storage = firebase.storage();
 
         document.getElementById('min-bruker-link').addEventListener('click', (event) => {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in, redirect to minbruker.html
-                window.location.href = 'mortensine-kopi/brukerside.html';
-            } else {
-                // No user is signed in, redirect to login.html
-                window.location.href = 'mortensine-kopi/templates/login.html';
-                event.preventDefault();
-            }
-        });
+        event.preventDefault();
+
+        const user = firebase.auth().currentUser;
+
+        if (user) {
+            // User is signed in, redirect to minbruker.html
+            window.location.href = 'mortensine-kopi/brukerside.html';
+        } else {
+            // No user is signed in, redirect to login.html
+            window.location.href = 'mortensine-kopi/templates/login.html';
+        }
     });
 
 
@@ -648,6 +652,9 @@ function setupDailyUsersListener() {
     const rfidUsersList = document.getElementById('rfidUsersList');
     const manualUsersList = document.getElementById('manualUsersList');
 
+    // Create a Map to keep track of the users and their latest method and sted
+    const usersMap = new Map();
+
     db.collection('Innlogginger')
         .where('tid', '>=', today)
         .orderBy('tid', 'asc')
@@ -657,8 +664,7 @@ function setupDailyUsersListener() {
                 return;
             }
 
-            let rfidUsers = '';
-            let manualUsers = '';
+            const promises = [];
 
             snapshot.forEach(doc => {
                 const data = doc.data();
@@ -666,26 +672,46 @@ function setupDailyUsersListener() {
                 const metode = data.metode;
                 const sted = data.sted;
 
-                db.collection('brukere').doc(userID).get().then(userDoc => {
+                const promise = db.collection('brukere').doc(userID).get().then(userDoc => {
                     if (!userDoc.exists) {
                         console.error("User document does not exist.");
                         return;
                     }
 
                     const userData = userDoc.data();
-                    const fornavn = userData.fornavn;
-                    const etternavn = userData.etternavn;
-                    const name = fornavn + ' ' + etternavn;
+                    const status = userData.status;
 
-                    if (metode === 'RFID') {
-                        rfidUsers += '<li>' + name + '</li>';
-                    } else if (metode === 'manual') {
-                        manualUsers += '<li>' + name + ' - ' + sted + '</li>';
+                    // Only add the user to the list if their status is true
+                    if (status) {
+                        // Update the user's latest method and sted in the Map
+                        usersMap.set(userID, { metode, sted });
                     }
-                    console.log(rfidUsersList, manualUsersList); 
+                });
 
-                    rfidUsersList.innerHTML = rfidUsers;
-                    manualUsersList.innerHTML = manualUsers;
+                promises.push(promise);
+            });
+
+            Promise.all(promises).then(() => {
+                let rfidUsers = '';
+                let manualUsers = '';
+
+                // Iterate over the Map and add the users to the appropriate list
+                usersMap.forEach((value, userID) => {
+                    db.collection('brukere').doc(userID).get().then(userDoc => {
+                        const userData = userDoc.data();
+                        const fornavn = userData.fornavn;
+                        const etternavn = userData.etternavn;
+                        const name = fornavn + ' ' + etternavn;
+
+                        if (value.metode === 'RFID') {
+                            rfidUsers += '<li>' + name + '</li>';
+                        } else if (value.metode === 'manual') {
+                            manualUsers += '<li>' + name + ' - ' + value.sted + '</li>';
+                        }
+
+                        rfidUsersList.innerHTML = rfidUsers;
+                        manualUsersList.innerHTML = manualUsers;
+                    });
                 });
             });
         }, error => {
@@ -697,7 +723,6 @@ setupDailyUsersListener();
 </script>
 <script src="mortensine-kopi/js/confetti.js"></script>
 
-</script>
 </body>
 </html>
 
