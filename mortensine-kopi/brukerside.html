@@ -194,6 +194,7 @@
     var db = firebase.firestore();
     const storage = firebase.storage();
     const auth = firebase.auth();
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
     </script>
     <script src="js/brukerside.js"></script>

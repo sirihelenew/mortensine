@@ -114,8 +114,14 @@
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
+
+                if (errorCode === 'auth/wrong-password') {
+                    errorMessage = 'Feil passord.';
+                } else if (errorCode === 'auth/user-not-found') {
+                    errorMessage = 'Ingen bruker funnet med denne eposten.';
+                }
                 document.getElementById('error-message').innerHTML = errorMessage;
-            });
+                });
         });
 
         document.getElementById('register-form').addEventListener('submit', function(event) {
