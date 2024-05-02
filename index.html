@@ -386,7 +386,7 @@ function loadLeaderboard() {
     db.collection('brukere')
     .orderBy('totalHours', 'desc')
     .orderBy('totalMinutes', 'desc')
-    .limit(20)
+    .limit(40)
     .get()
     .then((querySnapshot) => {
         const leaderboardContent = document.getElementById('leaderboardContent');
