@@ -23,6 +23,7 @@ def play_sound(user_id):
         dir_path=os.path.join("uploads")
 
     # Initialize Pygame
+    pygame.init()  
     pygame.mixer.init()
 
     # Load the sound file
