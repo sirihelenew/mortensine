@@ -30,9 +30,14 @@ def play_sound(user_id):
     # Play the sound
     pygame.mixer.music.play()
     print("Playing sound", sound_file)
+    pygame.time.set_timer(pygame.USEREVENT, 15000)
+
 
     # Wait for the sound to finish playing
     while pygame.mixer.music.get_busy():
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                pygame.mixer.music.stop()
         pygame.time.Clock().tick(10)
 
 if __name__ == '__main__':

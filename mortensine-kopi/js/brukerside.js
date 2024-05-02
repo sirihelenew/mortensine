@@ -70,6 +70,8 @@ document.getElementById('uploadButton').addEventListener('click', function() {
         .then(response => response.text())
         .then(result => {
             console.log('File uploaded succesfully');
+            document.getElementById('mp3Upload').value = ''; // Clear the file input field
+            alert('Filen er lastet opp');
         })
         .catch(error => {
             console.error('Error:', error);
