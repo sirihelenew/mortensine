@@ -101,4 +101,33 @@ exec('./setup.sh', (error, stdout, stderr) => {
   });
 });
 
+
+function updateUserTime() {
+  const usersRef = db.collection('brukere');
+  usersRef.get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        if (doc.data().status === true) { // assuming 'status' field indicates if user is in or out
+          usersRef.doc(doc.id).update({
+            totalMinutes: admin.firestore.FieldValue.increment(1) // assuming 'totalTime' field stores the total time
+          })
+          .then(() => {
+            console.log('User time updated successfully');
+          })
+          .catch((error) => {
+            console.error("Error updating user time: ", error);
+          });
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error getting users: ", error);
+    });
+}
+
+// Run updateUserTime every minute
+setInterval(updateUserTime, 60 * 1000);
+
+
+
 module.exports = app;
