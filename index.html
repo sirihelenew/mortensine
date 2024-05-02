@@ -148,12 +148,25 @@
         </div>
         <h1 style="font-size: 60px;">MORTENSINE 🩷</h1>
         <div class="topnav" id="topnavPC">
-            <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink">Wordle</a>
-            <a href="https://contexto.me/" class="hyperlink">Contexto</a>
-            <a href="https://angle.wtf/" class="hyperlink">Angle</a>
-            <a href="https://www.nytimes.com/games/connections" class="hyperlink">Connections</a>
-            <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink">Mini Crossword</a>
-            <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink">Aftenposten quiz</a>
+            <a href="javascript:void(0)" class="hyperlink" onclick="toggleAtSchool()">Vis hvem som er på skolen</a>
+            <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink" target="_blank">Wordle</a>
+            <a href="https://contexto.me/" class="hyperlink" target="_blank">Contexto</a>
+            <a href="https://angle.wtf/" class="hyperlink" target="_blank">Angle</a>
+            <a href="https://www.nytimes.com/games/connections" class="hyperlink" target="_blank">Connections</a>
+            <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink" target="_blank">Mini Crossword</a>
+            <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink" target="_blank">Aftenposten quiz</a>
+        </div>
+        <div class="container" id="atSchoolSection" style="width: 50%; display: none; padding: 20px;">
+            <div class="box" style="text-align: left; width: 80%; display:flex; flex-direction: row; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <div class="earlyBirds" style="background-color: var(--white); flex-direction: column;">
+                <h2 style="color: var(--lilla);">Mortensine G's</h2>
+                <ul id="rfidUsersList"></ul>
+            </div>
+                <div class="earlyBirds" style="background-color: var(--white); flex-direction: column; justify-content:flex-start;">
+                <h2 style="color: var(--frostee)">Andre G's</h2>
+                <ul id="manualUsersList" style="justify-content: left;"></ul>
+            </div>
+        </div>
         </div>
         
     </div>
@@ -196,32 +209,7 @@
             </div>
         </div>  
     </div>
-            <div class="container" id="linker" style="width: 90%;">
-                <div class="box" style="text-align: left; width: 80%;">
-                    <h2>Mortensine G's</h2>
-                    <ul id="rfidUsersList" style="justify-content: left;"></ul>
-                    <h2>Andre G's</h2>
-                    <ul id="manualUsersList"></ul>
-                </div>
-            </div>
-            
-            <!-- <div class="box2" style="background-color: var(--white); width: 40%;">
-                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS DUMMING👹</h1>
-                <h1 style="color: var(--grey); font-size: 30px;"> RORY 👹</h1>
-            </div> -->
-      
-        <!-- <div class="leaderboard" id="leaderClass" style="background-color: var(--white);">
-            <div class="box" style="background-color: var(--white); width: 40%;">
-                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS SLAYQUEEN 👑</h1>
-                <img src="" id="iceimg3" style="width: 85%;">
-            </div>
-            <div class="box" style="background-color: var(--white); width: 40%;">
-                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD ☀️</h1>
-                <h1 id="earlybirdText" style="color: var(--grey); font-size: 20px;"> </h1>
-                <img src="" id="earlybirdPic" style="width: 85%;">
-            </div>
-        </div> -->
-
+    
 </article>
 
 <div class="container" id="linker">
@@ -232,22 +220,11 @@
         <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink"><h1 id="linkerText" style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
     </div>
 </div>
-<!-- <div class="container" id="linker">
-    <div class="box" style="text-align: left; width: 20%;">
-        <h2>Mortensine G's</h2>
-        <ul id="rfidUsersList" style="justify-content: left;"></ul>
-    </div>
-    <div class="box" style="text-align: left; width: 20%;">
-        <h2>Andre G's</h2>
-        <ul id="manualUsersList"></ul>
-    </div>
-</div> -->
-
 <!-- <footer>
     <p style="font-size: 30px;">🩷</p>
     <p>laget av SIRI</p>
 </footer> -->
-    <!-- Rest of your existing HTML content here -->
+
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
@@ -711,6 +688,16 @@ function setupDailyUsersListener() {
         }, error => {
             console.error("Error listening to realtime updates: ", error);
         });
+}
+function toggleAtSchool() {
+    const atSchoolSection = document.getElementById('atSchoolSection');
+
+    if (atSchoolSection.style.display === 'none') {
+        atSchoolSection.style.display = 'block';
+    } else {
+        atSchoolSection.style.display = 'none';
+    }
+
 }
 setupDailyUsersListener();
 
