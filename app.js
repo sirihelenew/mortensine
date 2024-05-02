@@ -103,6 +103,10 @@ exec('./setup.sh', (error, stdout, stderr) => {
 
 
 function updateUserTime() {
+  if (process.env.NODE_ENV === 'test') {
+    console.log('Running in test mode, not updating user time');
+    return;
+  }
   const usersRef = db.collection('brukere');
   usersRef.get()
     .then((querySnapshot) => {

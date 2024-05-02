@@ -10,8 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const profilbilde = document.getElementById('profilbilde');
                 const kaffeCount = document.getElementById('kaffeStatistikk');
                 const profilbildePath = userData.profilbilde;
-                const timeAtSchool = beregnOppholdstid(user.uid);
                 const tidsStats = document.getElementById('timestatistikk');
+                const hours= Math.floor(userData.totalMinutes/60);
+                const minutes = userData.totalMinutes % 60;
+                tidsStats.textContent = 'Total tid på Skolen: ' + hours + ' timer og ' + minutes + ' minutter';
                 displayProfilbilde(profilbildePath);
                 brukernavn.textContent = userData.fornavn + ' ' + userData.etternavn;
                 if(userData && !userData.kaffeCount) {
@@ -163,88 +165,3 @@ function loggut() {
     });
 }
 
-
-function beregnOppholdstid(userID) {
-    return db.collection('Innlogginger')
-        .where('userID', '==', userID)
-        .orderBy('tid', 'asc')
-        .get()
-        .then(snapshot => {
-            let totalTid = 0;
-            let lastInTime = null;
-
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                const currentTid = data.tid.toDate();
-
-                // Only calculate time difference if current status is 'ut' and there was a preceding 'inn'
-                if (data.status === false && lastInTime) {
-                    const diff = currentTid - lastInTime;
-                    totalTid += diff;  // Accumulate the total time correctly
-                    lastInTime = null;  // Reset lastInTime after processing 'ut'
-                } else if (data.status === true) {
-                    lastInTime = currentTid;  // Set lastInTime when status is 'inn'
-                }
-            });
-
-            const totalHours = Math.floor(totalTid / (1000 * 60 * 60));
-            const totalMinutes = Math.floor((totalTid % (1000 * 60 * 60)) / (1000 * 60));
-            const sekunder = Math.floor((totalTid / 1000) % 60);
-            const tidsStats = document.getElementById('timestatistikk');
-            tidsStats.textContent = `Total tid på skolen: ${totalHours} timer, ${totalMinutes} minutter og ${sekunder} sekunder`;
-
-            console.log(`Total tid på skolen: ${totalHours} timer, ${totalMinutes} minutter og ${sekunder} sekunder`);
-
-            // Prepare to update Firestore
-            const brukereRef = db.collection('brukere').doc(userID);
-            const leaderboardRef = db.collection('leaderboardData');
-            const batch = db.batch();
-
-            // Set or update the user's total time in Firestore using batch operations
-            batch.set(brukereRef, {
-                totalHours: totalHours,
-                totalMinutes: totalMinutes
-            }, { merge: true });
-
-            return leaderboardRef.where("userID", "==", userID).get()
-            .then(querySnapshot => {
-                if (querySnapshot.empty) {
-                    const newDocRef = leaderboardRef.doc();
-                    batch.set(newDocRef, {
-                        userID: userID,
-                        totalHours: totalHours,
-                        totalMinutes: totalMinutes,
-                        kaffeKanner: 0
-                    }, { merge: true });
-                } else {
-                    querySnapshot.forEach(doc => {
-                        batch.set(doc.ref, {
-                            totalHours: firebase.firestore.FieldValue.increment(totalHours),
-                            totalMinutes: firebase.firestore.FieldValue.increment(totalMinutes)
-                        }, { merge: true });
-                    });
-                }
-                return batch.commit();
-            });
-        })
-        .then(() => {
-            console.log("Both documents updated successfully!");
-        })
-        .catch(error => {
-            console.error("Error calculating or updating total time: ", error);
-        });
-}
-
-
-async function displayTimeAtSchool() {
-    const user = firebase.auth().currentUser;
-    if (user) {
-        const timeAtSchool = await beregnOppholdstid(user.uid);
-        const tidsStats = document.getElementById('tidsStats'); // Replace 'tidsStats' with the actual ID of the element
-        tidsStats.textContent = 'Total tid på skolen: ' + timeAtSchool;
-    } else {
-        console.log('User is not logged in');
-    }
-}
-
-displayTimeAtSchool();
