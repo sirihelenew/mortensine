@@ -71,7 +71,7 @@ const localstorage = multer.diskStorage({
     const dir = './uploads/' + req.body.username;
     try {
       fs.mkdirSync(dir, { recursive: true });
-      logger.log(`Directory ${dir} created successfully`);
+      logger.info(`Directory ${dir} created successfully`);
     } catch (error) {
       logger.error(`Error creating directory ${dir}: ${error}`);
     }
@@ -79,7 +79,7 @@ const localstorage = multer.diskStorage({
   },
   filename: function(req, file, cb) {
     const filename = file.fieldname + '-' + Date.now() + path.extname(file.originalname);
-    logger.log(`File to be uploaded: ${filename}`);
+    logger.info(`File to be uploaded: ${filename}`);
     cb(null, filename); // Naming the file
   }
 });
@@ -89,7 +89,14 @@ const upload = multer({
   limits: { fileSize: 10000000 }  // 10MB
 });
 app.post('/upload', upload.single('mp3File'), (req, res) => {
-  res.send('File uploaded successfully');
+  if (req.file) {
+    logger.info(`File ${req.file.filename} uploaded successfully`);
+    res.send('File uploaded successfully');
+  } else {
+    const message = 'Error uploading file';
+    logger.error(message);
+    res.status(500).send(message);
+  }
 });
 app.use(function(err, req, res, next) {
   logger.error(err.stack);
