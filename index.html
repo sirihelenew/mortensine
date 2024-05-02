@@ -640,7 +640,7 @@ function setupDailyUsersListener() {
 window.onload = setupDailyUsersListener;
 
 function checkOvDoor() {
-    fetch('https://omegav.no/api/dooropen.php')
+    fetch('/api/doorstatus')
         .then(response => response.json())
         .then(data => {
             var ovLink = document.querySelector('.hyperlink[href="https://www.omegav.no/"]');
@@ -654,7 +654,6 @@ function checkOvDoor() {
         })
         .catch(error => console.error('Error:', error));
 }
-
 // Call the function when the page loads and every 60 seconds afterwards
 checkOvDoor();
 setInterval(checkOvDoor, 60000);
