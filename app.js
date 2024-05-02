@@ -32,6 +32,18 @@ import('node-fetch').then(nodeFetch => {
   console.log(err);
 });
 
+app.get('/restart', (req, res) => {
+  exec('pm2 restart app', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error restarting app: ${error}`);
+      return res.status(500).send(`Error restarting app: ${error}`);
+    }
+    console.log(`App restart stdout: ${stdout}`);
+    console.error(`App restart stderr: ${stderr}`);
+    res.send('App restarted successfully');
+  });
+});
+
 const localstorage = multer.diskStorage({
   destination: function(req, file, cb) {
     const dir = './uploads/' + req.body.username;
