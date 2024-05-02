@@ -154,6 +154,7 @@
             <a href="https://www.nytimes.com/games/connections" class="hyperlink">Connections</a>
             <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink">Mini Crossword</a>
             <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink">Aftenposten quiz</a>
+            <a href="https://www.omegav.no/" class="hyperlink">OV</a>
         </div>
         
     </div>
@@ -638,6 +639,25 @@ function setupDailyUsersListener() {
 }
 window.onload = setupDailyUsersListener;
 
+function checkOvDoor() {
+    fetch('https://omegav.no/api/dooropen.php')
+        .then(response => response.json())
+        .then(data => {
+            var ovLink = document.querySelector('.hyperlink[href="https://www.omegav.no/"]');
+            if (data.open == "1") {
+                ovLink.textContent = "OV er åpent";
+                ovLink.style.color = "green";
+            } else {
+                ovLink.textContent = "OV er stengt";
+                ovLink.style.color = "red";
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Call the function when the page loads and every 60 seconds afterwards
+checkOvDoor();
+setInterval(checkOvDoor, 60000);
 
 function setupDailyUsersListener() {
     const today = new Date();
