@@ -1,10 +1,10 @@
 import sys
 import os
 import random
+import json
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
-
 def play_sound(user_id):
     # Map user IDs to sound files
     sound_file=None
@@ -13,10 +13,25 @@ def play_sound(user_id):
         print(f'No directory found for user {user_id}')
     else:
         sound_files = [f for f in os.listdir(dir_path) if f.endswith('.mp3') or f.endswith('.wav')]
-        sound_file = random.choice(sound_files)
+        try:
+            with open('sound_indices.json', 'r') as file:
+                sound_indices = json.load(file)
+        except FileNotFoundError:
+            sound_indices = {}
+        # Get the current index for the user
+        sound_index = sound_indices.get(user_id, 0)
+        # Use the sound_index to select a sound file
+        if len(sound_files) == 0:
+            print(f'No sound files found for user {user_id}')
+        else:
+            sound_file = sound_files[sound_index % len(sound_files)]
+        # Increment the sound_index and save it
+            sound_indices[user_id] = sound_index + 1
+        # Write the sound indices back to the file
+            with open('sound_indices.json', 'w') as file:
+                json.dump(sound_indices, file)
 
     # Get the sound file for the user
-    
     if sound_file is None:
         print(f'No sound file found for user {user_id}')
         sound_file='swamp.mp3'
@@ -32,7 +47,6 @@ def play_sound(user_id):
     pygame.mixer.music.play()
     print("Playing sound", sound_file)
     pygame.time.set_timer(pygame.USEREVENT, 15000)
-
 
     # Wait for the sound to finish playing
     while pygame.mixer.music.get_busy():
