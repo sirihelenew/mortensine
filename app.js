@@ -40,26 +40,6 @@ app.use(function(err, req, res, next) {
   res.status(500).send('Something broke!');
 });
 
-app.use((req, res, next) => {
-  if (path.extname(req.path).toLowerCase() === '.html') {
-    const newUrl = req.path.substr(0, req.path.lastIndexOf('.html'));
-    res.redirect(newUrl);
-  } else {
-    next();
-  }
-});
-
-app.use((req, res, next) => {
-  if (req.secure) {
-    return res.redirect('http://' + req.headers.host + req.url);
-  }
-  next();
-});
-app.use(express.static(path.join(__dirname), {
-  extensions: ['html'],
-}));
-
-
 // Pull the latest code from the Git repository
 exec('./setup.sh', (error, stdout, stderr) => {
   if (error) {
