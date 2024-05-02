@@ -84,15 +84,13 @@ document.getElementById('uploadButton').addEventListener('click', function() {
 const userSelect = document.getElementById('userSelect');
 
 db.collection('brukere').get().then((snapshot) => {
-    snapshot.forEach((doc) => {
-      const option = document.createElement('option');
-      option.value = doc.data().fornavn+' '+doc.data().etternavn;
-      option.text = doc.data().fornavn+' '+doc.data().etternavn;
-      userSelect.appendChild(option);
-    });
-  }).catch((error) => {
-    console.error('Error:', error);
+  snapshot.forEach((doc) => {
+    const option = document.createElement('option');
+    option.value = doc.data().fornavn+' '+doc.data().etternavn;
+    option.text = doc.data().fornavn+' '+doc.data().etternavn;
+    userSelect.appendChild(option);
   });
+});
 
 
 
