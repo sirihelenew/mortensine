@@ -9,6 +9,7 @@ admin.initializeApp({
 const db = admin.firestore();
 const storage = admin.storage();
 const fs = require('fs');
+const ip = require('ip');
 
 
 const express = require('express');
@@ -39,7 +40,9 @@ app.use(function(err, req, res, next) {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
-
+app.get('/ip', (req, res) => {
+  res.send(ip.address());
+});
 // Pull the latest code from the Git repository
 exec('./setup.sh', (error, stdout, stderr) => {
   if (error) {

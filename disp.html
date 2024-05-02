@@ -296,7 +296,6 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
 
 function loadLeaderboard() {
     db.collection('brukere')
-    .orderBy('totalHours', 'desc')
     .orderBy('totalMinutes', 'desc')
     .limit(40)
     .get()

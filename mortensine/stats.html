@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Time Table</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="calcStats.js"></script>
+</head>
+<body>
+    <h1>User Time Table</h1>
+    <table id="userTimeTable">
+        <tr>
+            <th>User ID</th>
+            <th>Total Time</th>
+        </tr>
+    </table>
+    <button onclick="beregnOppholdstidForAlleBrukere()">Calculate Times</button>
+</body>
+</html>
