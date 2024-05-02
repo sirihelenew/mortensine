@@ -208,7 +208,7 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUr
     }, 7000); 
 }
 
-function showGoodbyeMessage(userID, profileImageUrl) {
+function showGoodbyeMessage(userID, profileImageUrl, userName) {
     db.collection('brukere').doc(userID).get().then(doc => {
         const userData = doc.data();
         const timeEntered = userData.timeEntered.toDate();
