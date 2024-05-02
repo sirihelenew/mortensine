@@ -160,7 +160,7 @@
         <a href="velkommen.html" style="color: var(--white);">Velkommen</a>
     </div> -->
     <article>
-        <div class="container" style="background-color: var(--white);">
+        <div class="container" style="background-color: var(--white); ">
             <div class="box" style="width: 40%; padding-left: 0; border-right: 2px solid var(--white); background-color: var(--white);">
                 <!-- <h1>fyyffff slay</h1> -->
                 <img src="" id="profilbilde" style="width: 90%;  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
@@ -177,20 +177,21 @@
                 <!-- <button class="knapp" style="background-color: var(--blue2);"><a href="#" style="font-size: 25px; color: var(--grey);">Stemple inn fra et annet sted</a></button><br> -->
                 <h1 style="color: var(--grey);" id="timestatistikk">Antall timer på skolen:</h1><br>
                 <h1 style="color: var(--grey);" id="kaffeStatistikk"></h1>
-                <h1  style="color: var(--grey);">
-                    Last opp lyd:
-                </h1>
-                NB: Lydfil må være i .mp3 eller .wav format og det er kun de første 15 sekunder som spilles
-                <br>
-                Lyd legges til i valgt person sin randome pool. Ved scanning plukkes ut en fil randomly.
-                <br>
-
-                <select id="userSelect"></select>
-                <input type="file" id="mp3Upload" accept=".mp3,.wav">
-                <button id="uploadButton">Upload</button>
-                <!-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1lMcrRsRphljbTorQk8Nav?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                    <button class="knapp"><a href="#">Bytt introsang</a></button>  -->
+                <div class="box" style="width: 90%; background-color: var(--blue2);box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+                    <h1  style="color: var(--grey); font-size: 35px;">
+                        Last opp lyd:
+                    </h1>
+                    <p style="color: var(--grey); text-align: left;">NB: Lydfil må være i .mp3 eller .wav format og det er kun de første 15 sekundene som spilles.</p>
+                    <p style="color: var(--grey); text-align: left;">Lyd legges til i valgt person sin randome pool. Ved scanning plukkes ut en fil randomly.</p>
+                    <br>
+                    <select id="userSelect"></select>
+                    <input type="file" id="mp3Upload" accept=".mp3,.wav">
+                    <button id="uploadButton">Upload</button>
+                    <!-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1lMcrRsRphljbTorQk8Nav?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        <button class="knapp"><a href="#">Bytt introsang</a></button>  -->
+                </div>
             </div>
+        </div>
     </article>
 
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>

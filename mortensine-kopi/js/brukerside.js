@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const tidsStats = document.getElementById('timestatistikk');
                 const hours= Math.floor(userData.totalMinutes/60);
                 const minutes = userData.totalMinutes % 60;
-                tidsStats.textContent = 'Total tid på Skolen: ' + hours + ' timer og ' + minutes + ' minutter';
+                tidsStats.textContent = 'Total tid på skolen: ' + hours + ' timer og ' + minutes + ' minutter';
                 displayProfilbilde(profilbildePath);
                 brukernavn.textContent = userData.fornavn + ' ' + userData.etternavn;
                 if(userData && !userData.kaffeCount) {
@@ -89,8 +89,9 @@ db.collection('brukere').get().then((snapshot) => {
     option.value = doc.data().fornavn+' '+doc.data().etternavn;
     option.text = doc.data().fornavn+' '+doc.data().etternavn;
     userSelect.appendChild(option);
-  });
-});
+  }); 
+}); 
+
 
 
 document.getElementById('byttpb').addEventListener('click', function() {
