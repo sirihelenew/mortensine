@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Leaderboard</title>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <title>Mortensine</title>
+    <link rel="stylesheet" href="mortensine-kopi/styles.css">
+    <link rel="stylesheet" href="mortensine-kopi/static/homebutton.css"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c110f170bd.js" crossorigin="anonymous"></script>
     <style>
         body {
             background-color: var(--white);
@@ -77,10 +79,11 @@
             .leaderboard { width: auto;}
             #leaderContent { width: 90% !important; }
             #leaderClass { flex-direction: row; }
-            #linker { flex-direction: row; }
+            #linker { display: none; }
             #pomodoro, #omegakok { width: 40% !important; border: 3px solid var(--white); background-color: var(--gul);}
             /* #topnavPC { display: none;} */
             .topnav { display: flex; flex-wrap: wrap; justify-content: space-around; text-align: left; background-color: var(--white);}
+            #linkerText { font-size: 30px !important; }
         }
         .js-container {
         display: flex;
@@ -111,29 +114,26 @@
         margin-left: 20px; 
         margin-right: 20px; 
     }
+    
     </style>
 </head>
 <body>
+    
     <div id="velkommenSide" class="js-container container1 hidden">
-        <div class="text-container"></div>
-        <div class="login-container"></div>
+        <div class="text-container">
+            <h1 id="velkommenText"></h1>
+        </div>
+        <div class="login-container">
+            <h1 id="loginInfo"></h1>
+        </div>
         <img src="" id="profileImage">
     </div>
-    <!-- <div id="pinModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>Please enter your PIN to access the content:</p>
-            <input type="password" id="pinInput">
-            <button onclick="checkPin()">Submit</button>
-        </div>
-    </div>
-    <div id="protectedContent" class="hidden"> -->
     <div class="menu-container">
         <div class="hamburger-menu">
             <button class="menyknapp" style="background-color: var(--white);" onclick="toggleMenu()">&#9776;</button>
         </div>
         <div class="menu-items hidden">
-            <a href="templates/login.html">Min bruker </a>
+            <a href="mortensine-kopi/templates/login.html">Min bruker </a>
             <!-- <a href="#">OMEGAKOK 👨🏼‍🍳</a>
             <a href="#">Sitater</a>
             <a href="#">Contact</a> -->
@@ -156,7 +156,7 @@
         <div class="leaderboard" id="leaderClass" style="background-color: var(--white);">
             <div class="box2" style="background-color: var(--white); width: 40%;">
                 <h1 style="color: var(--grey); font-size: 25px;"> Hvem har ICE-en?</h1>
-                <img src="" id="iceimg" style="width: 85%; cursor: pointer;" onclick="icestafett()">
+                <img src="" id="iceimg" style="width: 85%; cursor: pointer;">
             </div>
             <div class="box" style="background-color: var(--white); width: 40%;">
                 <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD ☀️</h1>
@@ -188,7 +188,7 @@
         <a href="https://pomofocus.io/" class="hyperlink"><h1 style="color: var(--grey); font-size: 40px;"> POMODORO ⏰</h1></a>
     </div>   
     <div class="box" id="omegakok" style="width: 20%;">
-        <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink"><h1 style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
+        <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink"><h1 id="linkerText" style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
     </div>
 </div>
 <div class="topnav" id="topnavPC">
@@ -199,50 +199,99 @@
     <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink">Mini Crossword</a>
     <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink">Aftenposten quiz</a>
 </div>
-
-
 <footer>
     <p style="font-size: 30px;">🩷</p>
     <p>laget av SIRI</p>
 </footer>
-<!-- </div> -->
 
-<script src="js/config.js"></script>
-<script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="mortensine-kopi/js/config.js"></script>
+    <script>
 
-firebase.initializeApp(firebaseConfig);
-var db = firebase.firestore();
-const storage = firebase.storage();
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+        const storage = firebase.storage();
 
-// db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
-//     snapshot.docChanges().forEach((change) => {
-//         if (change.type === 'added' || change.type === 'modified') {
-//             // Redirect to the new page URL where the updated content is displayed
-//             // window.location.href = "velkommen.html";
-//         }
-//     });
-// });
-// document.getElementById('pinModal').classList.remove('hidden');
 
-// function checkPin() {
-//     var pin = document.getElementById('pinInput').value;
-//     if(pin == "1234") {  // Change '1234' to whatever your PIN is
-//         document.getElementById('protectedContent').classList.remove('hidden');
-//         document.getElementById('modal').classList.add('hidden');
-//         document.getElementById('pinModal').classList.add('hidden');
-//     } else {
-//         alert("Incorrect PIN");
-//     }
-// }
+function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUrl) {
+    const velkommenText = document.getElementById('velkommenText');
+    const loginInfo = document.getElementById('loginInfo');
+    const profileImage = document.getElementById('profileImage');
 
-// // Optional: Close modal on clicking 'x'
-// document.querySelector('.close').onclick = function() {
-//     document.getElementById('pinModal').classList.add('hidden');
-// };
+    if (loginMethod === 'RFID') {
+        velkommenText.innerHTML = `Velkommen ${userName}!`;
+        loginInfo.style.display = "none";
+    } else if (loginMethod === 'manual') {
+        velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
+        //velkommenText.style.display = "none";
+    }
 
+    profileImage.src = profileImageUrl || '';
+
+    document.getElementById('velkommenSide').classList.remove('hidden');
+
+    setTimeout(() => {
+        document.getElementById('velkommenSide').classList.add('hidden');
+    }, 10000); // 10 seconds
+}
+
+db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added' || change.type === 'modified') {
+            const loginData = change.doc.data();
+            console.log("Login data: ", loginData);
+
+            const lastLoginTime = loginData.tid.toMillis();
+            console.log("Last login time: ", lastLoginTime);
+
+            const storedLastLoginTime = parseInt(localStorage.getItem('lastLoginTime')) || 0;
+            console.log("Stored last login time: ", storedLastLoginTime);
+
+            //const sessionShown = sessionStorage.getItem('welcomeMessageShown') === 'true';
+            //console.log("Session shown: ", sessionShown);
+            console.log(loginData.status)
+
+            if (lastLoginTime > storedLastLoginTime &&  loginData.status === true) {
+                localStorage.setItem('lastLoginTime', lastLoginTime);
+                sessionStorage.setItem('welcomeMessageShown', 'true');
+                console.log("moren din: ", loginData);
+
+                db.collection('brukere').doc(loginData.userID).get().then(doc => {
+                    const userData = doc.data();
+                    const profilbildePath = userData.profilbilde;
+                    let imageRef;
+
+                    if (profilbildePath && profilbildePath.startsWith('http')) {
+                        imageRef = storage.refFromURL(profilbildePath);
+                    } else if (profilbildePath) {
+                        imageRef = storage.ref(profilbildePath);
+                    }
+
+                    if (imageRef) {
+                        console.log("ImageRef: ", imageRef);
+                        imageRef.getDownloadURL().then((url) => {
+                            showWelcomeMessage(userData.fornavn, loginData.metode, loginData.sted, url);
+                        }).catch((error) => {
+                            console.error("Finner ikke bildet: ", error);
+                        });
+                    } else {
+                        console.error('Filsti for bilde eksisterer ikke');
+                    }
+                }).catch(error => {
+                    console.error("Feil ved å hente bruker: ", error);
+                });
+            }
+        }
+    });
+});
 
     function loadLeaderboard() {
-        db.collection('brukere').orderBy('totalHours', 'desc').limit(20)
+        db.collection('brukere')
+        .orderBy('totalHours', 'desc')
+        .orderBy('totalMinutes', 'desc')
+        .limit(20)
         .get()
         .then((querySnapshot) => {
             const leaderboardContent = document.getElementById('leaderboardContent');
@@ -353,10 +402,6 @@ function displayProfilbilde(profilbildePath) {
         }
     }
 
-    function icestafett() {
-        window.location.href = "icestafett.html";
-    }
-
 
     displayLatestProfilbilde();
     loadLeaderboard();
@@ -413,11 +458,8 @@ function updateProfilePicture(path) {
     imgElement.src = path;
 }
 
-
-
 </script>
-
-<script src="js/confetti.js"></script>
-
+<script src="../js/confetti.js"></script>
 </body>
 </html>
+
