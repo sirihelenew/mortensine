@@ -647,8 +647,10 @@ function checkOvDoor() {
             if (data.open == "1") {
                 ovLink.textContent = "OV er åpent";
                 ovLink.style.color = "green";
+                console.log("OV er åpent");
             } else {
                 ovLink.textContent = "OV er stengt";
+                console.log("OV er stengt");
                 ovLink.style.color = "red";
             }
         })
