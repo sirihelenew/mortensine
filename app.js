@@ -33,15 +33,16 @@ import('node-fetch').then(nodeFetch => {
 });
 
 app.get('/restart', (req, res) => {
-  exec('pm2 restart app', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error restarting app: ${error}`);
-      return res.status(500).send(`Error restarting app: ${error}`);
-    }
-    console.log(`App restart stdout: ${stdout}`);
-    console.error(`App restart stderr: ${stderr}`);
-    res.send('App restarted successfully');
-  });
+  res.send('Restarting app...');
+  setTimeout(() => {
+    exec('pm2 restart app', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error restarting app: ${error}`);
+      }
+      console.log(`App restart stdout: ${stdout}`);
+      console.error(`App restart stderr: ${stderr}`);
+    });
+  }, 5000); // delay the restart for 5 seconds
 });
 
 const localstorage = multer.diskStorage({
