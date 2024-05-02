@@ -171,6 +171,7 @@
             <div class="box2" style="background-color: var(--white); width: 60%;">
                 <h1 style="color: var(--grey); font-size: 25px;"> Hvem har ICE-en?</h1>
                 <img src="" id="iceimg" style="width: 85%; cursor: pointer;">
+                <h1 id="iceCountdown" style="color: var(--grey); font-size: 20px;"> </h1>
             </div>
         </div>
     </div>  
@@ -424,8 +425,50 @@ function updateProfilePicture(path) {
     const imgElement = document.getElementById('earlybirdPic');
     imgElement.src = path;
 }
+function calculateCountdown(targetDateTime) {
+    var now = new Date();
+    var timeDiff = targetDateTime - now;
+  
+    var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((timeDiff % ((1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+  
+    return days + "d " + hours + "t " + minutes + "m ";
+  }
+  
+  db.collection('icestafett').doc('OO6yweoYrlh7mDW5BTLt').get().then(doc => {
+    if (!doc.exists) {
+      console.error("Document does not exist.");
+      return;
+    }
+    console.log("Document ICE data:", doc.data());
+  
+    var targetDate = doc.data().tid.toDate(); 
+  
+    var day = targetDate.getDay();
+    var hour = targetDate.getHours();
+  
+    if ((day === 5 && hour >= 10) || day === 6 || day === 0) {
+      var daysUntilMonday;
+      if (day === 5 && hour >= 10) {
+        daysUntilMonday = 2; 
+      } else if (day === 6) {
+        daysUntilMonday = 1; 
+      } else {
+        daysUntilMonday = 0; 
+      }
+      targetDate.setDate(targetDate.getDate() + daysUntilMonday);
+    }
+    targetDate.setDate(targetDate.getDate() + 3);
+  
+    var countdownString = calculateCountdown(targetDate);
+    document.getElementById("iceCountdown").innerHTML = "Tid som gjenstår: " + countdownString;
+  }).catch(error => {
+    console.error("Error getting document: ", error);
+  });
 </script>
 <script src="mortensine-kopi/js/confetti.js"></script>
+<!-- <script src="icestafett.js"></script> -->
 </body>
 </html>
 
