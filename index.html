@@ -148,13 +148,13 @@
         </div>
         <h1 style="font-size: 60px;">MORTENSINE 🩷</h1>
         <div class="topnav" id="topnavPC">
-            <a href="javascript:void(0)" class="hyperlink" onclick="toggleAtSchool()">Vis hvem som er på skolen</a>
-            <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink" target="_blank">Wordle</a>
-            <a href="https://contexto.me/" class="hyperlink" target="_blank">Contexto</a>
-            <a href="https://angle.wtf/" class="hyperlink" target="_blank">Angle</a>
-            <a href="https://www.nytimes.com/games/connections" class="hyperlink" target="_blank">Connections</a>
-            <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink" target="_blank">Mini Crossword</a>
-            <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink" target="_blank">Aftenposten quiz</a>
+            <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink">Wordle</a>
+            <a href="https://contexto.me/" class="hyperlink">Contexto</a>
+            <a href="https://angle.wtf/" class="hyperlink">Angle</a>
+            <a href="https://www.nytimes.com/games/connections" class="hyperlink">Connections</a>
+            <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink">Mini Crossword</a>
+            <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink">Aftenposten quiz</a>
+            <a href="https://www.omegav.no/" class="hyperlink">OV</a>
         </div>
         <div class="container" id="atSchoolSection" style="width: 50%; display: none; padding: 20px;">
             <div class="box" style="text-align: left; width: 80%; display:flex; flex-direction: row; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
@@ -615,6 +615,26 @@ function setupDailyUsersListener() {
 }
 window.onload = setupDailyUsersListener;
 
+function checkOvDoor() {
+    fetch('/api/doorstatus')
+        .then(response => response.json())
+        .then(data => {
+            var ovLink = document.querySelector('.hyperlink[href="https://www.omegav.no/"]');
+            if (data.open == "1") {
+                ovLink.textContent = "OV er åpent";
+                ovLink.style.color = "green";
+                console.log("OV er åpent");
+            } else {
+                ovLink.textContent = "OV er stengt";
+                console.log("OV er stengt");
+                ovLink.style.color = "red";
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+// Call the function when the page loads and every 60 seconds afterwards
+checkOvDoor();
+setInterval(checkOvDoor, 60000);
 
 function setupDailyUsersListener() {
     const today = new Date();

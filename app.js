@@ -11,13 +11,26 @@ const storage = admin.storage();
 const fs = require('fs');
 const ip = require('ip');
 
-
 const express = require('express');
 const path = require('path');
 const { spawn, exec } = require('child_process');
 const multer = require('multer');
 const app = express();
 const port = 3000;
+let fetch;
+
+import('node-fetch').then(nodeFetch => {
+  fetch = nodeFetch.default;
+
+  app.get('/api/doorstatus', (req, res) => {
+      fetch('https://omegav.no/api/dooropen.php')
+          .then(response => response.json())
+          .then(data => res.json(data))
+          .catch(error => res.status(500).json({ error: error.toString() }));
+  });
+}).catch(err => {
+  console.log(err);
+});
 
 const localstorage = multer.diskStorage({
   destination: function(req, file, cb) {
