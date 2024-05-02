@@ -48,6 +48,7 @@
             <input type="text" id="login-brukernavn" class="fadeIn second" placeholder="Epost">
             <input type="password" id="login-password" class="fadeIn third" placeholder="Passord">
             <input type="submit" class="fadeIn fourth" value="Logg inn">
+            <div id="error-message"></div>
           </form>
       
           <form id="register-form" style="display: none;">
@@ -69,19 +70,13 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
+    <script src="../js/config.js"></script>
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBJ0BF5_RqwztdzjIFAqS6eprcO0zvuJv4",
-            authDomain: "mortensine-a58cb.firebaseapp.com",
-            projectId: "mortensine-a58cb",
-            storageBucket: "mortensine-a58cb.appspot.com",
-            messagingSenderId: "37788899408",
-            appId: "1:37788899408:web:20c1314ff1109d5a225955"
-        };
 
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
+
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
         window.onload = function() {
         document.getElementById('login-tab').addEventListener('click', function() {
