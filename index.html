@@ -412,6 +412,7 @@ function displayProfilbilde(profilbildePath) {
 displayLatestProfilbilde();
 loadLeaderboard();
 setupEarlybirdListener();
+setInterval(loadLeaderboard, 60000);
 
 
 function setupEarlybirdListener() {
