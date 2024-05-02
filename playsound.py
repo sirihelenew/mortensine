@@ -1,30 +1,32 @@
 import sys
 import os
+import random
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
 
 def play_sound(user_id):
     # Map user IDs to sound files
-    sounds = {
-        'Siri Helene Wahl': 'swamp.mp3',
-        'user2': 'sound2.mp3',
-        # Add more users and sounds here
-    }
-    
+    sound_file=None
+    dir_path = os.path.join('uploads', user_id)
+    if not os.path.exists(dir_path):
+        print(f'No directory found for user {user_id}')
+    else:
+        sound_files = [f for f in os.listdir(dir_path) if f.endswith('.mp3') or f.endswith('.wav')]
+        sound_file = random.choice(sound_files)
+
     # Get the sound file for the user
     
-    sound_file = sounds.get(user_id)
-
     if sound_file is None:
         print(f'No sound file found for user {user_id}')
         sound_file='swamp.mp3'
+        dir_path=os.path.join("uploads")
 
     # Initialize Pygame
     pygame.mixer.init()
 
     # Load the sound file
-    pygame.mixer.music.load(os.path.join("sounds", sound_file))
+    pygame.mixer.music.load(os.path.join(dir_path, sound_file))
     # Play the sound
     pygame.mixer.music.play()
     print("Playing sound", sound_file)

@@ -55,6 +55,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+document.getElementById('uploadButton').addEventListener('click', function() {
+    const mp3File = document.getElementById('mp3Upload').files[0];
+    const selectedUser = document.getElementById('userSelect').value;
+    if (mp3File && selectedUser) {
+        const formData = new FormData();
+        formData.append('username', selectedUser);
+        formData.append('mp3File', mp3File);
+        console.log(selectedUser)
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(result => {
+            console.log('File uploaded succesfully');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    } else {
+        console.log('No file selected or no user selected');
+    }
+});
+
+const userSelect = document.getElementById('userSelect');
+
+db.collection('brukere').get().then((snapshot) => {
+  snapshot.forEach((doc) => {
+    const option = document.createElement('option');
+    option.value = doc.data().fornavn+' '+doc.data().etternavn;
+    option.text = doc.data().fornavn+' '+doc.data().etternavn;
+    userSelect.appendChild(option);
+  });
+});
+
+
 document.getElementById('byttpb').addEventListener('click', function() {
     document.getElementById('byttprofilbilde').style.display = 'block';
     document.getElementById('byttpb').style.display = 'none';

@@ -8,13 +8,37 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const storage = admin.storage();
+const fs = require('fs');
 
 
 const express = require('express');
 const path = require('path');
 const { spawn, exec } = require('child_process');
+const multer = require('multer');
 const app = express();
 const port = 3000;
+
+const localstorage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    const dir = './uploads/' + req.body.username;
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);// Destination folder
+},
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) // Naming the file
+  }
+});
+const upload = multer({ 
+  storage: localstorage,
+  limits: { fileSize: 10000000 }  // 10MB
+});
+app.post('/upload', upload.single('mp3File'), (req, res) => {
+  res.send('File uploaded successfully');
+});
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 // Pull the latest code from the Git repository
 exec('./setup.sh', (error, stdout, stderr) => {
