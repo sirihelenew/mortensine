@@ -159,7 +159,7 @@ function stempleUtManuelt () {
 function loggut() {
     firebase.auth().signOut().then(() => {
         console.log('User signed out successfully');
-        window.location.href = "templates/login.html";
+        window.location.href = "../index.html";
     }).catch((error) => {
         console.error("Error signing out: ", error);
     });
