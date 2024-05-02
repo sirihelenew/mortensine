@@ -151,21 +151,25 @@
         </div>
     <div class="box" id="leaderContent" style="background-color: var(--white); width: 45%;">
         <div class="leaderboard" id="leaderClass" style="background-color: var(--white); align-items: center;">
-            <div class="box" style="background-color: var(--white); width: 60%;">
-                <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD 🥇☀️</h1>
-                <img src="" id="earlybird1" style="width: 85%;">
-                <h1 id="earlybirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>
-            </div>
-            <div class="earlyBirds" style="background-color: var(--white);">
-                <div class="box" style="background-color: var(--white); width: 60%;">
+            <div class="row" style="display: flex; justify-content: space-between;">
+                <div class="column" style="width: 45%;">
+                    <h1 style="color: var(--grey); font-size: 25px;"> DAGENS EARLYBIRD 🥇☀️</h1>
+                    <img src="" id="earlybird1" style="width: 85%;">
+                    <h1 id="earlybirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>
+            
                     <h1 style="color: var(--grey); font-size: 20px;"> DAGENS EARLYBIRD 🥈☀️</h1>
                     <img src="" id="earlybird2" style="width: 85%;">
                     <h1 id="earlybirdTime2" style="color: var(--grey); font-size: 20px;"> </h1>
                 </div>
-                <div class="box" style="background-color: var(--white); width: 60%;">
-                    <h1 id="earlybirdHeader3" style="color: var(--grey); font-size: 20px; display: none;"> DAGENS EARLYBIRD 🥉☀️</h1>
-                    <img src="" id="earlybird3" style="width: 85%;">
-                    <h1 id="earlybirdTime3" style="color: var(--grey); font-size: 20px;"> </h1>
+            
+                <div class="column" style="width: 45%;">
+                    <h1 style="color: var(--grey); font-size: 20px;"> GÅRSDAGENS LATEBIRD 🥇🌙</h1>
+                    <img src="" id="latebird1" style="width: 85%;">
+                    <h1 id="latebirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>
+            
+                    <h1 style="color: var(--grey); font-size: 20px;"> GÅRSDAGENS LATEBIRD 🥈🌙</h1>
+                    <img src="" id="latebird2" style="width: 85%;">
+                    <h1 id="latebirdTime2" style="color: var(--grey); font-size: 20px;"> </h1>
                 </div>
             </div>
             <div class="box2" style="background-color: var(--white); width: 60%;">
@@ -412,6 +416,62 @@ displayLatestProfilbilde();
 loadLeaderboard();
 setupEarlybirdListener();
 setInterval(loadLeaderboard, 60000);
+setupLastOutListener();
+
+
+function setupLastOutListener() {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() -1);
+    yesterday.setHours(0, 0, 0, 0); 
+
+    db.collection('Innlogginger')
+        .where('tid', '<', new Date())
+        .where('tid', '>=', yesterday)
+        .where('metode', '==', 'RFID')
+        .orderBy('tid', 'desc')
+        .onSnapshot(snapshot => {
+            if (snapshot.empty) {
+                console.log("No last out entries for yesterday.");
+                return;
+            }
+            const lastOutDocs = snapshot.docs.slice(0, 2);
+            lastOutDocs.forEach((lastOutDoc, index) => {
+                const userID = lastOutDoc.data().userID;
+                const tid = lastOutDoc.data().tid;
+                const date = tid.toDate();
+                const hours = date.getHours().toString().padStart(2, '0'); 
+                const minutes = date.getMinutes().toString().padStart(2, '0'); 
+                const seconds = date.getSeconds().toString().padStart(2, '0'); 
+                const timeString = `${hours}:${minutes}:${seconds}`;
+
+                console.log(`Last out #${index + 1}: ${userID} at ${timeString}`);
+                const lastOutTime = document.getElementById(`latebirdTime${index + 1}`);
+                if (lastOutTime) {
+                    lastOutTime.textContent = `Stemplet ut kl. ${timeString}`;
+                }
+
+                db.collection('brukere').doc(userID).get().then(userDoc => {
+                    if (!userDoc.exists) {
+                        console.error("Brukerdok finnes ikke.");
+                        return;
+                    }
+                    const userData = userDoc.data();
+                    const profilbildePath = userData.profilbilde;
+                    if (profilbildePath) {
+                        const lastOutImg = document.getElementById(`latebird${index + 1}`);
+                        if (lastOutImg) {
+                            lastOutImg.src = profilbildePath;
+                        }
+                    } else {
+                        console.error("Finner ikke profilbilde.");
+                    }
+                });
+            });
+        }, error => {
+            console.error("Feil med å lytte på realtime innlogginger ", error);
+        });
+}
+
 
 
 function setupEarlybirdListener() {
