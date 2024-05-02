@@ -372,6 +372,7 @@ function setupEarlybirdListener() {
 
     db.collection('Innlogginger')
         .where('tid', '>=', today)
+        .where('metode', '==', 'RFID')
         .orderBy('tid', 'asc')
         .onSnapshot(snapshot => {
             if (snapshot.empty) {
