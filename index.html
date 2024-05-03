@@ -493,9 +493,14 @@ function setupLastOutListener() {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() -1);
     yesterday.setHours(0, 0, 0, 0); 
+    yesterday.setMinutes(yesterday.getMinutes() - yesterday.getTimezoneOffset());
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Subtract timezone offset
 
     db.collection('Innlogginger')
-        .where('tid', '<', new Date())
+        .where('tid', '<', today)
         .where('tid', '>=', yesterday)
         .where('metode', '==', 'RFID')
         .where('status', '==', false)
