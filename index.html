@@ -194,6 +194,10 @@
                         <h1 style="color: var(--grey); font-size: 20px;"> DAGENS EARLYBIRD 🥈☀️</h1>
                         <img src="" id="earlybird2" style="width: 85%;">
                         <h1 id="earlybirdTime2" style="color: var(--grey); font-size: 20px;"> </h1>
+
+                        <h1 style="color: var(--grey); font-size: 20px;"> DAGENS EARLYBIRD 🥈☀️</h1>
+                        <img src="" id="earlybird3" style="width: 85%;">
+                        <h1 id="earlybirdTime3" style="color: var(--grey); font-size: 20px;"> </h1>
                     </div>
                 
                     <div class="column" style="width: 45%;">
@@ -555,7 +559,7 @@ function setupEarlybirdListener() {
                 console.log("No earlybird entries for today yet.");
                 return;
             }
-            const earlybirdDocs = snapshot.docs.slice(0, 2);
+            const earlybirdDocs = snapshot.docs.slice(0, 3);
             earlybirdDocs.forEach((earlybirdDoc, index) => {
                 const userID = earlybirdDoc.data().userID;
                 const tid = earlybirdDoc.data().tid;
