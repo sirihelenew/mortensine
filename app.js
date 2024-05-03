@@ -210,7 +210,6 @@ function updateUserTime() {
             totalMinutes: admin.firestore.FieldValue.increment(1) // assuming 'totalTime' field stores the total time
           })
           .then(() => {
-            logger.info('User time updated successfully');
           })
           .catch((error) => {
             logger.error("Error updating user time: ", error);
