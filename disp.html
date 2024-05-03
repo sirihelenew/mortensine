@@ -428,6 +428,7 @@ function setupLastOutListener() {
         .where('tid', '<', new Date())
         .where('tid', '>=', yesterday)
         .where('metode', '==', 'RFID')
+        .where('status', '==', false)
         .orderBy('tid', 'desc')
         .onSnapshot(snapshot => {
             if (snapshot.empty) {

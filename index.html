@@ -444,8 +444,8 @@ db.collection('icestafett').get()
     if (imageref) {
         imageref.getDownloadURL().then((url) => {
             iceimg.src = url;
-            iceimg2.src = url;
-            iceimg3.src = url;
+            //iceimg2.src = url;
+            //iceimg3.src = url;
         }).catch((error) => {
             console.error("Finner ikke bildet: ", error);
         });
@@ -493,6 +493,7 @@ function setupLastOutListener() {
         .where('tid', '<', new Date())
         .where('tid', '>=', yesterday)
         .where('metode', '==', 'RFID')
+        .where('status', '==', false)
         .orderBy('tid', 'desc')
         .onSnapshot(snapshot => {
             if (snapshot.empty) {
