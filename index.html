@@ -554,7 +554,7 @@ function setupLastOutListener() {
     yesterday.setMinutes(yesterday.getMinutes() - yesterday.getTimezoneOffset());
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(5, 0, 0, 0);
     today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Subtract timezone offset
 
     db.collection('Innlogginger')
