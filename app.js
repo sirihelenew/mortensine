@@ -191,7 +191,7 @@ exec('./setup.sh', (error, stdout, stderr) => {
 
 
   app.listen(port, () => {
-    logger.info(`App listening at http://localhost:${port}`);
+    console.log(`App listening at http://localhost:${port}`);
   });
 });
 

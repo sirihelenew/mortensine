@@ -370,16 +370,18 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
 });
 
 function loadLeaderboard() {
+    const storedLeaderboard = localStorage.getItem('leaderboard');
+    if (storedLeaderboard) {
+        document.getElementById('leaderboardContent').innerHTML = storedLeaderboard;
+    }
     const today = new Date();
     today.setHours(5, 0, 0, 0);
-
     db.collection('brukere')
     .orderBy('totalMinutes', 'desc')
-    .limit(40)
+    .limit(50)
     .get()
     .then((querySnapshot) => {
         const leaderboardContent = document.getElementById('leaderboardContent');
-        leaderboardContent.innerHTML = ''; 
         let htmlContent = '';
         let rank = 1;
 
@@ -442,17 +444,20 @@ function loadLeaderboard() {
                 htmlContent += `
                     <div class="leaderboard" >
                         <div class="leaderboardsplit">${rank++}</div>
-                        <div class="leaderboardsplit" style="width: 15%;">${totalHours} timer og ${totalMinutesLeft} minutter</div>
-                        <div class="leaderboardsplit" style="width: 15%;">${Math.floor(totalHoursToday)} timer og ${Math.round((totalHoursToday % 1) * 60)} minutter i dag</div>
+                        <div class="leaderboardsplit" style="width: 15%;">${totalHours}t ${totalMinutesLeft}m</div>
+                        <div class="leaderboardsplit" style="width: 15%;">${Math.floor(totalHoursToday)}t, ${Math.round((totalHoursToday % 1) * 60)}m i dag</div>
                         <div class="leaderboardsplit" style="width: 8%;">${kaffeCount} ☕️</div>
                         <div class="leaders" style="background-color: ${rowColor}; width=25%;">
                             <span class="name" style="margin-right: 20px;">${userData.fornavn + ' ' + userData.etternavn || 'Unknown'}</span>
                             <span class="quote">${quote}</span></div>
                         </div>`;
             });
-
             leaderboardContent.innerHTML = htmlContent;
+            localStorage.setItem('leaderboard', htmlContent);
+
+
         });
+
     })
     .catch((error) => { console.error("Error getting leaderboard entries: ", error); });
 }
