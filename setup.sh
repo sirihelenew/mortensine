@@ -6,6 +6,6 @@ done
 git pull
 if [ -z "$VIRTUAL_ENV" ]
 then
-    source myvenv/bin/activate
+    source venv/bin/activate
 fi
 pip install -r requirements.txt
