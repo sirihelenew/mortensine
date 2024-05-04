@@ -114,16 +114,18 @@
         margin-left: 20px; 
         margin-right: 20px; 
     }
-    #leaderClass {
-            flex-direction: column;
-        }
-        .earlyBirds {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            width: 90%;
-        }
+    #leaderClass { flex-direction: column; }
+    .earlyBirds {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+    }
+    .quote {
+        font-size: 0.8em;
+        color: #222831;
+    }
     
     </style>
 </head>
@@ -137,7 +139,7 @@
         <div class="login-container">
             <h1 id="loginInfo"></h1>
         </div>
-        <img src="" id="profileImage">
+        <img src="" id="profileImage" style="margin-right: 20px;">
     </div>
     <div class="menu-container">
         <div class="hamburger-menu">
@@ -149,13 +151,13 @@
         <h1 style="font-size: 60px;">MORTENSINE 🩷</h1>
         <div class="topnav" id="topnavPC">
             <a href="javascript:void(0)" class="hyperlink" onclick="toggleAtSchool()">Vis hvem som er på skolen</a>
-            <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink">Wordle</a>
-            <a href="https://contexto.me/" class="hyperlink">Contexto</a>
-            <a href="https://angle.wtf/" class="hyperlink">Angle</a>
-            <a href="https://www.nytimes.com/games/connections" class="hyperlink">Connections</a>
-            <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink">Mini Crossword</a>
-            <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink">Aftenposten quiz</a>
-            <a href="https://www.omegav.no/" class="hyperlink">OV</a>
+            <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink" target="_blank">Wordle</a>
+            <a href="https://contexto.me/" class="hyperlink" target="_blank">Contexto</a>
+            <a href="https://angle.wtf/" class="hyperlink" target="_blank">Angle</a>
+            <a href="https://www.nytimes.com/games/connections" class="hyperlink" target="_blank">Connections</a>
+            <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink" target="_blank">Mini Crossword</a>
+            <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink" target="_blank">Aftenposten quiz</a>
+            <a href="https://www.omegav.no/" class="hyperlink" target="_blank">OV</a>
         </div>
         <div class="container" id="atSchoolSection" style="width: 50%; display: none; padding: 20px;">
             <div class="box" style="text-align: left; width: 80%; display:flex; flex-direction: row; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
@@ -176,10 +178,11 @@
             <div class="box" id="leaderContent" style="width: 50%; background-color: var(--white);">
                 <h1 style="font-size: 30px;">LEADERBOARD!!!</h1>
                 <div class="leaderboard" style="background-color: var(--white);">
-                    <div class="leaderboardsplit" style="font-weight: 700; background-color: var(--white);">RANK</div>
-                    <div class="leaderboardsplit" style="width: 15%; font-weight: 700; background-color: var(--white);">ANTALL TIMER</div>
-                    <div class="leaderboardsplit" style="width: 15%;font-weight: 700; background-color: var(--white);">ANTALL KANNER TRAKTET</div>
-                    <div class="leaders" style="font-weight: 700; background-color: var(--white);">NAVN</div>
+                <div class="leaderboardsplit" style="font-weight: 700; background-color: var(--white);">RANK</div>
+                <div class="leaderboardsplit" style="width: 15%; font-weight: 700; background-color: var(--white);">TOTALT</div>
+                <div class="leaderboardsplit" style="width: 15%; font-weight: 700; background-color: var(--white);">DAGLIG</div>
+                <div class="leaderboardsplit" style="width: 8%;font-weight: 700; background-color: var(--white);"></div>
+                <div class="leaders" style="font-weight: 700; background-color: var(--white);">NAVN</div>
                 </div>
                 <div id="leaderboardContent"></div>
             </div>
@@ -223,10 +226,10 @@
 
 <div class="container" id="linker">
     <div class="box" id="pomodoro" style="width: 20%;">
-        <a href="https://pomofocus.io/" class="hyperlink"><h1 style="color: var(--grey); font-size: 40px;"> POMODORO ⏰</h1></a>
+        <a href="https://pomofocus.io/" class="hyperlink" target="_blank"><h1 style="color: var(--grey); font-size: 40px;"> POMODORO ⏰</h1></a>
     </div>   
     <div class="box" id="omegakok" style="width: 20%;">
-        <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink"><h1 id="linkerText" style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
+        <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink" target="_blank"><h1 id="linkerText" style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
     </div>
 </div>
 <!-- <footer>
@@ -250,10 +253,8 @@
         const user = firebase.auth().currentUser;
 
         if (user) {
-            // User is signed in, redirect to minbruker.html
             window.location.href = 'mortensine/brukerside.html';
         } else {
-            // No user is signed in, redirect to login.html
             window.location.href = 'mortensine/templates/login.html';
         }
     });
@@ -261,7 +262,7 @@
 
 
 
-        localStorage.setItem('serverStarted', 'true');
+localStorage.setItem('serverStarted', 'true');
 
 function showWelcomeMessage(userName, loginMethod, loginLocation, profileImageUrl) {
     const velkommenText = document.getElementById('velkommenText');
@@ -369,6 +370,9 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
 });
 
 function loadLeaderboard() {
+    const today = new Date();
+    today.setHours(5, 0, 0, 0);
+
     db.collection('brukere')
     .orderBy('totalMinutes', 'desc')
     .limit(40)
@@ -379,27 +383,76 @@ function loadLeaderboard() {
         let htmlContent = '';
         let rank = 1;
 
-        querySnapshot.forEach((doc) => {
+        const promises = querySnapshot.docs.map((doc) => {
             const userData = doc.data() || {};
-            const totalMinutes = userData.totalMinutes || 0;
-            const kaffeCount = userData.kaffeCount || 0;
-            const totalHours = Math.floor(totalMinutes / 60);
-            const totalMinutesLeft = totalMinutes % 60;
-            // Check if the user has punched in today
-            const hasPunchedInToday = userData.status === true;
+            const userID = doc.id;
 
-            // Set the row color based on whether the user has punched in today
-            const rowColor = hasPunchedInToday ? '#9ADE7B' : '#D04848';
+            return db.collection('Innlogginger')
+            .where('userID', '==', userID)
+            .where('tid', '>=', today)
+            .orderBy('tid')
+            .get()
+            .then((innloggingerSnapshot) => {
+                let totalMinutesToday = 0;
+                let punchInTime = null;
 
-            htmlContent += `
-                <div class="leaderboard" >
-                    <div class="leaderboardsplit">${rank++}</div>
-                    <div class="leaderboardsplit" style="width: 15%;">${totalHours} timer og ${totalMinutesLeft} minutter</div>
-                    <div class="leaderboardsplit" style="width: 15%;">${kaffeCount} ☕️</div>
-                    <div class="leaders" style="background-color: ${rowColor};">${userData.fornavn + ' ' + userData.etternavn || 'Unknown'}</div>
-                </div>`;
+                innloggingerSnapshot.forEach((innloggingerDoc) => {
+                    const innloggingerData = innloggingerDoc.data();
+                    const tid = innloggingerData.tid.toDate();
+                    const status = innloggingerData.status;
+
+                    if (status && !punchInTime) {
+                        // Punch in event
+                        punchInTime = tid;
+                    } else if (!status && punchInTime) {
+                        // Punch out event
+                        const minutesWorked = (tid.getTime() - punchInTime.getTime()) / 60000;
+                        totalMinutesToday += minutesWorked;
+                        punchInTime = null;
+                    }
+                });
+
+                if (punchInTime) {
+                    // There's a punch in time without a corresponding punch out time
+                    const minutesWorked = (new Date().getTime() - punchInTime.getTime()) / 60000;
+                    totalMinutesToday += minutesWorked;
+                }
+
+                const totalHoursToday = totalMinutesToday / 60;
+                userData.totalHoursToday = totalHoursToday;
+
+                return userData;
+            });
         });
-        leaderboardContent.innerHTML = htmlContent;
+
+        Promise.all(promises).then((usersData) => {
+            usersData.forEach((userData) => {
+                const totalMinutes = userData.totalMinutes || 0;
+                const kaffeCount = userData.kaffeCount || 0;
+                const quote = userData.quote || '';
+                const totalHours = Math.floor(totalMinutes / 60);
+                const totalMinutesLeft = totalMinutes % 60;
+                const totalHoursToday = userData.totalHoursToday || 0;
+                // Check if the user has punched in today
+                const hasPunchedInToday = userData.status === true;
+
+                // Set the row color based on whether the user has punched in today
+                const rowColor = hasPunchedInToday ? '#9ADE7B' : '#D04848';
+
+                htmlContent += `
+                    <div class="leaderboard" >
+                        <div class="leaderboardsplit">${rank++}</div>
+                        <div class="leaderboardsplit" style="width: 15%;">${totalHours} timer og ${totalMinutesLeft} minutter</div>
+                        <div class="leaderboardsplit" style="width: 15%;">${Math.floor(totalHoursToday)} timer og ${Math.round((totalHoursToday % 1) * 60)} minutter i dag</div>
+                        <div class="leaderboardsplit" style="width: 8%;">${kaffeCount} ☕️</div>
+                        <div class="leaders" style="background-color: ${rowColor}; width=25%;">
+                            <span class="name" style="margin-right: 20px;">${userData.fornavn + ' ' + userData.etternavn || 'Unknown'}</span>
+                            <span class="quote">${quote}</span></div>
+                        </div>`;
+            });
+
+            leaderboardContent.innerHTML = htmlContent;
+        });
     })
     .catch((error) => { console.error("Error getting leaderboard entries: ", error); });
 }

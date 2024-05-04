@@ -192,6 +192,39 @@ function stempleUtManuelt () {
     } else { console.log('User is not logged in'); }
 }
 
+function oppdaterQuote() {
+    const quoteField = document.querySelector('.quote');
+    quoteField.classList.toggle('hidden');
+    document.getElementById('quoteForm').classList.remove('hidden');
+
+    document.getElementById('quoteForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        let quote = document.getElementById('quoteInput').value;
+
+        const maxWords = 20;
+        const words = quote.split(' ');
+        if (words.length > maxWords) {
+            quote = words.slice(0, maxWords).join(' ');
+            alert(`Status er begrenset til ${maxWords} ord. De ekstra ordene er gone🥷🏼 `);
+        }
+
+        const userID = firebase.auth().currentUser.uid;
+
+        db.collection('brukere').doc(userID).set({
+            quote: quote
+        }, { merge: true })
+        .then(() => {
+            console.log("Quote successfully updated!");
+            quoteField.classList.toggle('hidden');
+            document.getElementById('quoteForm').classList.add('hidden');
+        })
+        .catch((error) => {
+            console.error("Error updating quote: ", error);
+        });
+    });
+}
+
 
 
 

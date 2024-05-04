@@ -59,7 +59,7 @@
     }
 
         
-    .stemple-inn, .kaffe {
+    .stemple-inn, .kaffe, .quote {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -73,7 +73,7 @@
     }
 
     
-    #stempling-inn, #kaffeStats {
+    #stempling-inn, #kaffeStats, #quoteForm {
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -88,12 +88,15 @@
         margin-bottom: 10px; 
         text-align: center;
     }
-    #kaffeStats label {
+    #kaffeStats label, #quoteForm label {
         font-weight: var(--bold); 
         text-align: center;
     }
 
-    #stempling-inn input[type="text"], #kaffeStats input[type="submit"]{
+    #stempling-inn input[type="text"], 
+    #kaffeStats input[type="submit"],
+    #quoteForm input[type="text"],
+    #quoteForm input[type="submit"]{
         padding: 10px;
         margin-bottom: 20px; 
         border: 1px solid var(--white);
@@ -137,6 +140,7 @@
         <a href="#" onclick="stempleInnManuelt()"> STEMPLE INN FRA ET ANNET STED</a>
         <a href="#" onclick="stempleUtManuelt()"> STEMPLE UT MANUELT</a>
         <a href="#" onclick="kaffe()"> REGISTRER TRAKTING AV KAFFE ☕️</a>
+        <a href="#" onclick="oppdaterQuote()"> OPPDATER DIN STATUS</a>
         <a href="#" onclick="loggut()"> Logg ut</a>
     </div>
     <div class="stemple-inn hidden">
@@ -147,12 +151,19 @@
             <input type="submit" id="stempleKnapp" value="Lagre">
         </form>
     </div>
-        <div class="kaffe hidden">
-            <form id="kaffeStats" style="text-align: center;">
-                <label for="kaffeInkrement" style="width: auto;">Trykk på knappen hvis du har trakta kaffe😍</label>
-                <br>
-                <input type="submit" id="kaffeInkrement" value="KAFFEEE 🩵" style="font-size: 20px; text-align: center;">
-            </form>
+    <div class="kaffe hidden">
+        <form id="kaffeStats" style="text-align: center;">
+            <label for="kaffeInkrement" style="width: auto;">Trykk på knappen hvis du har trakta kaffe😍</label>
+            <br>
+            <input type="submit" id="kaffeInkrement" value="KAFFEEE 🩵" style="font-size: 20px; text-align: center;">
+        </form>
+    </div>
+    <div class="quote hidden">
+        <form id="quoteForm" style="text-align: center;">
+            <label for="quoteInput" style="width: auto;">Oppdater din status:</label>
+            <input type="text" id="quoteInput" name="quote" placeholder="Din status her">
+            <input type="submit" id="quoteSubmit" value="Oppdater" style="font-size: 20px; text-align: center;">
+        </form>
     </div>
     <!-- <div class="topnav" style="background-color: var(--blue2); color: var(--white);">
         <a href="minbruker.html" style="color: var(--white);">Min bruker</a>
