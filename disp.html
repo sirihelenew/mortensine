@@ -131,7 +131,7 @@
     </style>
 </head>
 <body>
-    
+    <!-- <div id="audioPlayer"></div> -->
     <div id="velkommenSide" class="js-container container1 hidden">
         <div class="text-container">
             <h1 id="velkommenText" style="margin-left: 50px;"></h1>
@@ -546,7 +546,7 @@ function setupLastOutListener() {
 function setupEarlybirdListener() {
     const earlybirdText = document.getElementById('earlybirdText');
     const today = new Date();
-    today.setHours(0, 0, 0, 0); 
+    today.setHours(5, 0, 0, 0); 
 
     db.collection('Innlogginger')
         .where('tid', '>=', today)
@@ -719,6 +719,43 @@ function calculateTotalHoursForDay(userID, date) {
             console.error("Error getting documents: ", error);
         });
 }
+// let audioPlayer;
+// // Check the flag in LocalStorage
+// if (localStorage.getItem('playSong') === 'true') {
+//     // Get a reference to the song in Firebase Storage
+//     const songRef = firebase.storage().ref('sanger/RPReplay_Final1678538646.mp3');
+
+//     // Get the download URL of the song
+//     songRef.getDownloadURL()
+//     .then((url) => {
+//         // Create an audio player
+//         audioPlayer = document.createElement('audio');
+//         audioPlayer.controls = true;
+//         audioPlayer.src = url;
+
+//         // Add the audio player to the page
+//         document.getElementById('audioPlayer').appendChild(audioPlayer);
+
+//         // Start playing the song
+//         audioPlayer.play();
+//     })
+//     .catch((error) => {
+//         console.error("Error getting download URL: ", error);
+//     });
+
+//     // Clear the flag in LocalStorage
+//     localStorage.removeItem('playSong');
+// }
+// if (localStorage.getItem('stopSong') === 'true') {
+//     // Stop the song
+//     if (audioPlayer) {
+//         audioPlayer.remove();
+//         audioPlayer = null;
+//     }
+
+//     // Clear the stop flag in LocalStorage
+//     localStorage.removeItem('stopSong');
+// }
 
 
 </script>

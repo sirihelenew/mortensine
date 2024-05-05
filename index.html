@@ -158,6 +158,7 @@
             <a href="https://www.nytimes.com/crosswords/game/mini" class="hyperlink" target="_blank">Mini Crossword</a>
             <a href="https://www.aftenposten.no/tag/quiz" class="hyperlink" target="_blank">Aftenposten quiz</a>
             <a href="https://www.omegav.no/" class="hyperlink" target="_blank">OV</a>
+            <!-- <a href="javascript:void(0)" class="hyperlink" onclick="playIceIce()" style="color: red;">ICE</a> -->
         </div>
         <div class="container" id="atSchoolSection" style="width: 50%; display: none; padding: 20px;">
             <div class="box" style="text-align: left; width: 80%; display:flex; flex-direction: row; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
@@ -165,12 +166,15 @@
                 <h2 style="color: var(--lilla);">Mortensine G's</h2>
                 <ul id="rfidUsersList"></ul>
             </div>
+               
                 <div class="earlyBirds" style="background-color: var(--white); flex-direction: column; justify-content:flex-start;">
                 <h2 style="color: var(--frostee)">Andre G's</h2>
                 <ul id="manualUsersList" style="justify-content: left;"></ul>
             </div>
         </div>
         </div>
+        <!-- <button onclick="playIceIce()">Play Song</button>
+        <button onclick="stopIceIce()">Stop Song</button> -->
         
     </div>
     <article>
@@ -467,6 +471,14 @@ function toggleMenu() {
     menuItems.classList.toggle('hidden');
 }
 
+// function playIceIce() {
+//     // Set a flag in LocalStorage
+//     localStorage.setItem('playSong', 'true');
+// }
+// function stopIceIce() {
+//     // Set a flag in LocalStorage
+//     localStorage.setItem('stopSong', 'true');
+// }
 function displayLatestProfilbilde() {
 db.collection('icestafett').get()
     .then(snapshot => {
@@ -611,7 +623,7 @@ function setupLastOutListener() {
 function setupEarlybirdListener() {
     const earlybirdText = document.getElementById('earlybirdText');
     const today = new Date();
-    today.setHours(0, 0, 0, 0); 
+    today.setHours(5, 0, 0, 0); 
 
     db.collection('Innlogginger')
         .where('tid', '>=', today)
