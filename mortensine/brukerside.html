@@ -244,6 +244,7 @@
             console.log("Quote successfully updated!");
             quoteField.classList.toggle('hidden');
             document.getElementById('quoteForm').classList.add('hidden');
+            alert("Status oppdatert!")
         })
         .catch((error) => {
             console.error("Error updating quote: ", error);
