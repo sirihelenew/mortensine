@@ -125,6 +125,7 @@ document.getElementById('byttpb').addEventListener('click', function() {
                     console.log('Document updated successfully');
                     document.getElementById('byttprofilbilde').style.display = 'none';
                     document.getElementById('byttpb').style.display = 'block';
+                    alert("Profilbildet er oppdatert!")
                     window.location.href = "brukerside.html";
                 })
                 .catch((error) => {
@@ -184,6 +185,7 @@ function stempleUtManuelt () {
         })
         .then(() => {
             console.log('Document updated successfully');
+            alert("Du er stemplet ut!")
             window.location.href = "brukerside.html";
         })
         .catch((error) => {
