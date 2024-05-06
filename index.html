@@ -12,81 +12,82 @@
     <script src="https://kit.fontawesome.com/c110f170bd.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/x-icon" href="mortensine/static/mortensina.svg">
     <style>
-        body {
-            background-color: var(--white);
-            font-family: "PT Sans Narrow", sans-serif;
-            font-weight: 700;
-            box-sizing: border-box;
-            margin: 0;
-        }
-     
-        .container {
-            display: flex; 
-            justify-content: space-around; 
-            box-sizing: border-box;
-        }
-        .box {
-            width: 40%; 
-            padding: 20px; 
-            background-color: var(--white); 
-            text-align: center;
-        }
-        .box2 {
-            width: 40%; 
-            padding: 20px; 
-            background-color: #f8f8f8; 
-            text-align: center;
-        }
-        .leaderboard {
-            background-color: var(--blue2);
-            display: flex; 
-            justify-content: space-around; 
+    body {
+        background-color: var(--white);
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: 700;
+        box-sizing: border-box;
+        margin: 0;
+    }
+    
+    .container {
+        display: flex; 
+        justify-content: space-around; 
+        box-sizing: border-box;
+    }
+    .box {
+        width: 40%; 
+        padding: 20px; 
+        background-color: var(--white); 
+        text-align: center;
+    }
+    .box2 {
+        width: 40%; 
+        padding: 20px; 
+        background-color: #f8f8f8; 
+        text-align: center;
+    }
+    .leaderboard {
+        background-color: var(--blue2);
+        display: flex; 
+        justify-content: space-around; 
 
-        }
-        .leaderboardsplit {
-            width: 10%;
-            padding: 10px; 
-            text-align: left;
-            border-right: 1px solid var(--white);
-            border-bottom: 1px solid var(--white);
-            font-weight: 400;
-        }
-        .leaders {
-            width: 50%; 
-            padding: 10px; 
-            text-align: left;
-            border-bottom: 1px solid var(--white);
-            font-weight: 400;
-        }
-        .hyperlink { text-decoration: none; }
-        .menyknapp {
-            border: none;
-            font-size: 30px;
-            cursor: pointer;
-        }
-        footer {
-            background-color: var(--white);
-            text-align: center;
-            padding: 5px;
-            font-size: 20px;
-            font-weight: 400;
-        }
-        @media (min-width: 768px) {
-            .leaderboardsplit, .leaders { flex-basis: auto; }
-        }
-        @media (max-width: 767px) {
-            .container { flex-direction: column; }
-            .box, .box2 { width: 80%; }
-            .leaderboard { width: auto;}
-            #leaderContent { width: 90% !important; }
-            #leaderClass { flex-direction: row; }
-            #linker { display: none; }
-            #pomodoro, #omegakok { width: 40% !important; border: 3px solid var(--white); background-color: var(--gul);}
-            /* #topnavPC { display: none;} */
-            .topnav { display: flex; flex-wrap: wrap; justify-content: space-around; text-align: left; background-color: var(--white);}
-            #linkerText { font-size: 30px !important; }
-        }
-        .js-container {
+    }
+    .leaderboardsplit {
+        width: 10%;
+        padding: 10px; 
+        text-align: left;
+        border-right: 1px solid var(--white);
+        border-bottom: 1px solid var(--white);
+        font-weight: 400;
+    }
+    .leaders {
+        width: 50%; 
+        padding: 10px; 
+        text-align: left;
+        border-bottom: 1px solid var(--white);
+        font-weight: 400;
+    }
+    .hyperlink { text-decoration: none; }
+    .menyknapp {
+        border: none;
+        font-size: 30px;
+        cursor: pointer;
+    }
+    footer {
+        background-color: var(--white);
+        text-align: center;
+        padding: 5px;
+        font-size: 20px;
+        font-weight: 400;
+    }
+    @media (min-width: 768px) {
+        .leaderboardsplit, .leaders { flex-basis: auto; }
+    }
+    @media (max-width: 767px) {
+        .container { flex-direction: column; }
+        .box, .box2 { width: 80%; }
+        .leaderboard { width: auto;}
+        #leaderContent { width: 90% !important; }
+        #leaderClass { flex-direction: row; }
+        #linker { display: none; }
+        #pomodoro, #omegakok { width: 40% !important; border: 3px solid var(--white); background-color: var(--gul);}
+        /* #topnavPC { display: none;} */
+        .topnav { display: flex; flex-wrap: wrap; justify-content: space-around; text-align: left; background-color: var(--white);}
+        #linkerText { font-size: 30px !important; }
+        #atSchoolSection { width: 100% !important;}
+    }
+    .js-container {
         display: flex;
         width: 100%; 
         align-items: center; 
@@ -143,10 +144,7 @@
         justify-content: center;
         width: 90%;
     }
-    .quote {
-        font-size: 0.8em;
-        color: #222831;
-    }
+    .quote { font-size: 0.8em; color: #222831; }
     
     </style>
 </head>

@@ -124,10 +124,17 @@
     /* MOBIL */
     @media (max-width: 600px) { 
     .stemple-inn, .kaffe { width: 100%; margin: auto; }
-
+    .topnav { 
+        display: flex; flex-wrap: wrap; flex-direction: column;
+        justify-content:left; 
+        text-align: left; 
+        background-color: #F6F5F2;}
     #stempling-inn input[type="text"],
     #stempling-inn input[type="submit"], 
     #kaffeStats input[type="submit"] { width: 100%; box-sizing: border-box; }
+    #articleContainer {flex-direction: column; align-items: center;}
+    #profilbildeSection, #profilInfo { width: 80% !important;}
+    #pcBreak {display: none;}
 }  
 </style>
 </head>
@@ -172,8 +179,8 @@
         <a href="velkommen.html" style="color: var(--white);">Velkommen</a>
     </div> -->
     <article>
-        <div class="container" style="background-color: var(--white); ">
-            <div class="box" style="width: 40%; padding-left: 0; border-right: 2px solid var(--white); background-color: var(--white);">
+        <div class="container" id="articleContainer" style="background-color: var(--white); ">
+            <div class="box" id="profilbildeSection" style="width: 40%; padding-left: 0; border-right: 2px solid var(--white); background-color: var(--white);">
                 <!-- <h1>fyyffff slay</h1> -->
                 <img src="" id="profilbilde" style="width: 90%;  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 <br>
@@ -185,9 +192,9 @@
                     </form>
                 </div>
             </div>
-            <div class="box" style="width: 50%; background-color: var(--white);">
+            <div class="box" id="profilInfo" style="width: 50%; background-color: var(--white);">
                 <!-- <button class="knapp" style="background-color: var(--blue2);"><a href="#" style="font-size: 25px; color: var(--grey);">Stemple inn fra et annet sted</a></button><br> -->
-                <h1 style="color: var(--grey);" id="timestatistikk">Antall timer på skolen:</h1><br>
+                <h1 style="color: var(--grey);" id="timestatistikk">Antall timer på skolen:</h1><br id="pcBreak">
                 <h1 style="color: var(--grey);" id="kaffeStatistikk"></h1>
                 <div class="box" style="width: 90%; background-color: var(--blue2);box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
                     <h1  style="color: var(--grey); font-size: 35px;">
