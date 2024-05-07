@@ -86,6 +86,7 @@
         .topnav { display: flex; flex-wrap: wrap; justify-content: space-around; text-align: left; background-color: var(--white);}
         #linkerText { font-size: 30px !important; }
         #atSchoolSection { width: 100% !important;}
+        #contribute {flex-direction: row;}
     }
     .js-container {
         display: flex;
@@ -104,25 +105,7 @@
         align-items: center;
     }
 
-    .contribute-button {
-        background-color: var(--grey); /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        transition-duration: 0.4s;
-    }
-
-    .contribute-button:hover {
-        background-color: white; 
-        color: black; 
-        border: 2px solid #4CAF50;
-    }
+    
 
     h1 {
         font-size: 90px;
@@ -145,6 +128,24 @@
         width: 90%;
     }
     .quote { font-size: 0.8em; color: #222831; }
+    .contribute-button {
+        display: inline-block;
+        background-color: var(--lilla);
+        color: var(--white);
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 20px;
+        transition: background-color 0.3s ease;
+        font-weight: 400;
+    }
+
+    .contribute-button:hover {
+        background-color: #E59BE9;
+        border-color: none;
+        color: var(--grey);
+    }
+    #contribute { padding: 20px;}
     
     </style>
 </head>
@@ -257,6 +258,9 @@
     <div class="box" id="omegakok" style="width: 20%;">
         <a href="https://drive.google.com/drive/folders/1U6Vtb0Vp52Y_aH-IcK5jOupvC-ChpOrl?usp=drive_link" class="hyperlink" target="_blank"><h1 id="linkerText" style="color: var(--grey); font-size: 40px;"> OMEGAKOK 👨🏼‍🍳</h1></a>
     </div>
+</div>
+<div class="container" id="contribute">
+    <a href="https://github.com/sirihelenew/mortensine.git" class="contribute-button">Forslag til forbedringer? Gjør det sjæl👍</a>
 </div>
 <!-- <a href="https://github.com/sirihelenew/mortensine" target="_blank">
     <button class="contribute-button">Feature request? Gjør det sjæl.</button>
