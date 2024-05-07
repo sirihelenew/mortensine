@@ -227,13 +227,16 @@
                     </div>
                 
                     <div class="column" style="width: 45%;">
-                        <h1 style="color: var(--grey); font-size: 20px;"> GÅRSDAGENS LATEBIRD 🥇🌙</h1>
+                        <h1 style="color: var(--grey); font-size: 25px;"> GÅRSDAGENS LATEBIRD 🥇🌙</h1>
                         <img src="" id="latebird1" style="width: 85%;">
                         <h1 id="latebirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>
                 
                         <h1 style="color: var(--grey); font-size: 20px;"> GÅRSDAGENS LATEBIRD 🥈🌙</h1>
                         <img src="" id="latebird2" style="width: 85%;">
                         <h1 id="latebirdTime2" style="color: var(--grey); font-size: 20px;"> </h1>
+                        <h1 style="color: var(--grey); font-size: 20px;"> GÅRSDAGENS LATEBIRD 🥈🌙</h1>
+                        <img src="" id="latebird3" style="width: 85%;">
+                        <h1 id="latebirdTime3" style="color: var(--grey); font-size: 20px;"> </h1>
                     </div>
                 </div>
                 <div class="box2" style="background-color: var(--white); width: 60%;">
@@ -602,7 +605,7 @@ function setupLastOutListener() {
                 console.log("No last out entries for yesterday.");
                 return;
             }
-            const lastOutDocs = snapshot.docs.slice(0, 2);
+            const lastOutDocs = snapshot.docs.slice(0, 3);
             lastOutDocs.forEach((lastOutDoc, index) => {
                 const userID = lastOutDoc.data().userID;
                 const tid = lastOutDoc.data().tid;
