@@ -11,14 +11,19 @@ const storage = admin.storage();
 const fs = require('fs');
 const ip = require('ip');
 const winston = require('winston');
+const mqtt = require('mqtt');
 
 const express = require('express');
 const path = require('path');
-const { spawn, exec } = require('child_process');
+const { spawn, exec, execSync } = require('child_process');
 const multer = require('multer');
 const app = express();
 const port = 3000;
 let fetch;
+
+const mqttBroker = 'mqtt://broker.hivemq.com';
+const mqttTopic = 'mortensineRfid/scan';
+const mqttOutboundTopic = 'mortensinaActivate/go';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -34,6 +39,89 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: 'logs/combined.log' }),
   ],
 });
+
+try {
+  const stdout = execSync('./setup.sh');
+  logger.info(`Git pull stdout: ${stdout}`);
+} catch (error) {
+  logger.error(`Error pulling code from Git: ${error}`);
+  return;
+}
+
+
+
+const client = mqtt.connect(mqttBroker);
+
+client.on('connect', function () {
+  client.subscribe(mqttTopic, function (err) {
+    if (err) {
+      logger.error('Error subscribing to topic: ', err);
+    }
+  });
+});
+
+client.on('message', function (topic, message) {
+  if (topic === mqttTopic) {
+    const blob = message.toString();
+    const parts = blob.split(", ");
+    const rfidTag = parts[0].split(": ")[1];
+    const status = parts[1].split(": ")[1] === "LOW";
+    console.log(JSON.stringify({ rfid: rfidTag, in_out: status }));
+    client.publish(mqttOutboundTopic, 'true');
+
+    // Check if the RFID tag is associated with a user...
+    const userRef = db.collection('brukere').where('rfidTag', '==', rfidTag);
+    userRef.get()
+    .then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+            const userID = querySnapshot.docs[0].id;
+            const navn=querySnapshot.docs[0].data().fornavn+' '+querySnapshot.docs[0].data().etternavn;
+            const tid = admin.firestore.Timestamp.now();
+            const metode = 'RFID';
+            const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
+            logger.info("Spawned sound")
+            sound.stdout.on('data', (data) => {
+              logger.info(`stdout: ${data}`);
+            });
+            sound.stderr.on('data', (data) => {
+              logger.error(`stderr: ${data}`);
+             });
+            sound.on('error', (error) => {
+              logger.error('Error starting Python script:', error);
+            });
+            db.collection('Innlogginger').add({
+                userID,
+                tid,
+                metode,
+                status // or 'ut' depending on your logic
+            })
+            .then(() => {
+                //res.json({ status: 'success' });
+                logger.info('Document updated successfully');
+            })
+            .catch((error) => {
+                //res.json({ status: 'error', error: 'Error updating document: ' + error });
+                logger.error("Error updating document: ", error);
+            });
+        } else {
+            //res.json({ status: 'error', error: 'User not found' });
+            logger.info('User not found');
+            const python = spawn('./venv/bin/python', ['play_sound.py', NaN]);
+        }
+    });
+  }
+});
+
+client.on('error', function (error) {
+  logger.error('MQTT client error: ', error);
+  setTimeout(() => {
+    client.end();
+    client = mqtt.connect(mqttBroker);
+  }, 5000); // delay the reconnection for 5 seconds
+});
+
+
+
 
 import('node-fetch').then(nodeFetch => {
   fetch = nodeFetch.default;
@@ -111,89 +199,8 @@ app.get('/ip', (req, res) => {
   res.send(ip.address());
 });
 // Pull the latest code from the Git repository
-exec('./setup.sh', (error, stdout, stderr) => {
-  if (error) {
-    logger.error(`Error pulling code from Git: ${error}`);
-    return;
-  }
-  logger.info(`Git pull stdout: ${stdout}`);
-  logger.error(`Git pull stderr: ${stderr}`);
-
-  // Run Python script
-  const python = spawn('./venv/bin/python', ['pythonas.py']);
-  // Collect data from script
-  python.on('error', (error) => {
-    logger.error('Error starting Python script:', error);
-  });
-  let scriptOutput = '';
-  python.stdout.on('data', function (data) {
-    logger.info('Python script output:', data.toString());
-    try {
-      scriptOutput = JSON.parse(data.toString());
-      const rfidTag = scriptOutput.rfid;
-      const status=scriptOutput.in_out;
-      // Check if the RFID tag is associated with a user...
-      const userRef = db.collection('brukere').where('rfidTag', '==', rfidTag);
-      userRef.get()
-      .then((querySnapshot) => {
-          if (!querySnapshot.empty) {
-              const userID = querySnapshot.docs[0].id;
-              const navn=querySnapshot.docs[0].data().fornavn+' '+querySnapshot.docs[0].data().etternavn;
-              const tid = admin.firestore.Timestamp.now();
-              const metode = 'RFID';
-              const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
-              logger.info("Spawned sound")
-              sound.stdout.on('data', (data) => {
-                logger.info(`stdout: ${data}`);
-              });
-              sound.stderr.on('data', (data) => {
-                logger.error(`stderr: ${data}`);
-               });
-              sound.on('error', (error) => {
-                logger.error('Error starting Python script:', error);
-              });
-              db.collection('Innlogginger').add({
-                  userID,
-                  tid,
-                  metode,
-                  status // or 'ut' depending on your logic
-              })
-              .then(() => {
-                  //res.json({ status: 'success' });
-                  logger.info('Document updated successfully');
-              })
-              .catch((error) => {
-                  //res.json({ status: 'error', error: 'Error updating document: ' + error });
-                  logger.error("Error updating document: ", error);
-              });
-          } else {
-              //res.json({ status: 'error', error: 'User not found' });
-              logger.info('User not found');
-              const python = spawn('./venv/bin/python', ['play_sound.py', NaN]);
-          }
-      });
-    } catch (error) {
-      logger.error('Error parsing Python script output:', error);
-    }
-  });
-  // In case of error
-  python.stderr.on('data', (data) => {
-   logger.error(`stderr: ${data}`);
-  });
-
-  // End process
-  python.on('close', (code) => {
-   logger.info(`child process close all stdio with code ${code}`);
-  });
 
   // Serve static files from the public directory
-  app.use(express.static(path.join(__dirname)));
-
-
-  app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`);
-  });
-});
 
 
 function updateUserTime() {
@@ -226,5 +233,10 @@ function updateUserTime() {
 setInterval(updateUserTime, 60 * 1000);
 
 
+app.use(express.static(path.join(__dirname)));
 
+
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});
 module.exports = app;
