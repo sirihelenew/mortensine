@@ -92,7 +92,7 @@ function loadLeaderboard(usersData) {
     usersData.forEach((userData) => {
         const totalMinutes = userData.totalMinutes || 0;
         const kaffeCount = userData.kaffeCount || 0;
-        const quote = userData.quote || '';
+        const quote = encodeHTML(userData.quote || '');
         const totalHours = Math.floor(totalMinutes / 60);
         const totalMinutesLeft = totalMinutes % 60;
         const totalHoursToday = userData.totalHoursToday || 0;
@@ -291,3 +291,9 @@ function calculateCountdown(targetDateTime) {
   }).catch(error => {
     console.error("Error getting document: ", error);
   });
+
+  function encodeHTML(quote) {
+    let div = document.createElement('div');
+    div.innerText = quote;
+    return div.innerHTML;
+}
