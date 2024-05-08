@@ -3,6 +3,7 @@ var router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const logger = require('../funcs/logger');
 
 
 
@@ -19,7 +20,7 @@ const localstorage = multer.diskStorage({
       cb(null, dir); // Destination folder
     },
     filename: function(req, file, cb) {
-      const filename = file.fieldname + '-' + Date.now() + path.extname(file.originalname);
+      const filename = req.body.author + '-' + Date.now() + path.extname(file.originalname);
       logger.info(`File to be uploaded: ${filename}`);
       cb(null, filename); // Naming the file
     }

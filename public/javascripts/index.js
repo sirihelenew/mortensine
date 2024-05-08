@@ -22,6 +22,8 @@ getSocketInstance().on('connect', function () {
             setupLastOutListener(data.lastOutArray);
         }else if (data.type ==="earlybirdData"){
             setupEarlybirdListener(data.earlybirdArr);
+        }else if (data.type ==="sound"){
+            console.log("Sound message: ", data.message);
         }
     });
 });    

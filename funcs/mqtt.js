@@ -3,6 +3,7 @@ const {db,storage} = require('./firebase');
 const logger = require('./logger');
 const { spawn } = require('child_process');
 const admin = require('firebase-admin');
+const io=require('../bin/socket').getIO();
 
 
 
@@ -41,6 +42,12 @@ client.on('message', function (topic, message) {
               const tid = admin.firestore.Timestamp.now();
               const metode = 'RFID';
               const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
+              let output = '';
+              sound.stdout.on('data', (data) => {
+                output += data;
+                io.emit('message', { type: 'sound', message: output });
+              });
+              
               logger.info("Spawned sound")
               sound.stdout.on('data', (data) => {
                 logger.info(`stdout: ${data}`);
