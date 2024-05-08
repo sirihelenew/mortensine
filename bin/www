@@ -35,6 +35,8 @@ server.on('listening', onListening);
 
 socket.init(server); // Initialize the socket.io server
 require('../funcs/UpdateSocket')
+require("../funcs/mqtt");
+
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;

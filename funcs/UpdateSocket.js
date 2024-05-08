@@ -3,6 +3,8 @@
 const cron = require('node-cron');
 const {db, storage} = require ('../funcs/firebase');
 const io = require('../bin/socket').getIO();
+const fs = require('fs');
+
 
 db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
@@ -57,6 +59,19 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
 
 var leaderboardData= null;
 
+let previousLeaderboard = [];
+
+// Read the previousLeaderboard data from the file when the server starts up
+fs.readFile('previousLeaderboard.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading previousLeaderboard.json:', err);
+    } else {
+      previousLeaderboard = JSON.parse(data);
+      console.log("Previous leaderboard data loaded successfully");
+      console.log(previousLeaderboard);
+    }
+  });
+
 function updateLeaderboard(socket){
     const today = new Date();
     today.setHours(5, 0, 0, 0);
@@ -106,6 +121,15 @@ function updateLeaderboard(socket){
         });
 
         Promise.all(promises).then((usersData) => {
+            usersData.forEach((userData, index) => {
+                const previousIndex = previousLeaderboard.findIndex(user => (user.etternavn+user.fornavn) === (userData.etternavn+userData.fornavn));
+                if (previousIndex !== index) {
+                    console.log("Change in position for user", userData.etternavn, "from", previousIndex, "to", index);
+                    userData.changeInPosition = previousIndex - index;
+                } else {
+                    userData.changeInPosition = 0;
+                }
+            });
             
             const data = {
                 type: 'leaderboard',
@@ -128,8 +152,13 @@ function updateLeaderboard(socket){
 }
 
 console.log("Server running on port 3000")
-
-
+cron.schedule('0 5 * * *', () => {
+    fs.writeFile('previousLeaderboard.json', JSON.stringify(leaderboardData), 'utf8', (err) => {
+      if (err) {
+        console.error('Error writing previousLeaderboard.json:', err);
+      }
+    });
+  });
 // Server-side code
 let savedLastoutData=null;
 
@@ -288,3 +317,4 @@ cron.schedule('0 5 * * *', function() {
   lastOut();
 });
 setInterval(updateLeaderboard, 60000);
+

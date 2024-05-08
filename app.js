@@ -12,7 +12,6 @@ var restartRouter = require("./routes/restart");
 var ipRouter = require("./routes/ip");
 var logsRouter = require("./routes/logs");
 var uploadRouter = require("./routes/upload");
-const mqttClient = require("./funcs/mqtt");
 const { execSync } = require('child_process');
 const updateUserTime = require("./funcs/updateUsertime");
 
