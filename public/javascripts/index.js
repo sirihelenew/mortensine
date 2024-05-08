@@ -29,6 +29,9 @@ getSocketInstance().on('connect_error', function(error) {
     console.log('Connection failed', error);
 });
 
+
+
+
 function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePath) {
     const velkommenText = document.getElementById('velkommenText');
     const loginInfo = document.getElementById('loginInfo');
@@ -228,6 +231,7 @@ function setupLastOutListener(lastoutDataArray) {
             console.error("Finner ikke profilbilde.");
         }
     });
+    localStorage.setItem('latebird', JSON.stringify(lastoutDataArray));
 }
 
 
@@ -245,6 +249,7 @@ function setupEarlybirdListener(data) {
             earlybirdImg.src = earlybird.profilbildePath;
         }
     });
+    localStorage.setItem('earlybird', JSON.stringify(data));
 }
 function updateProfilePicture(path) {
     const imgElement = document.getElementById('earlybirdPic');
