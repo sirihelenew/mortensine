@@ -72,17 +72,15 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
     } else if (loginMethod === 'manual') {
         velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
     }
-    profileImage.onload = function() {
-        document.getElementById('profileImage').src = this.src;
-        document.getElementById('velkommenSide').classList.remove('hidden');
-    };
+    profileImage.src = profilbildePath;
+    document.getElementById('velkommenSide').classList.remove('hidden');
+
+    profileImage.src = profilbildePath;
 
     setTimeout(() => {
         document.getElementById('velkommenSide').classList.add('hidden');
         isMessageShowing = false;
     }, 10000); 
-
-    profileImage.src = profilbildePath;
 }
 
 
@@ -102,15 +100,13 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         const durationHours = Math.floor(durationMinutes / 60);
 
         const velkommenText = document.getElementById('velkommenText');
-        const profileImage = new Image();
 
-        profileImage.onload = function() {
-            document.getElementById('profileImage').src = this.src;
-            velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
-            document.getElementById('velkommenSide').classList.remove('hidden');
+        profileImage.src = profilbildePath;
+        velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
+        document.getElementById('velkommenSide').classList.remove('hidden');
 
            
-        };
+        
         setTimeout(() => {
             document.getElementById('velkommenSide').classList.add('hidden');
             isMessageShowing = false;
