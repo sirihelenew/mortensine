@@ -62,9 +62,9 @@ document.getElementById('uploadButton').addEventListener('click', function() {
     if (mp3File && selectedUser) {
         const formData = new FormData();
         formData.append('username', selectedUser);
-        formData.append('mp3File', mp3File);
         formData.append('author', author);
-        console.log(selectedUser)
+        formData.append('mp3File', mp3File);
+        console.log(formData);
         fetch('/upload', {
             method: 'POST',
             body: formData

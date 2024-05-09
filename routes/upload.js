@@ -11,6 +11,7 @@ const logger = require('../funcs/logger');
 const localstorage = multer.diskStorage({
     destination: function(req, file, cb) {
       const dir = './uploads/' + req.body.username;
+      console.log(req.body.author);
       try {
         fs.mkdirSync(dir, { recursive: true });
         logger.info(`Directory ${dir} created successfully`);
