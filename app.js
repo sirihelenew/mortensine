@@ -43,7 +43,13 @@ app.use("/logs", logsRouter);
 app.use("/upload", uploadRouter);
 app.use("/order", orderRouter);
 
-
+app.use(function(req, res, next) {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect('https://' + req.headers.host + req.url);
+  }
+});
 
 try {
   const stdout = execSync('./setup.sh');
