@@ -12,6 +12,7 @@ var restartRouter = require("./routes/restart");
 var ipRouter = require("./routes/ip");
 var logsRouter = require("./routes/logs");
 var uploadRouter = require("./routes/upload");
+var orderRouter = require("./routes/order");
 const { execSync } = require('child_process');
 const updateUserTime = require("./funcs/updateUsertime");
 
@@ -40,6 +41,7 @@ app.use("/restart", restartRouter);
 app.use("/ip", ipRouter);
 app.use("/logs", logsRouter);
 app.use("/upload", uploadRouter);
+app.use("/order", orderRouter);
 
 
 
