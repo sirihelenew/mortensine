@@ -8,6 +8,41 @@ function getSocketInstance() {
     return socketInstance;
 }
 
+function showNotification(title, body) {
+    if (!("Notification" in window)) {
+        console.log("This browser does not support desktop notification");
+    } else if (Notification.permission === "granted") {
+        var notification = new Notification(title, { body });
+    } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(function (permission) {
+            if (permission === "granted") {
+                var notification = new Notification(title, { body });
+            }
+        });
+    }
+}
+
+
+if (Notification.permission !== 'granted'){
+    Swal.fire({
+        title: 'Press yes, pretty please i beg you, i promise to be nice :)?',
+        showDenyButton: false,
+        confirmButtonText: `Enable`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (!("Notification" in window)) {
+                console.log("This browser does not support desktop notification");
+            } else if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                        permissionGranded = true;
+                        Swal.fire('Notifications enabled! \n Nice!', '', 'success')
+                    }
+                });
+            }
+        }
+    })
+}
 getSocketInstance().on('connect', function () {
     console.log("Connected to server");
     getSocketInstance().on('message', function (data) {
@@ -65,24 +100,32 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
     const velkommenText = document.getElementById('velkommenText');
     const loginInfo = document.getElementById('loginInfo');
     const profileImage = document.getElementById('profileImage');
+    let notificationText = '';
 
     if (loginMethod === 'RFID') {
         velkommenText.innerHTML = `Velkommen ${userName}!`;
+        notificationText = `Velkommen ${userName}!`;
+
         loginInfo.style.display = "none";
     } else if (loginMethod === 'manual') {
         velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
+        notificationText = `${userName} har stemplet inn her: ${loginLocation}!`;
+
     }
     profileImage.src = profilbildePath;
     document.getElementById('velkommenSide').classList.remove('hidden');
 
     profileImage.src = profilbildePath;
+    if (Notification.permission === "granted") {
+        var notification = new Notification(notificationText, { icon: profilbildePath });
+        console.log("Notification sent: ", notification);
+    }   
 
     setTimeout(() => {
         document.getElementById('velkommenSide').classList.add('hidden');
         isMessageShowing = false;
     }, 10000); 
 }
-
 
 
 function showGoodbyeMessage(userID, userName, profilbildePath) {
@@ -100,19 +143,22 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         const durationHours = Math.floor(durationMinutes / 60);
 
         const velkommenText = document.getElementById('velkommenText');
+        let notificationText = '';
 
         profileImage.src = profilbildePath;
         velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
         document.getElementById('velkommenSide').classList.remove('hidden');
-
-           
-        
+        notificationText=`Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
+        console.log("Notification permission: ", Notification.permission);
+        if (Notification.permission === "granted") {
+            var notification = new Notification(notificationText, { icon: profilbildePath });
+        }
+        console.log("Notification sent: ", notification);
         setTimeout(() => {
             document.getElementById('velkommenSide').classList.add('hidden');
             isMessageShowing = false;
         }, 10000); 
 
-        profileImage.src = profilbildePath;
     }).catch(error => {
         console.error("Error getting user document: ", error);
         isMessageShowing = false;
