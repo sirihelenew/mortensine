@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./mortensine-a58cb-firebase-adminsdk-7r4ub-c075dab8d4.json');
+const serviceAccount = require('../mortensine-a58cb-firebase-adminsdk-7r4ub-c075dab8d4.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
