@@ -24,6 +24,7 @@ getSocketInstance().on('connect', function () {
             setupEarlybirdListener(data.earlybirdArr);
         }else if (data.type ==="sound"){
             console.log("Sound message: ", data.message);
+            showSoundAuthour(data.message);
         }else if (data.type==="usersList"){
             updateUserslist(data.usersList);
         }
@@ -47,8 +48,10 @@ function updateUserslist(data){
     // Add the RFID users to the list
 }
 
+var isMessageShowing = false;
 
 function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePath) {
+    isMessageShowing = true;
     const velkommenText = document.getElementById('velkommenText');
     const loginInfo = document.getElementById('loginInfo');
     const profileImage = document.getElementById('profileImage');
@@ -59,18 +62,38 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
     } else if (loginMethod === 'manual') {
         velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
     }
-
+    profileImage.onload = function() {
+        document.getElementById('profileImage').src = this.src;
+        document.getElementById('velkommenSide').classList.remove('hidden');
+        setTimeout(() => {
+            document.getElementById('velkommenSide').classList.add('hidden');
+            isMessageShowing = false;
+        }, 10000); 
+    };
 
     profileImage.src = profilbildePath;
-    document.getElementById('velkommenSide').classList.remove('hidden');
-    setTimeout(() => {
-        document.getElementById('velkommenSide').classList.add('hidden');
-    }, 7000); 
-
+    isMessageShowing = false;
 
 }
 
+
+function showSoundAuthour(author){
+    if (isMessageShowing) {
+        setTimeout(showSoundAuthour, 500); // Check again in 1 second
+    } else {
+        const velkommenText = document.getElementById('velkommenText');
+        velkommenText.innerHTML = `Lyd lagt inn av: ${author}`;
+
+        document.getElementById('velkommenSide').classList.remove('hidden');
+        setTimeout(() => {
+            document.getElementById('velkommenSide').classList.add('hidden');
+        }, 5000); 
+    }
+}
+
 function showGoodbyeMessage(userID, userName, profilbildePath) {
+    isMessageShowing = true;
+
     db.collection('brukere').doc(userID).get().then(doc => {
         const userData = doc.data();
         const timeEntered = userData.timeEntered.toDate();
@@ -80,26 +103,25 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         const durationHours = Math.floor(durationMinutes / 60);
 
         const velkommenText = document.getElementById('velkommenText');
-        const profileImage = document.getElementById('profileImage');
+        const profileImage = new Image();
 
-        velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
+        profileImage.onload = function() {
+            document.getElementById('profileImage').src = this.src;
+            velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
+            document.getElementById('velkommenSide').classList.remove('hidden');
 
+            setTimeout(() => {
+                document.getElementById('velkommenSide').classList.add('hidden');
+                isMessageShowing = false;
+            }, 10000); 
+        };
 
-
-  
         profileImage.src = profilbildePath;
-
-        document.getElementById('velkommenSide').classList.remove('hidden');
-        setTimeout(() => {
-            document.getElementById('velkommenSide').classList.add('hidden');
-        }, 7000); 
-
-        
     }).catch(error => {
         console.error("Error getting user document: ", error);
+        isMessageShowing = false;
     });
 }
-
 
 function loadLeaderboard(usersData) {
     htmlContent = '';
