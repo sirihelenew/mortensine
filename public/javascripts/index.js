@@ -72,7 +72,6 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
     };
 
     profileImage.src = profilbildePath;
-    isMessageShowing = false;
 
 }
 
