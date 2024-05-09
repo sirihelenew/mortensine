@@ -271,7 +271,6 @@ function setupEarlybirdListener() {
             };
             io.sockets.emit('message', data);
             savedFirstInData=data;
-            earlybirdCounter += data.earlybirdArr.length;
 
           });
       }, error => {
