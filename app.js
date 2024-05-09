@@ -65,6 +65,7 @@ app.on('unhandledRejection', (reason, promise) => {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  res.status(404).sendFile(path.join(__dirname, '/public/404.html'));
   next(createError(404));
 });
 

@@ -225,16 +225,10 @@ function lastOut() {
 
 // Server-side code
 let savedFirstInData = null;
-let earlybirdCounter = 0;
 
 function setupEarlybirdListener() {
     const today = new Date();
     today.setHours(5, 0, 0, 0);
-
-    if (earlybirdCounter >= 3) {
-        console.log("Already found 3 earlybirds for today. Stopping listener until next reset.");
-        return;
-    }
 
     db.collection('Innlogginger')
         .where('tid', '>=', today)
@@ -245,7 +239,7 @@ function setupEarlybirdListener() {
                 console.log("No earlybird entries for today yet.");
                 return;
             }
-            const earlybirdDocs = snapshot.docs.slice(0, 3 - earlybirdCounter);
+            const earlybirdDocs = snapshot.docs.slice(0, 3);
             const earlybirdData = earlybirdDocs.map((earlybirdDoc, index) => {
               const userID = earlybirdDoc.data().userID;
               const tid = earlybirdDoc.data().tid;
@@ -285,10 +279,7 @@ function setupEarlybirdListener() {
       });
 }
 
-cron.schedule('0 0 * * *', function() {
-  earlybirdCounter = 0;
-  savedFirstInData=null;
-});
+
 
 var lastUserData=null;
 
