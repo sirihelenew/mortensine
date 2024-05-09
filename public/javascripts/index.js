@@ -8,41 +8,33 @@ function getSocketInstance() {
     return socketInstance;
 }
 
-function showNotification(title, body) {
+
+if (!localStorage.getItem('neverAskAgain')) {
     if (!("Notification" in window)) {
         console.log("This browser does not support desktop notification");
-    } else if (Notification.permission === "granted") {
-        var notification = new Notification(title, { body });
-    } else if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then(function (permission) {
-            if (permission === "granted") {
-                var notification = new Notification(title, { body });
+    } else if (Notification.permission !== 'granted'){
+        Swal.fire({
+            title: 'Trykk på godta notifications på promt eller evt trykk bjelle tegnet oppe og aktiver manuelt?',
+            showDenyButton: true,
+            confirmButtonText: `TRYKK MEG`,
+            denyButtonText: `Jeg gidder ikke, aldri spør meg igjen (ikke vær så teit a)`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (Notification.permission !== 'granted') {
+                    Notification.requestPermission().then(function (permission) {
+                        if (permission === "granted") {
+                            permissionGranded = true;
+                            Swal.fire('Notifications enabled BABY! \n Nice!', '', 'success')
+                        }
+                    });
+                }
+            } else if (result.isDenied){
+                localStorage.setItem('neverAskAgain', true);
             }
-        });
+        })
     }
 }
 
-
-if (Notification.permission !== 'granted'){
-    Swal.fire({
-        title: 'Press yes, pretty please i beg you, i promise to be nice :)?',
-        showDenyButton: false,
-        confirmButtonText: `Enable`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            if (!("Notification" in window)) {
-                console.log("This browser does not support desktop notification");
-            } else if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-                Notification.requestPermission().then(function (permission) {
-                    if (permission === "granted") {
-                        permissionGranded = true;
-                        Swal.fire('Notifications enabled! \n Nice!', '', 'success')
-                    }
-                });
-            }
-        }
-    })
-}
 getSocketInstance().on('connect', function () {
     console.log("Connected to server");
     getSocketInstance().on('message', function (data) {
