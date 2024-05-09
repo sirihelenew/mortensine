@@ -12,6 +12,38 @@ function init() {
       });
   }
 }
+let deferredPrompt;
+
+
+const installModal = document.getElementById('installModal');
+const installBtn = document.getElementById('installBtn');
+const closeBtn = document.getElementById('closeBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installModal.style.display = 'block';
+});
+
+installBtn.addEventListener('click', (e) => {
+  installModal.style.display = 'none';
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+    deferredPrompt = null;
+  });
+});
+
+closeBtn.addEventListener('click', (e) => {
+  installModal.style.display = 'none';
+});
+
+
+
 
 function getSocketInstance() {
     if (!socketInstance) {
