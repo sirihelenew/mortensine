@@ -1,17 +1,20 @@
 var express = require('express');
 var router = express.Router();
+var fetch = require('node-fetch');
+
 
 var latestStatus = null;
 var fetchError = null;
 
 function fetchStatus() {
-    fetch('https://omegav.no/api/dooropen.php')
+    fetch('https://www.omegav.no/api/dooropen.php')
         .then(response => response.json())
         .then(data => {
             latestStatus = data;
             fetchError = null;
         })
         .catch(error => {
+            console.error('Error fetching status:', error);
             fetchError = error.toString();
         });
 }
@@ -23,6 +26,8 @@ fetchStatus();
 setInterval(fetchStatus, 60000);
 
 router.get('/', (req, res) => {
+    console.log('fetchError:', fetchError);
+    console.log('latestStatus:', latestStatus);
     if (fetchError) {
         res.status(500).json({ error: fetchError });
     } else if (latestStatus) {

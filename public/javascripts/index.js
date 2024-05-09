@@ -1,6 +1,18 @@
 localStorage.setItem('serverStarted', 'true');
 let socketInstance = null;
 
+document.addEventListener('DOMContentLoaded', init, false);
+function init() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/javascripts/service-worker-index.js')
+      .then((reg) => {
+        console.log('Service worker registered -->', reg);
+      }, (err) => {
+        console.error('Service worker not registered -->', err);
+      });
+  }
+}
+
 function getSocketInstance() {
     if (!socketInstance) {
         socketInstance = io.connect('https://mortensine.no');
@@ -23,8 +35,15 @@ if (!localStorage.getItem('neverAskAgain')) {
                 if (Notification.permission !== 'granted') {
                     Notification.requestPermission().then(function (permission) {
                         if (permission === "granted") {
-                            permissionGranded = true;
-                            Swal.fire('Notifications enabled BABY! \n Nice!', '', 'success')
+                            Swal.fire({
+                                title: 'Notifications enabled BABY! \n Nice! Click the button to enable audio.',
+                                confirmButtonText: `Enable Audio`,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    var audio = new Audio('intro.mp3');
+                                    audio.play();
+                                }
+                            });
                         }
                     });
                 }
@@ -84,6 +103,8 @@ function updateUserslist(data){
 }
 
 var isMessageShowing = false;
+localStorage.setItem('audioPlaying',false);
+
 function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePath) {
     if (isMessageShowing){
         return;
@@ -114,12 +135,21 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
             var audio = new Audio('intro.mp3');
             audio.play();
             localStorage.setItem('audioPlaying', true);
+            var timeoutId = setTimeout(function() {
+                localStorage.setItem('audioPlaying',false);
+            }, 3 * 1000);
             audio.onended = function() {
-                localStorage.removeItem('audioPlaying');
+                localStorage.setItem('audioPlaying',false);
+                // Clear the timeout when the audio ends
+                clearTimeout(timeoutId);
             };
             console.log("Notification sent: ", notification);
+        } else {
+            console.log("Audio is already playing, not sending notification");
         }
-    }   
+    } else {
+        console.log("Notification permission not granted");
+    }
 
     setTimeout(() => {
         document.getElementById('velkommenSide').classList.add('hidden');
@@ -156,13 +186,21 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
                 var audio = new Audio('outro.mp3');
                 audio.play();
                 localStorage.setItem('audioPlaying', true);
+                var timeoutId = setTimeout(function() {
+                    localStorage.setItem('audioPlaying',false);
+                }, 3 * 1000);
                 audio.onended = function() {
-                    localStorage.removeItem('audioPlaying');
+                    localStorage.setItem('audioPlaying',false);
+                    // Clear the timeout when the audio ends
+                    clearTimeout(timeoutId);
                 };
                 console.log("Notification sent: ", notification);
+            } else {
+                console.log("Audio is already playing, not sending notification");
             }
+        } else {
+            console.log("Notification permission not granted");
         }
-        console.log("Notification sent: ", notification);
         setTimeout(() => {
             document.getElementById('velkommenSide').classList.add('hidden');
             isMessageShowing = false;
