@@ -4,7 +4,7 @@ var fs = require('fs');
 
 
 router.get('/', (req, res) => {
-    fs.readFile('../logs/combined.log', 'utf8', (err, data) => {
+    fs.readFile('logs/combined.log', 'utf8', (err, data) => {
       if (err) {
         logger.error(err);
         return res.status(500).send('Error reading log file');
