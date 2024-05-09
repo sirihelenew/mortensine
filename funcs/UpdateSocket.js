@@ -17,15 +17,12 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                 const userStatus = userData.status;
                 let imageRef;
                                     // Only update the status field of the user's document if it's not already true
-                if (userStatus!=loginData.status) {
-                    db.collection('brukere').doc(loginData.userID).update({
-                        status: loginData.status
-                    });
+                if (userStatus != loginData.status) {
+                    const updateData = { status: loginData.status };
                     if (loginData.status) {
-                        db.collection('brukere').doc(loginData.userID).update({
-                        timeEntered: new Date()
-                    });
+                        updateData.timeEntered = new Date();
                     }
+                    db.collection('brukere').doc(loginData.userID).update(updateData);
                 }
   
                 if (loginData.status) {
