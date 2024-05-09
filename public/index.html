@@ -56,6 +56,7 @@
         padding: 10px; 
         text-align: left;
         border-bottom: 1px solid var(--white);
+        border-right: 1px solid var(--white);
         font-weight: 400;
     }
     .hyperlink { text-decoration: none; }
@@ -79,13 +80,15 @@
         .box, .box2 { width: 80%; }
         .leaderboard { width: auto;}
         #leaderContent { width: 90% !important; }
-        #leaderClass { flex-direction: row; }
+        #leaderClass { flex-direction: column !important; }
         #linker { display: none; }
         #pomodoro, #omegakok { width: 40% !important; border: 3px solid var(--white); background-color: var(--gul);}
         /* #topnavPC { display: none;} */
         .topnav { display: flex; flex-wrap: wrap; justify-content: space-around; text-align: left; background-color: var(--white);}
         #linkerText { font-size: 30px !important; }
         #atSchoolSection { width: 100% !important;}
+        #birdies { flex-direction: column;}
+        #earlybirdies, #latebirdies {width: 90% !important;}
     }
     .js-container {
         display: flex;
@@ -145,6 +148,27 @@
         width: 90%;
     }
     .quote { font-size: 0.8em; color: #222831; }
+    .position-change {
+        display: flex;
+        width: 10%; /* Adjust this value to your needs */
+        text-align: center;
+        /* border-right: 1px solid var(--white); */
+        border-bottom: 1px solid var(--white);
+        justify-content: center;
+        align-items: center;
+        background-color: var(--white);
+    }
+    .arrow-up {
+        color: #41B06E; /* Adjust this value to your needs */
+    }
+
+    .arrow-down {
+        color: #D04848; /* Adjust this value to your needs */
+    }
+
+    .equal-sign {
+        color: #008DDA; /* Adjust this value to your needs */
+    }
     
     </style>
 </head>
@@ -211,8 +235,8 @@
             </div>
         <div class="box" id="leaderContent" style="background-color: var(--white); width: 45%;">
             <div class="leaderboard" id="leaderClass" style="background-color: var(--white); align-items: center;">
-                <div class="row" style="display: flex; justify-content: space-between;">
-                    <div class="column" style="width: 50%;">
+                <div class="row" id="birdies" style="display: flex; justify-content: space-between;">
+                    <div class="column" id="earlybirdies" style="width: 50%;">
                         <h1 style="color: var(--grey); font-size: 22px;"> DAGENS EARLYBIRD 🥇☀️</h1>
                         <img src="" id="earlybird1" style="width: 250px; height: 250px; object-fit: cover;">
                         <h1 id="earlybirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>
@@ -226,7 +250,7 @@
                         <h1 id="earlybirdTime3" style="color: var(--grey); font-size: 20px;"> </h1>
                     </div>
                 
-                    <div class="column" style="width: 50%;">
+                    <div class="column" id="latebirdies" style="width: 50%;">
                         <h1 style="color: var(--grey); font-size: 22px;"> GÅRSDAGENS LATEBIRD 🥇🌙</h1>
                         <img src="" id="latebird1" style="width: 250px; height: 250px; object-fit: cover;">
                         <h1 id="latebirdTime1" style="color: var(--grey); font-size: 20px;"> </h1>

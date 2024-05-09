@@ -125,13 +125,18 @@ function loadLeaderboard(usersData) {
 
         // Determine the arrow based on the changedPosition value
         let arrow;
-        if (changedPosition > 0) {
-            arrow = `🡅 ${Math.abs(changedPosition)}`; // Arrow up
-        } else if (changedPosition < 0) {
-            arrow = `🡇 ${Math.abs(changedPosition)}`; // Arrow down
-        } else {
-            arrow = '='; // Equal sign
-        }
+let arrowClass;
+
+    if (changedPosition > 0) {
+        arrow = `<i class="fa-solid fa-arrow-up"></i> ${Math.abs(changedPosition)}`;
+        arrowClass = 'arrow-up';
+    } else if (changedPosition < 0) {
+        arrow = `<i class="fa-solid fa-arrow-down"></i> ${Math.abs(changedPosition)}`;
+        arrowClass = 'arrow-down';
+    } else {
+        arrow = '';
+        arrowClass = 'equal-sign';
+    }
 
         htmlContent += `
             <div class="leaderboard" >
@@ -142,7 +147,7 @@ function loadLeaderboard(usersData) {
                 <div class="leaders" style="background-color: ${rowColor}; width=25%;">
                     <span class="name" style="margin-right: 20px;">${userData.fornavn + ' ' + userData.etternavn || 'Unknown'}</span>
                     <span class="quote">${quote}</span></div>
-                    <span class="position-change">${arrow}</span>
+                    <span class="position-change ${arrowClass}">${arrow}</span>
                 </div>`;
     });
     leaderboardContent.innerHTML = htmlContent;
