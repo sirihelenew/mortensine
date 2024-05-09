@@ -4,7 +4,14 @@ var io;
 
 module.exports = {
   init: function(server) {
-    io = socket(server);
+    io = socket(server, {
+      cors: {
+        origin: "*", // Allow all origins
+        methods: ["GET", "POST"],
+        allowedHeaders: ["my-custom-header"],
+        credentials: true
+      }
+    });
     return io;
   },
   getIO: function() {
