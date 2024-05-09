@@ -34,6 +34,14 @@ getSocketInstance().on('connect_error', function(error) {
     console.log('Connection failed', error);
 });
 
+getSocketInstance().on('disconnect', function () {
+    console.log("Disconnected from server");
+    if (isMessageShowing) {
+        document.getElementById('velkommenSide').classList.add('hidden');
+        isMessageShowing = false;
+    }
+});
+
 function updateUserslist(data){
     const list= JSON.parse(data);
     const rfidUsersList = document.getElementById('rfidUsersList');
@@ -51,6 +59,9 @@ function updateUserslist(data){
 var isMessageShowing = false;
 
 function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePath) {
+    if (isMessageShowing){
+        return;
+    }
     isMessageShowing = true;
     const velkommenText = document.getElementById('velkommenText');
     const loginInfo = document.getElementById('loginInfo');
@@ -78,7 +89,7 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
 
 function showSoundAuthour(author){
     if (isMessageShowing) {
-        setTimeout(showSoundAuthour, 500); // Check again in 1 second
+        setTimeout(showSoundAuthour(author), 500); // Check again in 1 second
     } else {
         const velkommenText = document.getElementById('velkommenText');
         velkommenText.innerHTML = `Lyd lagt inn av: ${author}`;
@@ -91,6 +102,9 @@ function showSoundAuthour(author){
 }
 
 function showGoodbyeMessage(userID, userName, profilbildePath) {
+    if (isMessageShowing){
+        return;
+    }
     isMessageShowing = true;
 
     db.collection('brukere').doc(userID).get().then(doc => {
