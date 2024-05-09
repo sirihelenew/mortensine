@@ -68,7 +68,6 @@ fs.readFile('previousLeaderboard.json', 'utf8', (err, data) => {
     } else {
       previousLeaderboard = JSON.parse(data);
       console.log("Previous leaderboard data loaded successfully");
-      console.log(previousLeaderboard);
     }
   });
 
@@ -122,9 +121,12 @@ function updateLeaderboard(socket){
 
         Promise.all(promises).then((usersData) => {
             usersData.forEach((userData, index) => {
-                const previousIndex = previousLeaderboard.findIndex(user => (user.etternavn+user.fornavn) === (userData.etternavn+userData.fornavn));
+                let previousIndex = previousLeaderboard.findIndex(user => (user.etternavn+user.fornavn) === (userData.etternavn+userData.fornavn));
+                // If the user was not found in the previous leaderboard, set its index to one bigger than the length of the previous leaderboard
+                if (previousIndex === -1) {
+                    previousIndex = previousLeaderboard.length;
+                }
                 if (previousIndex !== index) {
-                    console.log("Change in position for user", userData.etternavn, "from", previousIndex, "to", index);
                     userData.changeInPosition = previousIndex - index;
                 } else {
                     userData.changeInPosition = 0;
@@ -288,6 +290,95 @@ cron.schedule('0 0 * * *', function() {
   savedFirstInData=null;
 });
 
+var lastUserData=null;
+
+function currentUsers(){
+    console.log("checking current users");
+    const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set to start of today
+
+  // Create a Map to keep track of the users and their latest method and sted
+  const usersMap = new Map();
+
+  db.collection('Innlogginger')
+    .where('tid', '>=', today)
+    .orderBy('tid', 'asc')
+    .get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        console.log("No entries for today yet.");
+        return;
+      }
+
+      const promises = [];
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const userID = data.userID;
+        const metode = data.metode;
+        const sted = data.sted;
+
+        const promise = db.collection('brukere').doc(userID).get().then(userDoc => {
+          if (!userDoc.exists) {
+            console.error("User document does not exist.");
+            return;
+          }
+
+          const userData = userDoc.data();
+          const status = userData.status;
+
+          // Only add the user to the list if their status is true
+          if (status) {
+            // Update the user's latest method and sted in the Map
+            usersMap.set(userID, { metode, sted });
+          }
+        });
+
+        promises.push(promise);
+      });
+
+      Promise.all(promises).then(() => {
+        let rfidUsers = '';
+        let manualUsers = '';
+    
+        // Create an array to hold the promises from the get operations
+        const getPromises = [];
+    
+        // Iterate over the Map and add the users to the appropriate list
+        usersMap.forEach((value, userID) => {
+            const getPromise = db.collection('brukere').doc(userID).get().then(userDoc => {
+                const userData = userDoc.data();
+                const fornavn = userData.fornavn;
+                const etternavn = userData.etternavn;
+                const name = fornavn + ' ' + etternavn;
+    
+                if (value.metode === 'RFID') {
+                    rfidUsers += '<li>' + name + '</li>';
+                } else if (value.metode === 'manual') {
+                    manualUsers += '<li>' + name + ' - ' + value.sted + '</li>';
+                }
+            });
+    
+            getPromises.push(getPromise);
+        });
+    
+        // Wait for all of the get operations to complete before sending the user lists
+        Promise.all(getPromises).then(() => {
+            const data = {
+                type: 'usersList',
+                usersList: JSON.stringify({ rfidUsers, manualUsers })
+            };
+            io.sockets.emit('message', data);
+        });
+    });
+    })
+    .catch(error => {
+      console.error("Error getting documents: ", error);
+    });
+}
+setInterval(currentUsers, 60000);
+
+
 io.sockets.on('connection', (socket) =>{
   console.log('A user connected');
 
@@ -310,6 +401,12 @@ io.sockets.on('connection', (socket) =>{
       socket.emit('message', savedFirstInData);
   } else {
       setupEarlybirdListener();
+  }
+  if (lastUserData){
+    console.log("Sending current users data to new user");
+    socket.emit('message', lastUserData);
+  } else{
+    currentUsers();
   }
 });
 

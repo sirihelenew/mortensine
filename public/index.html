@@ -291,39 +291,6 @@
 
 
 
-    let usersPunchedInToday = [];
-
-function setupDailyUsersListener() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set to start of today
-
-    db.collection('Innlogginger')
-        .where('tid', '>=', today)
-        .orderBy('tid', 'asc')
-        .onSnapshot(snapshot => {
-            if (snapshot.empty) {
-                console.log("No entries for today yet.");
-                return;
-            }
-
-            usersPunchedInToday = []; 
-
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                const userID = data.userID;
-
-                
-                usersPunchedInToday.push(userID);
-            });
-
-            // Call loadLeaderboard after the users who have punched in today have been fetched
-            loadLeaderboard();
-        }, error => {
-            console.error("Error listening to realtime updates: ", error);
-        });
-}
-window.onload = setupDailyUsersListener;
-
 function checkOvDoor() {
     fetch('/ovDoor')
         .then(response => response.json())
@@ -345,79 +312,6 @@ function checkOvDoor() {
 checkOvDoor();
 setInterval(checkOvDoor, 60000);
 
-function setupDailyUsersListener() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set to start of today
-
-    const rfidUsersList = document.getElementById('rfidUsersList');
-    const manualUsersList = document.getElementById('manualUsersList');
-
-    // Create a Map to keep track of the users and their latest method and sted
-    const usersMap = new Map();
-
-    db.collection('Innlogginger')
-        .where('tid', '>=', today)
-        .orderBy('tid', 'asc')
-        .onSnapshot(snapshot => {
-            if (snapshot.empty) {
-                console.log("No entries for today yet.");
-                return;
-            }
-
-            const promises = [];
-
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                const userID = data.userID;
-                const metode = data.metode;
-                const sted = data.sted;
-
-                const promise = db.collection('brukere').doc(userID).get().then(userDoc => {
-                    if (!userDoc.exists) {
-                        console.error("User document does not exist.");
-                        return;
-                    }
-
-                    const userData = userDoc.data();
-                    const status = userData.status;
-
-                    // Only add the user to the list if their status is true
-                    if (status) {
-                        // Update the user's latest method and sted in the Map
-                        usersMap.set(userID, { metode, sted });
-                    }
-                });
-
-                promises.push(promise);
-            });
-
-            Promise.all(promises).then(() => {
-                let rfidUsers = '';
-                let manualUsers = '';
-
-                // Iterate over the Map and add the users to the appropriate list
-                usersMap.forEach((value, userID) => {
-                    db.collection('brukere').doc(userID).get().then(userDoc => {
-                        const userData = userDoc.data();
-                        const fornavn = userData.fornavn;
-                        const etternavn = userData.etternavn;
-                        const name = fornavn + ' ' + etternavn;
-
-                        if (value.metode === 'RFID') {
-                            rfidUsers += '<li>' + name + '</li>';
-                        } else if (value.metode === 'manual') {
-                            manualUsers += '<li>' + name + ' - ' + value.sted + '</li>';
-                        }
-
-                        rfidUsersList.innerHTML = rfidUsers;
-                        manualUsersList.innerHTML = manualUsers;
-                    });
-                });
-            });
-        }, error => {
-            console.error("Error listening to realtime updates: ", error);
-        });
-}
 function toggleAtSchool() {
     const atSchoolSection = document.getElementById('atSchoolSection');
 
@@ -428,9 +322,6 @@ function toggleAtSchool() {
     }
 
 }
-setupDailyUsersListener();
-
-
 
 </script>
 <script src="/socket.io/socket.io.js"></script>

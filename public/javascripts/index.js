@@ -24,6 +24,8 @@ getSocketInstance().on('connect', function () {
             setupEarlybirdListener(data.earlybirdArr);
         }else if (data.type ==="sound"){
             console.log("Sound message: ", data.message);
+        }else if (data.type==="usersList"){
+            updateUserslist(data.usersList);
         }
     });
 });    
@@ -31,7 +33,19 @@ getSocketInstance().on('connect_error', function(error) {
     console.log('Connection failed', error);
 });
 
-
+function updateUserslist(data){
+    const list= JSON.parse(data);
+    const rfidUsersList = document.getElementById('rfidUsersList');
+    const manualUsersList = document.getElementById('manualUsersList');
+    if (!rfidUsersList || !manualUsersList) {
+        return;
+      }
+    // Clear the lists
+    rfidUsersList.innerHTML = list.rfidUsers;
+    manualUsersList.innerHTML = list.manualUsers;
+  
+    // Add the RFID users to the list
+}
 
 
 function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePath) {
