@@ -109,13 +109,16 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
 
     profileImage.src = profilbildePath;
     if (Notification.permission === "granted") {
-        var notification = new Notification(notificationText, { icon: profilbildePath });
-        var audio = new Audio('intro.mp3');
-        audio.play();
-        localStorage.setItem('audioPlaying', true);
-        audio.onended = function() {
-            localStorage.removeItem('audioPlaying');
-        };
+        if (!localStorage.getItem('audioPlaying')) {
+            var notification = new Notification(notificationText, { icon: profilbildePath });
+            var audio = new Audio('intro.mp3');
+            audio.play();
+            localStorage.setItem('audioPlaying', true);
+            audio.onended = function() {
+                localStorage.removeItem('audioPlaying');
+            };
+            console.log("Notification sent: ", notification);
+        }
     }   
 
     setTimeout(() => {
@@ -148,13 +151,16 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         notificationText=`Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
         console.log("Notification permission: ", Notification.permission);
         if (Notification.permission === "granted") {
-            var notification = new Notification(notificationText, { icon: profilbildePath });
-            var audio = new Audio('outro.mp3');
-            audio.play();
-            localStorage.setItem('audioPlaying', true);
-            audio.onended = function() {
-                localStorage.removeItem('audioPlaying');
-            };
+            if (!localStorage.getItem('audioPlaying')) {
+                var notification = new Notification(notificationText, { icon: profilbildePath });
+                var audio = new Audio('outro.mp3');
+                audio.play();
+                localStorage.setItem('audioPlaying', true);
+                audio.onended = function() {
+                    localStorage.removeItem('audioPlaying');
+                };
+                console.log("Notification sent: ", notification);
+            }
         }
         console.log("Notification sent: ", notification);
         setTimeout(() => {
