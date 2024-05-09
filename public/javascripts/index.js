@@ -57,7 +57,6 @@ function updateUserslist(data){
 }
 
 var isMessageShowing = false;
-
 function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePath) {
     if (isMessageShowing){
         return;
@@ -76,30 +75,17 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
     profileImage.onload = function() {
         document.getElementById('profileImage').src = this.src;
         document.getElementById('velkommenSide').classList.remove('hidden');
-        setTimeout(() => {
-            document.getElementById('velkommenSide').classList.add('hidden');
-            isMessageShowing = false;
-        }, 10000); 
     };
 
+    setTimeout(() => {
+        document.getElementById('velkommenSide').classList.add('hidden');
+        isMessageShowing = false;
+    }, 10000); 
+
     profileImage.src = profilbildePath;
-
 }
 
 
-function showSoundAuthour(author){
-    if (isMessageShowing) {
-        setTimeout(showSoundAuthour(author), 500); // Check again in 1 second
-    } else {
-        const velkommenText = document.getElementById('velkommenText');
-        velkommenText.innerHTML = `Lyd lagt inn av: ${author}`;
-
-        document.getElementById('velkommenSide').classList.remove('hidden');
-        setTimeout(() => {
-            document.getElementById('velkommenSide').classList.add('hidden');
-        }, 5000); 
-    }
-}
 
 function showGoodbyeMessage(userID, userName, profilbildePath) {
     if (isMessageShowing){
@@ -123,17 +109,33 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
             velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
             document.getElementById('velkommenSide').classList.remove('hidden');
 
-            setTimeout(() => {
-                document.getElementById('velkommenSide').classList.add('hidden');
-                isMessageShowing = false;
-            }, 10000); 
+           
         };
+        setTimeout(() => {
+            document.getElementById('velkommenSide').classList.add('hidden');
+            isMessageShowing = false;
+        }, 10000); 
 
         profileImage.src = profilbildePath;
     }).catch(error => {
         console.error("Error getting user document: ", error);
         isMessageShowing = false;
     });
+}
+
+
+function showSoundAuthour(author){
+    if (isMessageShowing) {
+        setTimeout(showSoundAuthour(author), 500); // Check again in 1 second
+    } else {
+        const velkommenText = document.getElementById('velkommenText');
+        velkommenText.innerHTML = `Lyd lagt inn av: ${author}`;
+
+        document.getElementById('velkommenSide').classList.remove('hidden');
+        setTimeout(() => {
+            document.getElementById('velkommenSide').classList.add('hidden');
+        }, 5000); 
+    }
 }
 
 function loadLeaderboard(usersData) {
