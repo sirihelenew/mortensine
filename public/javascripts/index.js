@@ -3,7 +3,7 @@ let socketInstance = null;
 
 function getSocketInstance() {
     if (!socketInstance) {
-        socketInstance = io.connect('http://localhost:3000');
+        socketInstance = io.connect('https://mortensine.no');
     }
     return socketInstance;
 }
