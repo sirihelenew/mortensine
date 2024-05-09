@@ -27,6 +27,17 @@ self.addEventListener('fetch', function(event) {
     )
   })
 
+self.addEventListener('push', function(event) {
+  const options = {
+    body: event.data.text(),
+    // you can also add more options like icon, image, vibrate, etc.
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('My PWA', options)
+  );
+});
+
 self.addEventListener('activate', function(event) {
     event.waitUntil(
       caches.keys()
