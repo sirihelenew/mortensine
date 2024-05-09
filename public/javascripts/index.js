@@ -24,7 +24,7 @@ getSocketInstance().on('connect', function () {
             setupEarlybirdListener(data.earlybirdArr);
         }else if (data.type ==="sound"){
             console.log("Sound message: ", data.message);
-            showSoundAuthour(data.message);
+            //showSoundAuthour(data.message);
         }else if (data.type==="usersList"){
             updateUserslist(data.usersList);
         }
