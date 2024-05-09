@@ -58,10 +58,12 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('uploadButton').addEventListener('click', function() {
     const mp3File = document.getElementById('mp3Upload').files[0];
     const selectedUser = document.getElementById('userSelect').value;
+    const author= document.getElementById('brukernavn').textContent;
     if (mp3File && selectedUser) {
         const formData = new FormData();
         formData.append('username', selectedUser);
         formData.append('mp3File', mp3File);
+        formData.append('author', author);
         console.log(selectedUser)
         fetch('/upload', {
             method: 'POST',
@@ -73,9 +75,18 @@ document.getElementById('uploadButton').addEventListener('click', function() {
             document.getElementById('mp3Upload').value = ''; // Clear the file input field
             alert('Filen er lastet opp');
         })
+
         .catch(error => {
             console.error('Error:', error);
         });
+
+        uploadButton.disabled = true;
+        uploadButton.textContent = 'Laster opp...';
+        setTimeout(() => {
+            uploadButton.disabled = false;
+            uploadButton.textContent = 'Last opp';
+        }, 3000);
+
     } else {
         console.log('No file selected or no user selected');
     }

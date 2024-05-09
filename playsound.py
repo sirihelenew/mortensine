@@ -45,9 +45,9 @@ def play_sound(user_id):
     pygame.mixer.music.load(os.path.join(dir_path, sound_file))
     # Play the sound
     pygame.mixer.music.play()
-    print("Playing sound", sound_file)
     pygame.time.set_timer(pygame.USEREVENT, 15000)
-
+    name = sound_file.split('-')[0]
+    print(name)
     # Wait for the sound to finish playing
     while pygame.mixer.music.get_busy():
         for event in pygame.event.get():
