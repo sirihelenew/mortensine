@@ -6,7 +6,7 @@ var logger = require('../funcs/logger');
 router.get('/', (req, res) => {
     res.send('Restarting app...');
     setTimeout(() => {
-      exec('pm2 restart app', (error, stdout, stderr) => {
+      exec('pm2 restart www', (error, stdout, stderr) => {
         if (error) {
           logger.error(`Error restarting app: ${error}`);
         }
