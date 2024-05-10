@@ -1,6 +1,38 @@
 localStorage.setItem('serverStarted', 'true');
 let socketInstance = null;
 
+if (!localStorage.getItem('neverAskAgain')) {
+    if (!("Notification" in window)) {
+        console.log("This browser does not support desktop notification");
+    } else if (Notification.permission !== 'granted'){
+        Swal.fire({
+            title: 'Trykk på godta notifications på promt eller evt trykk bjelle tegnet oppe og aktiver manuelt?',
+            showDenyButton: true,
+            confirmButtonText: `TRYKK MEG`,
+            denyButtonText: `Jeg gidder ikke, aldri spør meg igjen (ikke vær så teit a)`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (Notification.permission !== 'granted') {
+                    Notification.requestPermission().then(function (permission) {
+                        if (permission === "granted") {
+                            Swal.fire({
+                                title: 'Notifications enabled BABY! \n Nice! \n Velg hvilke typer notifications du får fra brukersiden',
+                                confirmButtonText: `Enable Audio`,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    var audio = new Audio('intro.mp3');
+                                    audio.play();
+                                }
+                            });
+                        }
+                    });
+                }
+            } else if (result.isDenied){
+                localStorage.setItem('neverAskAgain', true);
+            }
+        })
+    }
+}
 document.addEventListener('DOMContentLoaded', init, false);
 async function init() {
     if ('serviceWorker' in navigator) {
@@ -90,38 +122,6 @@ function getSocketInstance() {
 }
 
 
-if (!localStorage.getItem('neverAskAgain')) {
-    if (!("Notification" in window)) {
-        console.log("This browser does not support desktop notification");
-    } else if (Notification.permission !== 'granted'){
-        Swal.fire({
-            title: 'Trykk på godta notifications på promt eller evt trykk bjelle tegnet oppe og aktiver manuelt?',
-            showDenyButton: true,
-            confirmButtonText: `TRYKK MEG`,
-            denyButtonText: `Jeg gidder ikke, aldri spør meg igjen (ikke vær så teit a)`,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                if (Notification.permission !== 'granted') {
-                    Notification.requestPermission().then(function (permission) {
-                        if (permission === "granted") {
-                            Swal.fire({
-                                title: 'Notifications enabled BABY! \n Nice! \n Velg hvilke typer notifications du får fra brukersiden',
-                                confirmButtonText: `Enable Audio`,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    var audio = new Audio('intro.mp3');
-                                    audio.play();
-                                }
-                            });
-                        }
-                    });
-                }
-            } else if (result.isDenied){
-                localStorage.setItem('neverAskAgain', true);
-            }
-        })
-    }
-}
 
 function urlBase64ToUint8Array(base64String) {
     var padding = '='.repeat((4 - base64String.length % 4) % 4);
