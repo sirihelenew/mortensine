@@ -218,76 +218,26 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
     const loginInfo = document.getElementById('loginInfo');
     const profileImage = document.getElementById('profileImage');
     let notificationText = '';
+    try{
 
-    if (loginMethod === 'RFID') {
-        velkommenText.innerHTML = `Velkommen ${userName}!`;
-        notificationText = `Velkommen ${userName}!`;
+        if (loginMethod === 'RFID') {
+            velkommenText.innerHTML = `Velkommen ${userName}!`;
+            notificationText = `Velkommen ${userName}!`;
 
-        loginInfo.style.display = "none";
-    } else if (loginMethod === 'manual') {
-        velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
-        notificationText = `${userName} har stemplet inn her: ${loginLocation}!`;
+            loginInfo.style.display = "none";
+        } else if (loginMethod === 'manual') {
+            velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
+            notificationText = `${userName} har stemplet inn her: ${loginLocation}!`;
 
-    }
-    profileImage.src = profilbildePath;
-    document.getElementById('velkommenSide').classList.remove('hidden');
-
-    profileImage.src = profilbildePath;
-    if (Notification.permission === "granted") {
-        if (localStorage.getItem('audioPlaying') !==true) {
-            var notification = new Notification(notificationText, { icon: profilbildePath });
-            var audio = new Audio('intro.mp3');
-            audio.play();
-            localStorage.setItem('audioPlaying', true);
-            var timeoutId = setTimeout(function() {
-                localStorage.setItem('audioPlaying',false);
-            }, 3 * 1000);
-            audio.onended = function() {
-                localStorage.setItem('audioPlaying',false);
-                // Clear the timeout when the audio ends
-                clearTimeout(timeoutId);
-            };
-            console.log("Notification sent: ", notification);
-        } else {
-            console.log("Audio is already playing, not sending notification");
         }
-    } else {
-        console.log("Notification permission not granted");
-    }
-
-    setTimeout(() => {
-        document.getElementById('velkommenSide').classList.add('hidden');
-        isMessageShowing = false;
-    }, 10000); 
-}
-
-
-function showGoodbyeMessage(userID, userName, profilbildePath) {
-    if (isMessageShowing){
-        return;
-    }
-    isMessageShowing = true;
-
-    db.collection('brukere').doc(userID).get().then(doc => {
-        const userData = doc.data();
-        const timeEntered = userData.timeEntered.toDate();
-        const timeNow = new Date();
-        const durationMs = timeNow - timeEntered;
-        const durationMinutes = Math.floor(durationMs / 60000);
-        const durationHours = Math.floor(durationMinutes / 60);
-
-        const velkommenText = document.getElementById('velkommenText');
-        let notificationText = '';
+        profileImage.src = profilbildePath;
+        document.getElementById('velkommenSide').classList.remove('hidden');
 
         profileImage.src = profilbildePath;
-        velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
-        document.getElementById('velkommenSide').classList.remove('hidden');
-        notificationText=`Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
-        console.log("Notification permission: ", Notification.permission);
         if (Notification.permission === "granted") {
-            if (localStorage.getItem('audioPlaying')!==true) {
-                //var notification = new Notification(notificationText, { icon: profilbildePath });
-                var audio = new Audio('outro.mp3');
+            if (localStorage.getItem('audioPlaying') !==true) {
+                var notification = new Notification(notificationText, { icon: profilbildePath });
+                var audio = new Audio('intro.mp3');
                 audio.play();
                 localStorage.setItem('audioPlaying', true);
                 var timeoutId = setTimeout(function() {
@@ -305,10 +255,72 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         } else {
             console.log("Notification permission not granted");
         }
+    } catch (error){
+        console.error("Error showing welcome message: ", error);
+    } finally {
         setTimeout(() => {
             document.getElementById('velkommenSide').classList.add('hidden');
             isMessageShowing = false;
         }, 10000); 
+    }
+
+
+}
+
+
+function showGoodbyeMessage(userID, userName, profilbildePath) {
+    if (isMessageShowing){
+        return;
+    }
+    isMessageShowing = true;
+ 
+
+    db.collection('brukere').doc(userID).get().then(doc => {
+        const userData = doc.data();
+        const timeEntered = userData.timeEntered.toDate();
+        const timeNow = new Date();
+        const durationMs = timeNow - timeEntered;
+        const durationMinutes = Math.floor(durationMs / 60000);
+        const durationHours = Math.floor(durationMinutes / 60);
+
+        const velkommenText = document.getElementById('velkommenText');
+        let notificationText = '';
+        try {
+                
+            profileImage.src = profilbildePath;
+            velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
+            document.getElementById('velkommenSide').classList.remove('hidden');
+            notificationText=`Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
+            console.log("Notification permission: ", Notification.permission);
+            if (Notification.permission === "granted") {
+                if (localStorage.getItem('audioPlaying')!==true) {
+                    //var notification = new Notification(notificationText, { icon: profilbildePath });
+                    var audio = new Audio('outro.mp3');
+                    audio.play();
+                    localStorage.setItem('audioPlaying', true);
+                    var timeoutId = setTimeout(function() {
+                        localStorage.setItem('audioPlaying',false);
+                    }, 3 * 1000);
+                    audio.onended = function() {
+                        localStorage.setItem('audioPlaying',false);
+                        // Clear the timeout when the audio ends
+                        clearTimeout(timeoutId);
+                    };
+                    console.log("Notification sent: ", notification);
+                } else {
+                    console.log("Audio is already playing, not sending notification");
+                }
+            } else {
+                console.log("Notification permission not granted");
+            }
+        } catch (error) {
+            console.error("Error showing goodbye message: ", error);
+        } finally {
+            setTimeout(() => {
+                document.getElementById('velkommenSide').classList.add('hidden');
+                isMessageShowing = false;
+            }, 10000); 
+        }
 
     }).catch(error => {
         console.error("Error getting user document: ", error);
