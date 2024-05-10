@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.querySelector('#notification-preferences').addEventListener('submit', (event) => {
     event.preventDefault();
-  
+
     const user = firebase.auth().currentUser;
     if (user) {
       const preferences = {
@@ -65,6 +65,9 @@ document.querySelector('#notification-preferences').addEventListener('submit', (
         announcements: document.querySelector('#notif_ann').checked,
         // Add more types as needed
       };
+      if (preferences.movements || preferences.announcements) {
+        Notification.requestPermission();
+      }
   
       db.collection('brukere').doc(user.uid).update({
         notificationPreferences: preferences
