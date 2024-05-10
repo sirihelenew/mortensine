@@ -70,7 +70,7 @@ fs.readFile('previousLeaderboard.json', 'utf8', (err, data) => {
 
 function updateLeaderboard(socket){
     const today = new Date();
-    today.setHours(5, 0, 0, 0);
+    today.setHours(3, 0, 0, 0);
 
     db.collection('brukere')
     .orderBy('totalMinutes', 'desc')
@@ -168,7 +168,7 @@ function lastOut() {
   yesterday.setMinutes(yesterday.getMinutes() - yesterday.getTimezoneOffset());
 
   const today = new Date();
-  today.setHours(5, 0, 0, 0);
+  today.setHours(3, 0, 0, 0);
   today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Subtract timezone offset
 
   db.collection('Innlogginger')
@@ -225,7 +225,7 @@ let savedFirstInData = null;
 
 function setupEarlybirdListener() {
     const today = new Date();
-    today.setHours(5, 0, 0, 0);
+    today.setHours(3, 0, 0, 0);
 
     db.collection('Innlogginger')
         .where('tid', '>=', today)
