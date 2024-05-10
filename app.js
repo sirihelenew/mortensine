@@ -13,6 +13,8 @@ var ipRouter = require("./routes/ip");
 var logsRouter = require("./routes/logs");
 var uploadRouter = require("./routes/upload");
 var orderRouter = require("./routes/order");
+var pushKeyRouter = require("./routes/pushKey");
+var pushSubRouter = require("./routes/pushSub");
 const { execSync } = require('child_process');
 const updateUserTime = require("./funcs/updateUsertime");
 
@@ -42,6 +44,8 @@ app.use("/ip", ipRouter);
 app.use("/logs", logsRouter);
 app.use("/upload", uploadRouter);
 app.use("/order", orderRouter);
+app.use("/pushKey", pushKeyRouter);
+app.use("/pushSub", pushSubRouter);
 
 
 try {

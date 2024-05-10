@@ -2,16 +2,51 @@ localStorage.setItem('serverStarted', 'true');
 let socketInstance = null;
 
 document.addEventListener('DOMContentLoaded', init, false);
-function init() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/javascripts/service-worker-index.js')
-      .then((reg) => {
-        console.log('Service worker registered -->', reg);
-      }, (err) => {
-        console.error('Service worker not registered -->', err);
-      });
+async function init() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker-index.js')
+        .then(function(registration) {
+          // Use the PushManager to get the user's subscription to the push service.
+          return registration.pushManager.getSubscription()
+            .then(async function(subscription) {
+              // If a subscription was found, return it.
+              if (subscription) {
+                console.log('Existing subscription found', subscription);
+
+                return subscription;
+              }
+  
+              // Get the server's public key
+              const response = await fetch('/pushKey');
+              const vapidPublicKey = await response.text();
+              // Chrome doesn't accept the base64-encoded (string) vapidPublicKey yet
+              // urlBase64ToUint8Array() is defined in /tools.js
+              const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+  
+              // Otherwise, subscribe the user (userVisibleOnly allows to specify that we don't plan to
+              // send notifications that don't have a visible effect for the user).
+              return registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: convertedVapidKey
+              });
+            });
+        }).then(function(subscription) {
+          // Send the subscription details to the server using the Fetch API.
+          console.log('Subscription object', subscription);
+
+          fetch('/pushSub', {
+            method: 'post',
+            headers: {
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+              subscription: subscription
+            }),
+          });
+        });
+    }
   }
-}
+  
 let deferredPrompt;
 
 
@@ -47,7 +82,7 @@ closeBtn.addEventListener('click', (e) => {
 
 function getSocketInstance() {
     if (!socketInstance) {
-        socketInstance = io.connect('https://mortensine.no');
+        socketInstance = io.connect("https://mortensine.no");
     }
     return socketInstance;
 }
@@ -85,6 +120,21 @@ if (!localStorage.getItem('neverAskAgain')) {
         })
     }
 }
+
+function urlBase64ToUint8Array(base64String) {
+    var padding = '='.repeat((4 - base64String.length % 4) % 4);
+    var base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+   
+    var rawData = window.atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+   
+    for (var i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
 
 getSocketInstance().on('connect', function () {
     console.log("Connected to server");
@@ -162,7 +212,7 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
 
     profileImage.src = profilbildePath;
     if (Notification.permission === "granted") {
-        if (!localStorage.getItem('audioPlaying')) {
+        if (localStorage.getItem('audioPlaying') !==true) {
             var notification = new Notification(notificationText, { icon: profilbildePath });
             var audio = new Audio('intro.mp3');
             audio.play();
@@ -213,8 +263,8 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         notificationText=`Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
         console.log("Notification permission: ", Notification.permission);
         if (Notification.permission === "granted") {
-            if (!localStorage.getItem('audioPlaying')) {
-                var notification = new Notification(notificationText, { icon: profilbildePath });
+            if (localStorage.getItem('audioPlaying')!==true) {
+                //var notification = new Notification(notificationText, { icon: profilbildePath });
                 var audio = new Audio('outro.mp3');
                 audio.play();
                 localStorage.setItem('audioPlaying', true);

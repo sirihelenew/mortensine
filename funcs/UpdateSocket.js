@@ -3,7 +3,9 @@
 const cron = require('node-cron');
 const {db, storage} = require ('../funcs/firebase');
 const io = require('../bin/socket').getIO();
+const logger = require('./logger');
 const fs = require('fs');
+const sendNotificationToAll =require('./sendPushAll')
 
 
 db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
@@ -33,6 +35,12 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                         sted: loginData.sted,
                         profilbilde: userData.profilbilde
                     };
+                    const welcomePayload = JSON.stringify({
+                        title: 'Welcome',
+                        body: `${userData.fornavn} has logged in via ${loginData.metode} at ${loginData.sted}`,
+                        icon: userData.profilbilde
+                    });
+                    sendNotificationToAll(welcomePayload,[]);
                     io.sockets.emit('message', data);
                 }
                 else {
@@ -42,9 +50,16 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                         profilbilde: userData.profilbilde,
                         fornavn: userData.fornavn
                     };
+                    const goodbyePayload = JSON.stringify({
+                        title: 'Goodbye',
+                        body: `${userData.fornavn} has logged out`,
+                        icon: userData.profilbilde
+                    });
+                    sendNotificationToAll(goodbyePayload,[]);
                     io.sockets.emit('message', data);
                     console.log('Bruker har stemplet ut');
                 }
+                updateLeaderboard();
             }).catch(error => {
                 console.error("Feil ved å hente bruker: ", error);
             });

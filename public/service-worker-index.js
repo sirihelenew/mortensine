@@ -28,16 +28,24 @@ self.addEventListener('fetch', function(event) {
   })
 
 self.addEventListener('push', function(event) {
-  const options = {
-    body: event.data.text(),
-    // you can also add more options like icon, image, vibrate, etc.
-  };
+  // Retrieve the textual payload from event.data (a PushMessageData object).
+  // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
+  // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
+  const payload = JSON.parse(event.data.text());
 
+
+
+
+  // Keep the service worker alive until the notification is created.
   event.waitUntil(
-    self.registration.showNotification('My PWA', options)
+    // Show a notification with title 'ServiceWorker Cookbook' and use the payload
+    // as the body.
+    self.registration.showNotification(payload.title, {
+      body: payload.body,
+      icon: payload.icon
+    })
   );
 });
-
 self.addEventListener('activate', function(event) {
     event.waitUntil(
       caches.keys()
