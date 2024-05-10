@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     kaffeCount.textContent = 'Antall kaffekanner traktet: ' + userData.kaffeCount;
                 }
-                kaffeCount.textContent = 'Antall kaffekanner traktet: ' + userData.kaffeCount;
 
             } else {
                 console.log("No such document!");
