@@ -169,7 +169,7 @@ function updateLeaderboard(socket){
 
 console.log("Server running on port 3000")
 cron.schedule('0 5 * * *', () => {
-    fs.writeFile('previousLeaderboard.json', JSON.stringify(leaderboardData), 'utf8', (err) => {
+    fs.writeFile('previousLeaderboard.json', JSON.stringify(leaderboardData.userData), 'utf8', (err) => {
       if (err) {
         console.error('Error writing previousLeaderboard.json:', err);
       }
