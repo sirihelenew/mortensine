@@ -103,7 +103,7 @@ if (!localStorage.getItem('neverAskAgain')) {
                     Notification.requestPermission().then(function (permission) {
                         if (permission === "granted") {
                             Swal.fire({
-                                title: 'Notifications enabled BABY! \n Nice! Click the button to enable audio.',
+                                title: 'Notifications enabled BABY! \n Nice! \n Velg hvilke typer notifications du får fra brukersiden',
                                 confirmButtonText: `Enable Audio`,
                             }).then((result) => {
                                 if (result.isConfirmed) {

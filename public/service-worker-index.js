@@ -15,6 +15,23 @@ self.addEventListener('install', function(event) {
   )
 })
 
+self.addEventListener('message', (event) => {
+  if (event.data.type === 'SET_PREFERENCES') {
+    // Save preferences in IndexedDB
+    const dbPromise = idb.open('preferences-db', 1, (upgradeDb) => {
+      upgradeDb.createObjectStore('preferences');
+    });
+
+    dbPromise.then((db) => {
+      const tx = db.transaction('preferences', 'readwrite');
+      tx.objectStore('preferences').put(event.data.preferences, 'notificationPreferences');
+      return tx.complete;
+    }).then(() => {
+      console.log('Preferences saved in IndexedDB');
+    });
+  }
+});
+
 self.addEventListener('fetch', function(event) {
     event.respondWith(
       fetch(event.request)
@@ -26,23 +43,20 @@ self.addEventListener('fetch', function(event) {
         })
     )
   })
-
 self.addEventListener('push', function(event) {
-  // Retrieve the textual payload from event.data (a PushMessageData object).
-  // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
-  // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
   const payload = JSON.parse(event.data.text());
 
-
-
-
-  // Keep the service worker alive until the notification is created.
   event.waitUntil(
-    // Show a notification with title 'ServiceWorker Cookbook' and use the payload
-    // as the body.
-    self.registration.showNotification(payload.title, {
-      body: payload.body,
-      icon: payload.icon
+    getPreferences().then((preferences) => {
+      if (preferences[payload.type]) {
+        return self.registration.showNotification(payload.title, {
+          body: payload.body,
+          icon: payload.icon
+        });
+      }
+    }).catch((error) => {
+      console.error('Error in push event handler:', error);
+      throw error;
     })
   );
 });
@@ -60,3 +74,20 @@ self.addEventListener('activate', function(event) {
         .then(() => self.clients.claim())
     )
   })
+  function getPreferences() {
+    return idb.open('preferences-db', 1).then((db) => {
+      const tx = db.transaction('preferences', 'readonly');
+      return tx.objectStore('preferences').get('notificationPreferences');
+    }).then((preferences) => {
+      // If preferences are not defined, default to false
+      if (!preferences) {
+        return {
+          movements: false,
+          announcements: false,
+          // Add more types as needed
+        };
+      }
+  
+      return preferences;
+    });
+  }

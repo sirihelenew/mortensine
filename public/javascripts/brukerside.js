@@ -55,6 +55,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+document.querySelector('#notification-preferences').addEventListener('submit', (event) => {
+    event.preventDefault();
+  
+    const user = firebase.auth().currentUser;
+    if (user) {
+      const preferences = {
+        movements: document.querySelector('#notif_mov').checked,
+        announcements: document.querySelector('#notif_ann').checked,
+        // Add more types as needed
+      };
+  
+      db.collection('brukere').doc(user.uid).update({
+        notificationPreferences: preferences
+      }).then(() => {
+        console.log('Notification preferences updated successfully');
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SET_PREFERENCES',
+            preferences: preferences
+          });
+      }).catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+    } else {
+      console.log('User is not logged in');
+    }
+  });
+
 document.getElementById('uploadButton').addEventListener('click', function() {
     const mp3File = document.getElementById('mp3Upload').files[0];
     const selectedUser = document.getElementById('userSelect').value;

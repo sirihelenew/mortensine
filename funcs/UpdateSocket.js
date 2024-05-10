@@ -38,7 +38,8 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     const welcomePayload = JSON.stringify({
                         title: 'Welcome',
                         body: `${userData.fornavn} has logged in via ${loginData.metode} at ${loginData.sted}`,
-                        icon: userData.profilbilde
+                        icon: userData.profilbilde,
+                        type: "movements"
                     });
                     sendNotificationToAll(welcomePayload,[]);
                     io.sockets.emit('message', data);
@@ -53,7 +54,8 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     const goodbyePayload = JSON.stringify({
                         title: 'Goodbye',
                         body: `${userData.fornavn} has logged out`,
-                        icon: userData.profilbilde
+                        icon: userData.profilbilde,
+                        type: "movements"
                     });
                     sendNotificationToAll(goodbyePayload,[]);
                     io.sockets.emit('message', data);
