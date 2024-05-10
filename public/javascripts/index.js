@@ -85,7 +85,7 @@ let deferredPrompt;
 const installModal = document.getElementById('installModal');
 const installBtn = document.getElementById('installBtn');
 const closeBtn = document.getElementById('closeBtn');
-
+/*
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
@@ -110,7 +110,7 @@ installBtn.addEventListener('click', (e) => {
   closeBtn.addEventListener('click', (e) => {
     installModal.style.display = 'none';
   });
-
+*/
 
 
 
