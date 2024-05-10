@@ -36,49 +36,69 @@ if (!localStorage.getItem('neverAskAgain')) {
 document.addEventListener('DOMContentLoaded', init, false);
 async function init() {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker-index.js')
-        .then(function(registration) {
-          // Use the PushManager to get the user's subscription to the push service.
-          return registration.pushManager.getSubscription()
-            .then(async function(subscription) {
-              // If a subscription was found, return it.
-              if (subscription) {
-                console.log('Existing subscription found', subscription);
+        navigator.serviceWorker.register('service-worker-index.js')
+            .then(function(registration) {
+                // Use the PushManager to get the user's subscription to the push service.
+                return registration.pushManager.getSubscription()
+                    .then(async function(subscription) {
+                        // If a subscription was found, return it.
+                        if (subscription) {
+                            console.log('Existing subscription found', subscription);
+                            return subscription;
+                        }
 
-                return subscription;
-              }
-  
-              // Get the server's public key
-              const response = await fetch('/pushKey');
-              const vapidPublicKey = await response.text();
-              // Chrome doesn't accept the base64-encoded (string) vapidPublicKey yet
-              // urlBase64ToUint8Array() is defined in /tools.js
-              const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-  
-              // Otherwise, subscribe the user (userVisibleOnly allows to specify that we don't plan to
-              // send notifications that don't have a visible effect for the user).
-              return registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: convertedVapidKey
-              });
+                        // Get the server's public key
+                        const response = await fetch('/pushKey');
+                        const vapidPublicKey = await response.text();
+                        // Chrome doesn't accept the base64-encoded (string) vapidPublicKey yet
+                        // urlBase64ToUint8Array() is defined in /tools.js
+                        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+                        // Otherwise, subscribe the user (userVisibleOnly allows to specify that we don't plan to
+                        // send notifications that don't have a visible effect for the user).
+                        return registration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: convertedVapidKey
+                        });
+                    });
+            })
+            .then(function(subscription) {
+                // Send the subscription details to the server using the Fetch API.
+                console.log('Subscription object', subscription);
+
+                fetch('/pushSub', {
+                    method: 'post',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        subscription: subscription
+                    }),
+                });
             });
-        }).then(function(subscription) {
-          // Send the subscription details to the server using the Fetch API.
-          console.log('Subscription object', subscription);
-
-          fetch('/pushSub', {
-            method: 'post',
-            headers: {
-              'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-              subscription: subscription
-            }),
-          });
-        });
     }
-  }
-  
+}
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        db.collection('brukere').doc(user.uid).get().then((doc) => {
+            if (doc.exists) {
+                const preferences = doc.data().notificationPreferences;
+                if (preferences) {
+                    navigator.serviceWorker.controller.postMessage({
+                        type: 'SET_PREFERENCES',
+                        preferences: preferences
+                    });
+                    console.log("set preferences");
+                }
+            } else {
+                console.log("No such document!");
+            }
+        });
+    } else {
+        console.log('No user is signed in.');
+    }
+});
 let deferredPrompt;
 
 
