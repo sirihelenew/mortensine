@@ -211,18 +211,17 @@
                 </div>
             </div>
         </div>
-        <form id="notification-preferences">
-            <label>
-              <input type="checkbox" id="notif_mov"">
-              User movement notifications (aids, not recommended)
+        <form id="notification-preferences" style="width: 50%; margin: auto; padding: 20px;  border-radius: 10px;">
+            <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                Absolutt alt av notifikasjoner (aids, ikke anbefalt)
+                <input type="checkbox" id="notif_mov" style="margin-left: 10px;">
             </label>
-            <label>
-              <input type="checkbox" id="notif_ann">
-              Announcements (keep on)
+            <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                Kunngjøringer (Anbefalt)
+                <input type="checkbox" id="notif_ann" style="margin-left: 10px;">
             </label>
-            <!-- Add more checkboxes as needed -->
-            <button type="submit">Save Preferences</button>
-          </form>
+            <button type="submit" style="background-color: var(--gul); color: var(--grey); padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-align: center;">Lagre</button>
+        </form>
     </article>
 
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
