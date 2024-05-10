@@ -59,23 +59,25 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e;
   installModal.style.display = 'block';
 });
-
 installBtn.addEventListener('click', (e) => {
-  installModal.style.display = 'none';
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the A2HS prompt');
-    } else {
-      console.log('User dismissed the A2HS prompt');
+    if (localStorage.getItem('prompted') !== 'true') {
+      installModal.style.display = 'none';
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        } else {
+          console.log('User dismissed the A2HS prompt');
+        }
+        deferredPrompt = null;
+      });
+      localStorage.setItem('prompted', 'true');
     }
-    deferredPrompt = null;
   });
-});
-
-closeBtn.addEventListener('click', (e) => {
-  installModal.style.display = 'none';
-});
+  
+  closeBtn.addEventListener('click', (e) => {
+    installModal.style.display = 'none';
+  });
 
 
 

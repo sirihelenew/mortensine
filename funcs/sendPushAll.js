@@ -14,7 +14,7 @@ if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
 
 // Set the keys used for encrypting the push messages.
 webPush.setVapidDetails(
-  process.env.NODE_ENV_HOST,
+  "https://mortensine.no",
   process.env.VAPID_PUBLIC_KEY,
   process.env.VAPID_PRIVATE_KEY);  
 
