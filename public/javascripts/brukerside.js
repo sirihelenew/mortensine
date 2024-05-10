@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Bruker er logget inn!');
         db.collection('brukere').doc(user.uid).get().then((doc) => {
             if (doc.exists) {
+                const preferences = doc.data().notificationPreferences;
+                if (preferences) {
+                document.querySelector('#notif_mov').checked = preferences.movements;
+                document.querySelector('#notif_ann').checked = preferences.announcements;
+                }
                 const userData = doc.data();
                 const brukernavn = document.getElementById('brukernavn');
                 const profilbilde = document.getElementById('profilbilde');
@@ -77,6 +82,8 @@ document.querySelector('#notification-preferences').addEventListener('submit', (
             type: 'SET_PREFERENCES',
             preferences: preferences
           });
+        alert('Notification preferences updated successfully');
+
       }).catch((error) => {
         console.error("Error updating document: ", error);
       });
