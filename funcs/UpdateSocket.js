@@ -297,11 +297,8 @@ function Earlybirds() {
           });
 
           Promise.all(earlybirdData).then(results => {
-            const data = {
-              type: 'earlybirdData',
-              earlybirdArr: results.filter(result => result !== null)
-            };
-            return data;
+
+            return results.filter(result => result !== null);
 
           });
       }, error => {
@@ -412,7 +409,7 @@ io.sockets.on('connection', (socket) =>{
       updateLeaderboard(socket);
   }
 
-
+    console.log("Sending last out data to new user");
     socket.emit('message', savedLastoutData);
 
     const data = {

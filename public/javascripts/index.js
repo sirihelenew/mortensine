@@ -162,6 +162,14 @@ getSocketInstance().on('connect', function () {
     console.log("Connected to server");
     getSocketInstance().on('message', function (data) {
         console.log("recieved message: ", data);
+        if (!data) {
+            console.error("Received null data");
+            return;
+        }
+        if (!data.type) {
+            console.error("Data type is not defined", data);
+            return;
+        }
         if (data.type === 'welcome') {
           showWelcomeMessage(data.fornavn, data.metode, data.sted, data.profilbilde);
         } else if (data.type === 'goodbye') {
