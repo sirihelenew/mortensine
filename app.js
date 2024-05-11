@@ -32,8 +32,9 @@ app.use(morganLogger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'public'), {
+  extensions: ['html']
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -46,6 +47,10 @@ app.use("/upload", uploadRouter);
 app.use("/order", orderRouter);
 app.use("/pushKey", pushKeyRouter);
 app.use("/pushSub", pushSubRouter);
+
+app.get('/login', function(req, res) {
+  res.sendFile(path.join(__dirname, 'public/templates/login.html'));
+});
 
 
 try {

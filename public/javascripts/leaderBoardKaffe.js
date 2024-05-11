@@ -39,7 +39,7 @@ function kaffe() {
         })
         .then(() => {
             console.log("Both brukere and leaderboardData documents updated successfully!");
-            window.location.href = "brukerside.html";
+            window.location.href = "brukerside";
         })
         .catch((error) => {
             console.error("Error updating documents: ", error);
