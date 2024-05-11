@@ -234,7 +234,7 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
         document.getElementById('velkommenSide').classList.remove('hidden');
 
         profileImage.src = profilbildePath;
-        if (Notification.permission === "granted") {
+        if (Notification.permission === "granted" && preferences.movements === true) {
             if (localStorage.getItem('audioPlaying') !==true) {
                 var notification = new Notification(notificationText, { icon: profilbildePath });
                 var audio = new Audio('intro.mp3');
@@ -282,6 +282,7 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         const durationMs = timeNow - timeEntered;
         const durationMinutes = Math.floor(durationMs / 60000);
         const durationHours = Math.floor(durationMinutes / 60);
+        const preferences = userData.notificationPreferences;
 
         const velkommenText = document.getElementById('velkommenText');
         let notificationText = '';
@@ -292,7 +293,7 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
             document.getElementById('velkommenSide').classList.remove('hidden');
             notificationText=`Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
             console.log("Notification permission: ", Notification.permission);
-            if (Notification.permission === "granted") {
+            if (Notification.permission === "granted" && preferences.movements === true) {
                 if (localStorage.getItem('audioPlaying')!==true) {
                     //var notification = new Notification(notificationText, { icon: profilbildePath });
                     var audio = new Audio('outro.mp3');
