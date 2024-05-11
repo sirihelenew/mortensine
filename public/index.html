@@ -244,7 +244,7 @@
             <button class="menyknapp" style="background-color: var(--white);" onclick="toggleMenu()">&#9776;</button>
         </div>
         <div class="menu-items hidden">
-            <a id="min-bruker-link" href="brukerside.html">Min bruker </a>
+            <a id="min-bruker-link" href="brukerside">Min bruker </a>
         </div>
         <h1 style="font-size: 60px;">MORTENSINE</h1>
         <div class="topnav" id="topnavPC">
@@ -361,9 +361,9 @@
         const user = firebase.auth().currentUser;
 
         if (user) {
-            window.location.href = 'brukerside.html';
+            window.location.href = 'brukerside';
         } else {
-            window.location.href = 'templates/login.html';
+            window.location.href = 'login';
         }
     });
 
