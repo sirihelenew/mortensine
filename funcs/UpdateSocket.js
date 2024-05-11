@@ -8,6 +8,8 @@ const fs = require('fs');
 const sendNotificationToAll =require('./sendPushAll')
 
 
+var earlbirdArray = Earlybirds();
+
 db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
@@ -43,6 +45,15 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     });
                     sendNotificationToAll(welcomePayload,[]);
                     io.sockets.emit('message', data);
+                    if (loginData.metode === 'RFID' && earlbirdArray.length < 3) {
+                        earlbirdArray.push(userData);
+                        const earlybirdData = {
+                            type: 'earlybirdData',
+                            earlybirdArr: earlbirdArray
+                        };
+                        io.sockets.emit('message', earlybirdData);
+                        
+                    }
                 }
                 else {
                     const data = {
@@ -167,17 +178,9 @@ function updateLeaderboard(socket){
     .catch((error) => { console.error("Error getting leaderboard entries: ", error); });
 }
 
-console.log("Server running on port 3000")
-cron.schedule('0 5 * * *', () => {
-    fs.writeFile('previousLeaderboard.json', JSON.stringify(leaderboardData.userData), 'utf8', (err) => {
-      if (err) {
-        console.error('Error writing previousLeaderboard.json:', err);
-      }
-    });
-  });
-// Server-side code
-let savedLastoutData=null;
 
+// Server-side code
+let savedLastoutData=lastOut();
 function lastOut() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() -1);
@@ -194,7 +197,9 @@ function lastOut() {
       .where('metode', '==', 'RFID')
       .where('status', '==', false)
       .orderBy('tid', 'desc')
-      .onSnapshot(snapshot => {
+      .limit(3)
+      .get()
+      .then(snapshot => {
           if (snapshot.empty) {
               console.log("No last out entries for yesterday.");
               return;
@@ -230,7 +235,7 @@ function lastOut() {
                 lastOutArray: results.filter(result => result !== null)
               };
               io.sockets.emit('message', data);
-              savedLastoutData=data;
+              return data;
           });
       }, error => {
           console.error("Feil med å lytte på realtime innlogginger ", error);
@@ -238,9 +243,8 @@ function lastOut() {
 }
 
 // Server-side code
-let savedFirstInData = null;
 
-function setupEarlybirdListener() {
+function Earlybirds() {
     const today = new Date();
     today.setHours(5, 0, 0, 0);
 
@@ -248,10 +252,12 @@ function setupEarlybirdListener() {
         .where('tid', '>=', today)
         .where('metode', '==', 'RFID')
         .orderBy('tid', 'asc')
-        .onSnapshot(snapshot => {
+        .limit(3)
+        .get()
+        .then(snapshot => {
             if (snapshot.empty) {
                 console.log("No earlybird entries for today yet.");
-                return;
+                return [];
             }
             const earlybirdDocs = snapshot.docs.slice(0, 3);
             const earlybirdData = earlybirdDocs.map((earlybirdDoc, index) => {
@@ -283,8 +289,7 @@ function setupEarlybirdListener() {
               type: 'earlybirdData',
               earlybirdArr: results.filter(result => result !== null)
             };
-            io.sockets.emit('message', data);
-            savedFirstInData=data;
+            return data;
 
           });
       }, error => {
@@ -394,18 +399,16 @@ io.sockets.on('connection', (socket) =>{
       updateLeaderboard(socket);
   }
 
-  if (savedLastoutData){
-      console.log("Sending last out data to new user");
-      socket.emit('message', savedLastoutData);
-  } else {
-      lastOut();
-  }
-  if (savedFirstInData){
-      console.log("Sending first in data to new user");
-      socket.emit('message', savedFirstInData);
-  } else {
-      setupEarlybirdListener();
-  }
+
+    socket.emit('message', savedLastoutData);
+
+    const earlybirdData = {
+        type: 'earlybirdData',
+        earlybirdArr: earlbirdArray
+    };
+    io.sockets.emit('message', earlybirdData);
+
+
   if (lastUserData){
     console.log("Sending current users data to new user");
     socket.emit('message', lastUserData);
@@ -416,6 +419,19 @@ io.sockets.on('connection', (socket) =>{
 
 cron.schedule('0 5 * * *', function() {
   lastOut();
+  earlbirdArray=[];
+    const earlybirdData = {
+        type: 'earlybirdData',
+        earlybirdArr: earlbirdArray
+    };
+    io.sockets.emit('message', earlybirdData);
+  fs.writeFile('previousLeaderboard.json', JSON.stringify(leaderboardData.userData), 'utf8', (err) => {
+    if (err) {
+      console.error('Error writing previousLeaderboard.json:', err);
+    }
+  });
+  previousLeaderboard = leaderboardData.userData;
+  
 });
 setInterval(updateLeaderboard, 60000);
 
