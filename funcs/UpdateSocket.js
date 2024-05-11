@@ -119,7 +119,7 @@ fs.readFile('previousLeaderboard.json', 'utf8', (err, data) => {
 
 function updateLeaderboard(socket){
     const today = new Date();
-    today.setHours(5, 0, 0, 0);
+    today.setHours(4, 0, 0, 0);
 
     db.collection('brukere')
     .orderBy('totalMinutes', 'desc')
@@ -216,7 +216,7 @@ async function lastOut() {
   yesterday.setMinutes(yesterday.getMinutes() - yesterday.getTimezoneOffset());
 
   const today = new Date();
-  today.setHours(5, 0, 0, 0);
+  today.setHours(4, 0, 0, 0);
   today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Subtract timezone offset
 
   return db.collection('Innlogginger')
@@ -273,7 +273,7 @@ async function lastOut() {
 // Server-side code
 async function Earlybirds() {
     const today = new Date();
-    today.setHours(5, 0, 0, 0);
+    today.setHours(4, 0, 0, 0);
 
     return db.collection('Innlogginger')
         .where('tid', '>=', today)
@@ -443,7 +443,7 @@ io.sockets.on('connection', (socket) =>{
     socket.emit('message', lastUserData);
 });
 
-cron.schedule('0 5 * * *', function() {
+cron.schedule('0 4 * * *', function() {
   lastOut();
   earlbirdArray=[];
     const earlybirdData = {
