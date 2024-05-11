@@ -37,9 +37,14 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                         sted: loginData.sted,
                         profilbilde: userData.profilbilde
                     };
+                    let sted = loginData.sted;
+                    if (loginData.metode === 'rfid') {
+                        sted = 'Mortensine';
+                    }
+
                     const welcomePayload = JSON.stringify({
                         title: 'Welcome',
-                        body: `${userData.fornavn} has logged in via ${loginData.metode} at ${loginData.sted}`,
+                        body: `${userData.fornavn} has logged in at ${sted ? ' at ' + sted : ''}`,
                         icon: userData.profilbilde,
                         type: "movements"
                     });
@@ -62,9 +67,14 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                         profilbilde: userData.profilbilde,
                         fornavn: userData.fornavn
                     };
+                    let sted = loginData.sted;
+                    if (loginData.metode === 'rfid') {
+                        sted = 'Mortensine';
+                    }
+
                     const goodbyePayload = JSON.stringify({
                         title: 'Goodbye',
-                        body: `${userData.fornavn} has logged out`,
+                        body: `${userData.fornavn} has logged out from ${sted ? ' at ' + sted : ''}`,
                         icon: userData.profilbilde,
                         type: "movements"
                     });
