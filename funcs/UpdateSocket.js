@@ -8,7 +8,14 @@ const fs = require('fs');
 const sendNotificationToAll =require('./sendPushAll')
 
 
-var earlbirdArray = Earlybirds();
+
+var earlbirdArray;
+
+async function getEarlybirds() {
+    earlbirdArray = await Earlybirds();
+}
+
+getEarlybirds();
 
 db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
@@ -192,10 +199,10 @@ function updateLeaderboard(socket){
 
 
 // Server-side code
-var savedLastoutData=lastOut();
+var savedLastoutData=await lastOut();
 logger.info("Last out data saved", savedLastoutData);
 
-function lastOut() {
+async function lastOut() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() -1);
   yesterday.setHours(0, 0, 0, 0); 
@@ -258,7 +265,7 @@ function lastOut() {
 
 // Server-side code
 
-function Earlybirds() {
+async function Earlybirds() {
     const today = new Date();
     today.setHours(5, 0, 0, 0);
 
@@ -310,9 +317,13 @@ function Earlybirds() {
 
 
 
-var lastUserData=currentUsers();
+var lastUserData;
+async function getLastUserData() {
+    lastUserData = await currentUsers();
+}
+getLastUserData();
 
-function currentUsers(){
+async function currentUsers(){
     console.log("checking current users");
     const today = new Date();
   today.setHours(0, 0, 0, 0); // Set to start of today
