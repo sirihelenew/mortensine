@@ -29,11 +29,11 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     db.collection('brukere').doc(loginData.userID).update(updateData);
                     if (loginData.metode === 'RFID' && earlbirdArray.length < 3) {
                         earlbirdArray.push(userData);
-                        const earlybirdData = {
+                        const data = {
                             type: 'earlybirdData',
                             earlybirdArr: earlbirdArray
                         };
-                        io.sockets.emit('message', earlybirdData);
+                        io.sockets.emit('message', data);
                         
                     }
                 }
@@ -84,7 +84,7 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     console.log('Bruker har stemplet ut');
                 }
                 updateLeaderboard();
-                userStatus();
+                currentUsers();
             }).catch(error => {
                 console.error("Feil ved å hente bruker: ", error);
             });
@@ -415,11 +415,11 @@ io.sockets.on('connection', (socket) =>{
 
     socket.emit('message', savedLastoutData);
 
-    const earlybirdData = {
+    const data = {
         type: 'earlybirdData',
         earlybirdArr: earlbirdArray
     };
-    io.sockets.emit('message', earlybirdData);
+    socket.emit('message', data);
 
     console.log("Sending current users data to new user");
     socket.emit('message', lastUserData);
