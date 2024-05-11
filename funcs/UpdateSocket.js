@@ -450,6 +450,29 @@ io.sockets.on('connection', (socket) =>{
     socket.emit('message', lastUserData);
 });
 
+function purge() {
+    // Get all users where status is true
+    db.collection('brukere').where('status', '==', true).get()
+        .then((querySnapshot) => {
+            // Iterate over each user
+            querySnapshot.forEach((doc) => {
+                const userData = doc.data();
+
+                var newtotalMinutes = userData.totalMinutes - 600;
+                if (newtotalMinutes < 0) {
+                    newtotalMinutes = 0;
+                }
+                db.collection('brukere').doc(doc.id).update({
+                    totalMinutes: newtotalMinutes,
+                    status: false
+                });
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+}
+
 cron.schedule('0 4 * * *', function() {
   lastOut();
   earlbirdArray=[];
@@ -464,6 +487,7 @@ cron.schedule('0 4 * * *', function() {
     }
   });
   previousLeaderboard = leaderboardData.userData;
+  purge(); // Purge the active minutes of all users (seemlingy active users)
   
 });
 setInterval(updateLeaderboard, 60000);
