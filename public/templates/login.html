@@ -110,7 +110,7 @@
             firebase.auth().signInWithEmailAndPassword(brukernavn, password)
             .then((userCredential) => {
                 var user = userCredential.user;
-                window.location.href = "../brukerside"; 
+                window.location.href = "../brukerside.html"; 
             })
             .catch((error) => {
                 var errorCode = error.code;
@@ -148,7 +148,7 @@
                 });
             })
             .then(() => {
-                window.location.href = "../brukerside"; 
+                window.location.href = "../brukerside.html"; 
             })
             .catch((error) => {
                 var errorCode = error.code;
