@@ -27,6 +27,15 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                         updateData.timeEntered = new Date();
                     }
                     db.collection('brukere').doc(loginData.userID).update(updateData);
+                    if (loginData.metode === 'RFID' && earlbirdArray.length < 3) {
+                        earlbirdArray.push(userData);
+                        const earlybirdData = {
+                            type: 'earlybirdData',
+                            earlybirdArr: earlbirdArray
+                        };
+                        io.sockets.emit('message', earlybirdData);
+                        
+                    }
                 }
   
                 if (loginData.status) {
@@ -50,15 +59,7 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     });
                     sendNotificationToAll(welcomePayload,[]);
                     io.sockets.emit('message', data);
-                    if (loginData.metode === 'RFID' && earlbirdArray.length < 3) {
-                        earlbirdArray.push(userData);
-                        const earlybirdData = {
-                            type: 'earlybirdData',
-                            earlybirdArr: earlbirdArray
-                        };
-                        io.sockets.emit('message', earlybirdData);
-                        
-                    }
+
                 }
                 else {
                     const data = {
@@ -83,6 +84,7 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     console.log('Bruker har stemplet ut');
                 }
                 updateLeaderboard();
+                userStatus();
             }).catch(error => {
                 console.error("Feil ved å hente bruker: ", error);
             });
@@ -309,7 +311,7 @@ function Earlybirds() {
 
 
 
-var lastUserData=null;
+var lastUserData=currentUsers();
 
 function currentUsers(){
     console.log("checking current users");
@@ -388,6 +390,7 @@ function currentUsers(){
                 usersList: JSON.stringify({ rfidUsers, manualUsers })
             };
             io.sockets.emit('message', data);
+            lastUserData=data;
         });
     });
     })
@@ -418,13 +421,8 @@ io.sockets.on('connection', (socket) =>{
     };
     io.sockets.emit('message', earlybirdData);
 
-
-  if (lastUserData){
     console.log("Sending current users data to new user");
     socket.emit('message', lastUserData);
-  } else{
-    currentUsers();
-  }
 });
 
 cron.schedule('0 5 * * *', function() {

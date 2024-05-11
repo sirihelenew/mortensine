@@ -217,17 +217,14 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
     const velkommenText = document.getElementById('velkommenText');
     const loginInfo = document.getElementById('loginInfo');
     const profileImage = document.getElementById('profileImage');
-    let notificationText = '';
     try{
 
         if (loginMethod === 'RFID') {
             velkommenText.innerHTML = `Velkommen ${userName}!`;
-            notificationText = `Velkommen ${userName}!`;
 
             loginInfo.style.display = "none";
         } else if (loginMethod === 'manual') {
             velkommenText.innerHTML = `${userName} har stemplet inn her: ${loginLocation}!`;
-            notificationText = `${userName} har stemplet inn her: ${loginLocation}!`;
 
         }
         profileImage.src = profilbildePath;
@@ -248,7 +245,6 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
                     // Clear the timeout when the audio ends
                     clearTimeout(timeoutId);
                 };
-                console.log("Notification sent: ", notification);
             } else {
                 console.log("Audio is already playing, not sending notification");
             }
@@ -285,13 +281,11 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         const preferences = userData.notificationPreferences;
 
         const velkommenText = document.getElementById('velkommenText');
-        let notificationText = '';
         try {
                 
             profileImage.src = profilbildePath;
             velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
             document.getElementById('velkommenSide').classList.remove('hidden');
-            notificationText=`Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
             console.log("Notification permission: ", Notification.permission);
             if (Notification.permission === "granted" && preferences.movements === true) {
                 if (localStorage.getItem('audioPlaying')!==true) {
@@ -307,7 +301,6 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
                         // Clear the timeout when the audio ends
                         clearTimeout(timeoutId);
                     };
-                    console.log("Notification sent: ", notification);
                 } else {
                     console.log("Audio is already playing, not sending notification");
                 }
