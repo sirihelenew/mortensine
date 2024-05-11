@@ -33,6 +33,11 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', function(event) {
+  if (event.request.url.startsWith('https://firestore.googleapis.com/')) {
+    // Make a network request
+    event.respondWith(fetch(event.request));
+    return;
+  }
     event.respondWith(
       fetch(event.request)
         .catch(() => {
