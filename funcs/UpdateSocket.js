@@ -5,7 +5,8 @@ const {db, storage} = require ('../funcs/firebase');
 const io = require('../bin/socket').getIO();
 const logger = require('./logger');
 const fs = require('fs');
-const sendNotificationToAll =require('./sendPushAll')
+const sendNotificationToAll =require('./sendPushAll');
+const { get } = require('http');
 
 
 
@@ -199,9 +200,15 @@ function updateLeaderboard(socket){
 
 
 // Server-side code
-var savedLastoutData=await lastOut();
-logger.info("Last out data saved", savedLastoutData);
 
+var savedLastoutData;
+
+async function getLastOut() {
+    savedLastoutData = await lastOut();
+}
+
+
+getLastOut();
 async function lastOut() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() -1);
