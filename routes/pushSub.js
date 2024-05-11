@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var Subscription = require('../funcs/mongoose');
+var Subscription;
+if (!process.env.NODE_ENV === "test") {
+  Subscription = require('../funcs/mongoose');
+}
 
 
 
