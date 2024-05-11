@@ -13,7 +13,9 @@ const { get } = require('http');
 var earlbirdArray;
 
 async function getEarlybirds() {
+    logger.info("Getting earlybirds");
     earlbirdArray = await Earlybirds();
+    logger.info("Got earlybirds", earlbirdArray);
 }
 
 getEarlybirds();
@@ -35,8 +37,7 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                         updateData.timeEntered = new Date();
                     }
                     db.collection('brukere').doc(loginData.userID).update(updateData);
-                    if (loginData.metode === 'RFID' && earlbirdArray.length < 3) {
-                        earlbirdArray.push(userData);
+                    if (loginData.metode === 'RFID' && earlbirdArray && earlbirdArray.length < 3) {                        earlbirdArray.push(userData);
                         const data = {
                             type: 'earlybirdData',
                             earlybirdArr: earlbirdArray
