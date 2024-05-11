@@ -5,8 +5,15 @@ const {db, storage} = require ('../funcs/firebase');
 const io = require('../bin/socket').getIO();
 const logger = require('./logger');
 const fs = require('fs');
-const sendNotificationToAll =require('./sendPushAll');
 const { get } = require('http');
+
+let sendNotificationToAll;
+
+if (process.env.NODE_ENV !== 'test') {
+    sendNotificationToAll = require('./sendPushAll');
+} else {
+    sendNotificationToAll = () => {};
+}
 
 
 
