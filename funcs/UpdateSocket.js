@@ -208,7 +208,6 @@ async function getLastOut() {
     savedLastoutData = await lastOut();
 }
 
-
 getLastOut();
 async function lastOut() {
   const yesterday = new Date();
@@ -220,7 +219,7 @@ async function lastOut() {
   today.setHours(5, 0, 0, 0);
   today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Subtract timezone offset
 
-  db.collection('Innlogginger')
+  return db.collection('Innlogginger')
       .where('tid', '<', today)
       .where('tid', '>=', yesterday)
       .where('metode', '==', 'RFID')
@@ -231,7 +230,7 @@ async function lastOut() {
       .then(snapshot => {
           if (snapshot.empty) {
               console.log("No last out entries for yesterday.");
-              return;
+              return [];
           }
           const lastOutDocs = snapshot.docs.slice(0, 3);
           const lastOutData = lastOutDocs.map((lastOutDoc, index) => {
@@ -258,7 +257,7 @@ async function lastOut() {
               });
           });
 
-          Promise.all(lastOutData).then(results => {
+          return Promise.all(lastOutData).then(results => {
               const data = {
                 type: 'lastOutData',
                 lastOutArray: results.filter(result => result !== null)
@@ -272,12 +271,11 @@ async function lastOut() {
 }
 
 // Server-side code
-
 async function Earlybirds() {
     const today = new Date();
     today.setHours(5, 0, 0, 0);
 
-    db.collection('Innlogginger')
+    return db.collection('Innlogginger')
         .where('tid', '>=', today)
         .where('metode', '==', 'RFID')
         .orderBy('tid', 'asc')
@@ -313,10 +311,8 @@ async function Earlybirds() {
               });
           });
 
-          Promise.all(earlybirdData).then(results => {
-
+          return Promise.all(earlybirdData).then(results => {
             return results.filter(result => result !== null);
-
           });
       }, error => {
           console.error("Feil med å lytte på realtime innlogginger ", error);
