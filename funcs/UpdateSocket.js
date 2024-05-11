@@ -192,7 +192,9 @@ function updateLeaderboard(socket){
 
 
 // Server-side code
-let savedLastoutData=lastOut();
+var savedLastoutData=lastOut();
+logger.info("Last out data saved", savedLastoutData);
+
 function lastOut() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() -1);
@@ -247,7 +249,7 @@ function lastOut() {
                 lastOutArray: results.filter(result => result !== null)
               };
               io.sockets.emit('message', data);
-              return data;
+              return results.filter(result => result !== null);
           });
       }, error => {
           console.error("Feil med å lytte på realtime innlogginger ", error);
@@ -409,14 +411,18 @@ io.sockets.on('connection', (socket) =>{
       updateLeaderboard(socket);
   }
 
-    console.log("Sending last out data to new user");
-    socket.emit('message', savedLastoutData);
-
-    const data = {
+  var data = {
+    type: 'lastOutData',
+    lastOutArray: savedLastoutData
+  };
+  io.sockets.emit('message', data);
+  logger.info("Sending last out data to new user", data);
+    data = {
         type: 'earlybirdData',
         earlybirdArr: earlbirdArray
     };
     socket.emit('message', data);
+    logger.info("Sending earlybird to new user", data);
 
     console.log("Sending current users data to new user");
     socket.emit('message', lastUserData);
