@@ -83,9 +83,28 @@ client.on('message', function (topic, message) {
   
 client.on('error', function (error) {
     logger.error('MQTT client error: ', error);
-    setTimeout(() => {
-      client.end();
-      client = mqtt.connect(mqttBroker);
-    }, 5000); // delay the reconnection for 5 seconds
-  });
-  
+    let reconnectInterval;
+    const startReconnectTime = Date.now();
+
+    reconnectInterval = setInterval(() => {
+        if (Date.now() - startReconnectTime >= 60000) { // Stop trying after 1 minute
+            clearInterval(reconnectInterval);
+            if (!client.connected) {
+                logger.info('Client not connected after 1 minute, attempting to restart app...');
+                exec('pm2 restart www', (error, stdout, stderr) => {
+                    if (error) {
+                        logger.error(`Error restarting app: ${error}`);
+                    } else {
+                        logger.info(`App restarted. stdout: ${stdout}. stderr: ${stderr}`);
+                    }
+                });
+            } else {
+                logger.info('Client reconnected successfully within 1 minute.');
+            }
+        } else {
+            logger.info('Attempting to reconnect client...');
+            client.end();
+            client = mqtt.connect(mqttBroker);
+        }
+    }, 5000); // Try to reconnect every 5 seconds
+});
