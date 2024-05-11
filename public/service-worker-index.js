@@ -1,9 +1,13 @@
-importScripts('https://unpkg.com/idb@5.0.4/build/iife/index-min.js');
 const CACHE_NAME = 'sw-cache-example';
 const toCache = [
   '/',
   '/index.html',
 ];
+let preferences = {
+  movements: false,
+  announcements: false,
+  // Add more types as needed
+};
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -17,18 +21,9 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('message', (event) => {
   if (event.data.type === 'SET_PREFERENCES') {
-    // Save preferences in IndexedDB
-    const dbPromise = idb.open('preferences-db', 1, (upgradeDb) => {
-      upgradeDb.createObjectStore('preferences');
-    });
-
-    dbPromise.then((db) => {
-      const tx = db.transaction('preferences', 'readwrite');
-      tx.objectStore('preferences').put(event.data.preferences, 'notificationPreferences');
-      return tx.complete;
-    }).then(() => {
-      console.log('Preferences saved in IndexedDB');
-    });
+    // Save preferences in the variable
+    preferences = event.data.preferences;
+    console.log('Preferences saved in variable');
   }
 });
 
@@ -38,33 +33,34 @@ self.addEventListener('fetch', function(event) {
     event.respondWith(fetch(event.request));
     return;
   }
-    event.respondWith(
-      fetch(event.request)
-        .catch(() => {
-          return caches.open(CACHE_NAME)
-            .then((cache) => {
-              return cache.match(event.request)
-            })
-        })
-    )
-  })
-self.addEventListener('push', function(event) {
-  const payload = JSON.parse(event.data.text());
+  event.respondWith(
+    fetch(event.request)
+      .catch(() => {
+        return caches.open(CACHE_NAME)
+          .then((cache) => {
+            return cache.match(event.request)
+          })
+      })
+  )
+})
 
-  event.waitUntil(
-    getPreferences().then((preferences) => {
-      if (preferences[payload.type]) {
-        return self.registration.showNotification(payload.title, {
-          body: payload.body,
-          icon: payload.icon
-        });
-      }
-    }).catch((error) => {
-      console.error('Error in push event handler:', error);
-      throw error;
-    })
-  );
-});
+
+  self.addEventListener('push', function(event) {
+    const payload = JSON.parse(event.data.text());
+  
+    event.waitUntil(
+      new Promise((resolve, reject) => {
+        if (preferences[payload.type]) {
+          self.registration.showNotification(payload.title, {
+            body: payload.body,
+            icon: payload.icon
+          }).then(resolve, reject);
+        } else {
+          resolve();
+        }
+      })
+    );
+  });
 self.addEventListener('activate', function(event) {
     event.waitUntil(
       caches.keys()
