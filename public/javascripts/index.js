@@ -239,26 +239,6 @@ function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePat
         document.getElementById('velkommenSide').classList.remove('hidden');
 
         profileImage.src = profilbildePath;
-        if (Notification.permission === "granted" && preferences && preferences.movements === true) {
-            if (localStorage.getItem('audioPlaying') !==true) {
-                var notification = new Notification(notificationText, { icon: profilbildePath });
-                var audio = new Audio('intro.mp3');
-                audio.play();
-                localStorage.setItem('audioPlaying', true);
-                var timeoutId = setTimeout(function() {
-                    localStorage.setItem('audioPlaying',false);
-                }, 3 * 1000);
-                audio.onended = function() {
-                    localStorage.setItem('audioPlaying',false);
-                    // Clear the timeout when the audio ends
-                    clearTimeout(timeoutId);
-                };
-            } else {
-                console.log("Audio is already playing, not sending notification");
-            }
-        } else {
-            console.log("Notification permission not granted");
-        }
     } catch (error){
         console.error("Error showing welcome message: ", error);
     } finally {
@@ -286,7 +266,6 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
         const durationMs = timeNow - timeEntered;
         const durationMinutes = Math.floor(durationMs / 60000);
         const durationHours = Math.floor(durationMinutes / 60);
-        const preferences = userData.notificationPreferences;
 
         const velkommenText = document.getElementById('velkommenText');
         try {
@@ -294,27 +273,7 @@ function showGoodbyeMessage(userID, userName, profilbildePath) {
             profileImage.src = profilbildePath;
             velkommenText.innerHTML = `Hade ${userName}! Total tid idag: ${durationHours} timer og ${durationMinutes % 60} minutter.`;
             document.getElementById('velkommenSide').classList.remove('hidden');
-            console.log("Notification permission: ", Notification.permission);
-            if (Notification.permission === "granted" && preferences && preferences.movements === true) {
-                if (localStorage.getItem('audioPlaying')!==true) {
-                    //var notification = new Notification(notificationText, { icon: profilbildePath });
-                    var audio = new Audio('outro.mp3');
-                    audio.play();
-                    localStorage.setItem('audioPlaying', true);
-                    var timeoutId = setTimeout(function() {
-                        localStorage.setItem('audioPlaying',false);
-                    }, 3 * 1000);
-                    audio.onended = function() {
-                        localStorage.setItem('audioPlaying',false);
-                        // Clear the timeout when the audio ends
-                        clearTimeout(timeoutId);
-                    };
-                } else {
-                    console.log("Audio is already playing, not sending notification");
-                }
-            } else {
-                console.log("Notification permission not granted");
-            }
+            
         } catch (error) {
             console.error("Error showing goodbye message: ", error);
         } finally {
