@@ -1,4 +1,4 @@
-
+importScripts('https://unpkg.com/idb@5.0.4/build/iife/index-min.js');
 const CACHE_NAME = 'sw-cache-example';
 const toCache = [
   '/',
