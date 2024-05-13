@@ -75,6 +75,7 @@ client.on('message', function (topic, message) {
           } else {
               //res.json({ status: 'error', error: 'User not found' });
               logger.info('User not found');
+              io.emit('rfid', {rfid: rfidTag});
               const python = spawn('./venv/bin/python', ['play_sound.py', NaN]);
           }
       });

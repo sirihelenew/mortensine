@@ -1,3 +1,37 @@
+
+let socketInstance = null;
+
+function getSocketInstance() {
+    if (!socketInstance) {
+        socketInstance = io.connect("https://mortensine.no",{ query: "source=brukerside" });
+    }
+    return socketInstance;
+}
+
+let selfRegEnabled=false;
+getSocketInstance().on('connect', function () {
+    console.log("Connected to server");
+    getSocketInstance().on('rfid', function (data) {
+        console.log(data);
+        rfid=data.rfid;
+        if (selfRegEnabled){
+            const user = firebase.auth().currentUser;
+            if (user) {
+                const userID = user.uid;
+                db.collection('brukere').doc(userID).update({
+                    rfidTag: rfid
+                }).then(() => {
+                    console.log("User updated with RFID: ", rfid);
+                    selfRegEnabled=false;
+                }).catch((error) => {
+                    console.error("Error updating user: ", error);
+                });
+            }
+        }
+    }); 
+});
+
+
 document.addEventListener('DOMContentLoaded', function() {
     auth.onAuthStateChanged((user) => {
     console.log(user)
@@ -19,6 +53,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const tidsStats = document.getElementById('timestatistikk');
                 const hours= Math.floor(userData.totalMinutes/60);
                 const minutes = userData.totalMinutes % 60;
+                const selfEnrollButton = document.getElementById('selfEnrollLink');
+                if (!userData.rfidTag){
+                    selfEnrollButton.style.display = 'block';
+                }
+
                 tidsStats.textContent = 'Total tid på skolen: ' + hours + ' timer og ' + minutes + ' minutter';
                 displayProfilbilde(profilbildePath);
                 brukernavn.textContent = userData.fornavn + ' ' + userData.etternavn;
@@ -299,6 +338,59 @@ function StempleEksamen(){
     });
 }
 
+function selfEnroll(){
+    Swal.fire({
+      title: "Klar til å scanne kortet ved RFID-leseren på mortensine?",
+      text: "Neste kort som scannes innen 10 sekund vil bli registrert din bruker!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Kjøh!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let timerInterval;
+        selfRegEnabled=true;
+        Swal.fire({
+          title: "Scann kortet nå!",
+          html: "Jeg lukkes om <b></b> seconds.",
+          timer: 10000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              timer.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
+              if (!selfRegEnabled){
+                Swal.close();
+              }
+            }, 1000);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (selfRegEnabled){
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Noe gikk galt, RFID ikke registrert!",
+              });
+          } else {
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: "RFID registered successfully!",
+            });
+            registerButton=document.getElementById('selfEnrollLink');
+            registerButton.style.display = 'none';
+            }
+          selfRegEnabled=false;
+        });
+      }
+    });
+}
 
 
 function loggut() {

@@ -447,6 +447,9 @@ setInterval(currentUsers, 60000);
 
 io.sockets.on('connection', (socket) =>{
   console.log('A user connected');
+  if (socket.handshake.query.source === 'brukerside') {
+    return;
+  }
 
   if (leaderboardData){
       console.log("Sending last leaderboard data to new user");

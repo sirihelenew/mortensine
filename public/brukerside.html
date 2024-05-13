@@ -147,6 +147,7 @@
     </div>
     <div class="topnav">
         <!-- <a href="#" onclick="toggleMenu()"> Oppdater ICE-stafetten</a> -->
+        <a href="#" id="selfEnrollLink" style="display:none;" onclick="selfEnroll()"> REGISTRERE RFID</a>
         <a href="#" onclick="stempleInnManuelt()"> STEMPLE INN</a>
         <a href="#" onclick="StempleEksamen()"> INNSTEMPLING EKSAMEN</a>
         <a href="#" onclick="stempleUtManuelt()"> STEMPLE UT</a>
@@ -329,6 +330,7 @@
 }
 
     </script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="javascripts/brukerside.js"></script>
 </body>
 </html>
