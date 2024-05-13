@@ -179,7 +179,7 @@ document.getElementById('byttpb').addEventListener('click', function() {
                     document.getElementById('byttprofilbilde').style.display = 'none';
                     document.getElementById('byttpb').style.display = 'block';
                     alert("Profilbildet er oppdatert!")
-                    window.location.href = "brukerside.html";
+                    window.location.href = "brukerside";
                 })
                 .catch((error) => {
                     console.error("Error updating document: ", error);
@@ -211,7 +211,7 @@ document.getElementById('byttpb').addEventListener('click', function() {
                 .then(() => {
                     console.log('Document updated successfully');
                     stempling.classList.toggle('hidden');
-                    window.location.href = "brukerside.html";
+                    window.location.href = "brukerside";
                 })
         .catch((error) => {
             console.error("Error updating document: ", error);
@@ -236,7 +236,7 @@ function stempleUtManuelt () {
         .then(() => {
             console.log('Document updated successfully');
             alert("Du er stemplet ut!")
-            window.location.href = "brukerside.html";
+            window.location.href = "brukerside";
         })
         .catch((error) => {
             console.error("Error updating document: ", error);
@@ -299,7 +299,7 @@ function StempleEksamen(){
 function loggut() {
     firebase.auth().signOut().then(() => {
         console.log('User signed out successfully');
-        window.location.href = "index.html";
+        window.location.href = "../";
     }).catch((error) => {
         console.error("Error signing out: ", error);
     });
