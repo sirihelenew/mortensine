@@ -267,7 +267,12 @@ function StempleEksamen(){
     }).then((result) => {
         if (result.isConfirmed) {
             console.log('User text:', result.value);
-            Swal.fire("I believe in you!", "You got this! \n See you on the other side!");
+            let currentHour = new Date().getHours();
+            let time;
+            if (currentHour < 10) {
+               time = "13:00";
+            } else { time = "19:00";}
+            Swal.fire("I believe in you!", `You got this! \n See you on the other side! \n PS: Du må stemple ut som vanlig når du er ferdig. Alle blir stemplet ut automatisk kl ${time} (sorry dyssere)`);
             const user = firebase.auth().currentUser;
             if (user) {
                 const userID = user.uid;

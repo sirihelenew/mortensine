@@ -550,6 +550,15 @@ const examFinished= () =>{
     let examUsersRef = db.collection('examUsers');
     let batch = db.batch();
     let examUsers;
+    db.collection('brukere').where('eksamen', '==', true).get().then(snapshot => {
+        snapshot.forEach(doc => {
+            db.collection('brukere').doc(doc.id).update({ eksamen: false, status: false });
+        });
+    }).catch(error => {
+        console.error('Error updating eksamen field in brukere collection: ', error);
+    });
+    
+
 
     examUsersRef.get().then(snapshot => {
         examUsers = snapshot.docs.map(doc => doc.data());
@@ -581,6 +590,7 @@ const examFinished= () =>{
     }).catch((error) => {
         console.error('Error deleting documents in examUsers collection: ', error);
     });
+
 }
 
 cron.schedule('0 13 * * *', examFinished);
