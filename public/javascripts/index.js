@@ -619,17 +619,17 @@ function showTribute(usersArray, complete) {
 
             // Add the user's name, place, and profile picture to the div
             userDiv.innerHTML = `
-                <h2>A moment of silence, brave scholars, as they embark on the journey of examination...</h2>
-                <h1>${user.fornavn}</h1>
-                <p>${Fagkode}</p>
-                <p>${romNr}</p>
-                <img src="${user.profilbilde}" style="width: 200px; height: 200px; border-radius: 50%; margin-top: 20px;">
+            <h2>A moment of silence, brave scholars, as they embark on the journey of examination...</h2>
+            <h1>${user.fornavn}</h1>
+            <p><span style="font-size: 1.5em;">${Fagkode}</span></p>
+            <p><span style="font-size: 1.5em;">${romNr}</span></p>
+            <img src="${user.profilbilde}" style="width: 200px; height: 200px; border-radius: 50%; margin-top: 20px;">
             `;
             if (complete){
                 userDiv.innerHTML = `
                 <h2>🎉🎉🎉 Congratulations! ${user.fornavn} triumphantly finished the exam! 🎉🎉🎉</h2>
                 <p>Finish Time: ${user.finished}</p>
-                <p>${Fagkode}</p>
+                <p><span style="font-size: 1.5em;">${Fagkode}</span></p>
                 <img src="${user.profilbilde}" style="width: 200px; height: 200px; border-radius: 50%; margin-top: 20px;">
             `;
             }
