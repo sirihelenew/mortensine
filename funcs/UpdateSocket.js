@@ -130,7 +130,7 @@ function updateLeaderboard(socket){
 
     db.collection('brukere')
     .orderBy('totalMinutes', 'desc')
-    .limit(50)
+    .limit(100)
     .get()
     .then((querySnapshot) => {
         const promises = querySnapshot.docs.map((doc) => {
