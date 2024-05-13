@@ -1,7 +1,7 @@
 const mqtt= require('mqtt');
 const {db,storage} = require('./firebase');
 const logger = require('./logger');
-const { spawn, exec} = require('child_process');
+const {spawn} = require('child_process');
 const admin = require('firebase-admin');
 const io=require('../bin/socket').getIO();
 
@@ -91,13 +91,13 @@ client.on('error', function (error) {
             clearInterval(reconnectInterval);
             if (!client.connected) {
                 logger.info('Client not connected after 1 minute, attempting to restart app...');
-                exec('pm2 restart www', (error, stdout, stderr) => {
+                /*exec('pm2 restart www', (error, stdout, stderr) => {
                     if (error) {
                         logger.error(`Error restarting app: ${error}`);
                     } else {
                         logger.info(`App restarted. stdout: ${stdout}. stderr: ${stderr}`);
                     }
-                });
+                });*/
             } else {
                 logger.info('Client reconnected successfully within 1 minute.');
             }

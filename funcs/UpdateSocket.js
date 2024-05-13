@@ -49,7 +49,7 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                     if (loginData.metode === 'RFID' && earlbirdArray && earlbirdArray.length < 3) {                        earlbirdArray.push(userData);
                         const data = {
                             type: 'earlybirdData',
-                            earlybirdArr: earlbirdArray
+                            earlybirdArr: getEarlybirds()
                         };
                         io.sockets.emit('message', data);
                         
