@@ -134,9 +134,11 @@
         /* #topnavPC { display: none;} */
         .topnav { display: flex; flex-wrap: wrap; justify-content: space-around; text-align: left; background-color: var(--white);}
         #linkerText { font-size: 30px !important; }
-        #atSchoolSection { width: 100% !important;}
+        #atSchoolSection, #ruleSection { width: 100% !important;}
         #birdies { flex-direction: column;}
         #earlybirdies, #latebirdies {width: 90% !important;}
+        .leaderboardsplit, .leaders {font-size: 10px !important;}
+        #atSchoolBox {flex-direction: column !important;}
     }
     .js-container {
         display: flex;
@@ -246,8 +248,10 @@
         <div class="menu-items hidden">
             <a id="min-bruker-link" href="brukerside.html">Min bruker </a>
         </div>
+    </div>
         <h1 style="font-size: 60px;">MORTENSINE</h1>
         <div class="topnav" id="topnavPC">
+            <a href="javascript:void(0)" class="hyperlink" onclick="toggleRules()" style="text-decoration: underline;">DEN HELLIGE REGELBOKEN</a>
             <a href="javascript:void(0)" class="hyperlink" onclick="toggleAtSchool()">Vis hvem som er på skolen</a>
             <a href="https://www.nytimes.com/games/wordle/index.html" class="hyperlink" target="_blank">Wordle</a>
             <a href="https://contexto.me/" class="hyperlink" target="_blank">Contexto</a>
@@ -258,9 +262,9 @@
             <a href="https://www.omegav.no/" class="hyperlink" target="_blank">OV</a>
             <!-- <a href="javascript:void(0)" class="hyperlink" onclick="playIceIce()" style="color: red;">ICE</a> -->
         </div>
-        <div class="container" id="atSchoolSection" style="width: 50%; display: none; padding: 20px;">
-            <div class="box" style="text-align: left; width: 80%; display:flex; flex-direction: row; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                <div class="earlyBirds" style="background-color: var(--white); flex-direction: column;">
+        <div class="container" id="atSchoolSection" style="width: 90%; display: none; padding: 20px; justify-content: center; align-items: center;">
+            <div class="box" id="atSchoolBox" style="text-align: left; width: 50%; display:flex; flex-direction: row; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <div class="earlyBirds" style="background-color: var(--white); flex-direction: column; justify-content:flex-start;">
                 <h2 style="color: var(--lilla);">Mortensine G's</h2>
                 <ul id="rfidUsersList"></ul>
             </div>
@@ -271,6 +275,80 @@
             </div>
         </div>
         </div>
+        <div class="container" id="ruleSection" style="width: 90%; display: none; padding: 20px; font-weight: 400; justify-content: center;  flex-direction: column; align-items: center;">
+            <div class="box" style="text-align: left; width: 50%; display:flex; flex-direction: column; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h1 style="font-size: 20px; text-align: left;">Regler</h1>
+            <ol>
+                <li>Generelt</li>
+                <ol type="a">
+                    <li>Du stempler inn når du er på (gyldig) Campus og gjør <strong>skolearbeid</strong>.</li>
+                    <ol type="i">
+                    <li>Gyldige campuser: NTNUs campuser i Trondheim.</li>
+                    </ol>
+                    <li>Innstempling</li>
+                    <ol type="i">
+                        <li>Utføres enten via RFID eller fra din brukerside.</li>
+                        <li>Overholder regel 1a, eller unntaksreglene (se 2), for gyldige aktiviteter.</li>
+                    </ol>
+                    <li>Utstempling</li>
+                    <ol type="i">
+                        <li>Utføres enten via RFID eller fra din brukerside.</li>
+                        <li>Hvis du glemmer å stemple ut blir du automatisk stemplet ut kl 04:00 og trukket 600 minutter #sugeråsuge.</li>
+                    </ol>
+                </ol>
+                <li>Unntaksregler</li>
+                <ol type="a">
+                    <li>Gyldige aktiviteter som overskrider regel 1</li>
+                    <ol type="i">
+                        <li>Eksamen</li>
+                        <ol type="a">
+                            <li>Du kan stemple inn manuelt fra Sluppen/Dragvoll når du har eksamen. Da må du huske på å stemple ut når du forlater eksamenslokalet.</li>
+                        </ol>
+                        <li>Pause</li>
+                        <ol type="a">
+                            <li>Et pauseintervall kan ikke overskride 1 time.</li>
+                            <li>Utenom dette skal regelen vurderes etter skjønn for hva du selv anser som "pauseaktivitet".</li>
+                        </ol>
+                        <li>Pils på Loftet</li>
+                        <ol type="a">
+                            <li>Gjelder kun som gyldig aktivitet dersom</li>
+                            <ol type="i">
+                                <li>Du allerede er stemplet inn og regel 1 er overholdt.</li>
+                                <li>Du har tenkt til å ta opp skolearbeidet igjen. Ergo, skal du ta en pils på Loftet før du drar hjem, stempler du ut.</li>
+                            </ol>
+                        </ol>
+                    </ol>
+                </ol>
+                <li>Kaffe</li>
+                <ol type="a">
+                    <li>Gjelder kun felleskannen som står på Mortensine.</li>
+                    <li>Registrering av kaffe</li>
+                    <ol type="i">
+                        <li>Det trengs ikke flere personer for å trakte en kanne kaffe. Ergo, har du tatt initiativ på å trakte kaffe, registrerer du én kanne.</li>
+                        <ol type="a">
+                            <li><strong>Unntak:</strong> To personer kan samarbeide om å trakte én kanne kaffe: Én fyller vann og én fyller på kaffepulver. Da kan begge registrere én kanne hver.</li>
+                            <li>Du har <strong>ikke</strong> lagd kaffe dersom du har vært med ned på Loftet og sett på noen andre lage.</li>
+                        </ol>
+                        <li>Ansvarlige personer skal sørge for at kaffekanna blir tatt med opp igjen.</li>
+                    </ol>
+                </ol>
+                <li>Pils</li>
+                <ol type="a">
+                    <li>Gjelder <strong>kun</strong> pils på Loftet.</li>
+                    <li>Gjelder fra 01.05.2024.</li>
+                    <ol type="a">
+                        <li>Du kan etterregistrere pils f.o.m denne datoen.</li>
+                    </ol>
+                    <li>Registrering gjelder for hver pils. Ergo 3 pils = 3 registreringer.</li>
+                    <li>Øvrige regler, som spesifisert i "Pils på Loftet"-gruppen på Facebook, må også overholdes.</li>
+                </ol>
+                <li>Earlybird og Latebird</li>
+                <ol type="a">
+                    <li>Gjelder <strong>kun</strong> inn- og utstempling via RFID.</li>
+                </ol>
+            </ol>
+        </div>
+    </div>
         <!-- <button onclick="playIceIce()">Play Song</button>
         <button onclick="stopIceIce()">Stop Song</button> -->
         
@@ -394,13 +472,25 @@ setInterval(checkOvDoor, 60000);
 
 function toggleAtSchool() {
     const atSchoolSection = document.getElementById('atSchoolSection');
-
+    const ruleSection = document.getElementById('ruleSection');
+    
     if (atSchoolSection.style.display === 'none') {
-        atSchoolSection.style.display = 'block';
+        ruleSection.style.display = 'none';
+        atSchoolSection.style.display = 'flex';
     } else {
         atSchoolSection.style.display = 'none';
     }
 
+}
+function toggleRules() {
+    const ruleSection = document.getElementById('ruleSection');
+    const atSchoolSection = document.getElementById('atSchoolSection');
+    if (ruleSection.style.display === 'none') {
+        atSchoolSection.style.display = 'none';
+        ruleSection.style.display = 'flex';
+    } else {
+        ruleSection.style.display = 'none';
+    } 
 }
 
 </script>

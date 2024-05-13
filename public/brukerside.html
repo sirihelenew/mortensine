@@ -311,6 +311,7 @@
                 .then(() => {
                     console.log("Pils successfully updated!");
                     alert("Pils registrert!");
+                    window.location.href = "brukerside.html";
                 })
                 .catch((error) => {
                     console.error("Error updating pils: ", error);
