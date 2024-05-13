@@ -245,6 +245,57 @@ function stempleUtManuelt () {
 }
 
 
+
+function StempleEksamen(){
+    Swal.fire({
+        title: 'ENTERING EKSAMENSMODUS',
+        html: `
+            <input id="swal-input1" class="swal2-input" placeholder="Romnr">
+            <input id="swal-input2" class="swal2-input" placeholder="Fagkode">
+        `,
+        showDenyButton: true,
+        confirmButtonText: `bekreft`,
+        denyButtonText: `avbryt`,
+        preConfirm: () => {
+            const input1 = document.getElementById('swal-input1').value;
+            const input2 = document.getElementById('swal-input2').value;
+            if (!input1 || !input2) {
+                Swal.showValidationMessage(`Vennligst fyll ut begge feltene`);
+            }
+            return { input1: input1, input2: input2 };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log('User text:', result.value);
+            Swal.fire("I believe in you!", "You got this! \n See you on the other side!");
+            const user = firebase.auth().currentUser;
+            if (user) {
+                const userID = user.uid;
+                const sted = result.value.input1+'#'+result.value.input2;
+                const tid = firebase.firestore.Timestamp.now();
+                const metode = 'eksamen';
+                db.collection('Innlogginger').add({
+                    userID,
+                    tid,
+                    metode,
+                    sted,
+                    status: true
+                })
+                .then(() => {
+                    console.log('Document updated successfully');
+                })
+                .catch((error) => {
+                    console.error("Error updating document: ", error);
+                });
+            } else {
+                console.log('User is not logged in');
+            }
+        }
+    });
+}
+
+
+
 function loggut() {
     firebase.auth().signOut().then(() => {
         console.log('User signed out successfully');

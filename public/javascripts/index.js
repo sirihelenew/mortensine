@@ -170,8 +170,17 @@ getSocketInstance().on('connect', function () {
             console.error("Data type is not defined", data);
             return;
         }
+        if (data.type === 'examUsers') {
+            showTribute(data.examUsers,false);
+        } else if (data.type === 'examUsersFinish') {
+            showTribute(data.examUsers,true);
+        }
         if (data.type === 'welcome') {
-          showWelcomeMessage(data.fornavn, data.metode, data.sted, data.profilbilde);
+          if (data.metode==="eksamen"){
+            showExamMessage(data.fornavn, data.sted, data.profilbilde);
+          } else{
+           showWelcomeMessage(data.fornavn, data.metode, data.sted, data.profilbilde);
+          }
         } else if (data.type === 'goodbye') {
           showGoodbyeMessage(data.userID, data.fornavn, data.profilbilde);
         } else if (data.type === "leaderboard"){
@@ -217,12 +226,41 @@ function updateUserslist(data){
 var isMessageShowing = false;
 localStorage.setItem('audioPlaying',false);
 
+function showExamMessage(userName, location, profilbildePath) {
+    if (isMessageShowing){
+        return;
+    }
+    isMessageShowing = true;
+    const eksamenTekst = document.getElementById('eksamenstekst');
+    const profileImage = document.getElementById('eksamensbilde');
+    var skullContainer = document.querySelector(".skull-container");
+
+    try{
+        let [romNr, Fagkode] = location.split("#");         
+        eksamenTekst.innerHTML = `<span style="color:red; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">${userName} har stemplet inn fra <u>${romNr}</u> <br> Eksamen: <u>${Fagkode}</u></span>`;
+        document.getElementById('EksamensSide').style.backgroundColor = "blueviolet";
+        document.getElementById('EksamensSide').classList.remove('hidden');
+        skullContainer.style.display = "block";
+
+        profileImage.src = profilbildePath;
+    } catch (error){
+        console.error("Error showing welcome message: ", error);
+    } finally {
+        setTimeout(() => {
+            document.getElementById('EksamensSide').classList.add('hidden');
+            skullContainer.style.display = "none";
+            isMessageShowing = false;
+        }, 10000);
+    }
+}
+
+
 function showWelcomeMessage(userName, loginMethod, loginLocation, profilbildePath) {
     if (isMessageShowing){
         return;
     }
     isMessageShowing = true;
-    const velkommenText = document.getElementById('velkommenText');
+    var velkommenText = document.getElementById('velkommenText');
     const loginInfo = document.getElementById('loginInfo');
     const profileImage = document.getElementById('profileImage');
     try{
@@ -305,6 +343,7 @@ function showSoundAuthour(author){
 }
 
 function loadLeaderboard(usersData) {
+    let examInProgress=false;
     htmlContent = '';
     rank = 1;
     const storedLeaderboard = localStorage.getItem('leaderboard');
@@ -319,12 +358,18 @@ function loadLeaderboard(usersData) {
         const totalMinutesLeft = totalMinutes % 60;
         const totalHoursToday = userData.totalHoursToday || 0;
         const pilsCount = userData.pils || 0;
+        const eksamen = userData.eksamen || false;
         // Check if the user has punched in today
         const hasPunchedInToday = userData.status === true;
 
         // Set the row color based on whether the user has punched in today
-        const rowColor = hasPunchedInToday ? '#9ADE7B' : '#D04848';
-        
+        let rowColor;
+        if (eksamen) {
+            rowColor = 'purple';
+            examInProgress=true;
+        } else {
+            rowColor = hasPunchedInToday ? '#9ADE7B' : '#D04848';
+        }        
         const changedPosition = userData.changeInPosition || 0;
 
         // Determine the arrow based on the changedPosition value
@@ -357,6 +402,11 @@ function loadLeaderboard(usersData) {
     });
     leaderboardContent.innerHTML = htmlContent;
     localStorage.setItem('leaderboard', htmlContent);
+    if (examInProgress){
+        document.getElementById('exam').classList.remove('hidden');
+    } else {
+        document.getElementById('exam').classList.add('hidden');
+    }
 }
 
 function toggleMenu() {
@@ -541,4 +591,65 @@ function calculateCountdown(targetDateTime) {
     let div = document.createElement('div');
     div.innerText = quote;
     return div.innerHTML;
+}
+
+function showTribute(usersArray, complete) {
+    usersArray.forEach((user, index) => {
+        setTimeout(() => {
+            // Create a new div for the user's information
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user-info';
+            userDiv.style.position = 'fixed';
+            userDiv.style.top = '0';
+            userDiv.style.left = '0';
+            userDiv.style.width = '100%';
+            userDiv.style.height = '100%';
+            userDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            userDiv.style.color = 'white';
+            userDiv.style.display = 'flex';
+            userDiv.style.justifyContent = 'center';
+            userDiv.style.alignItems = 'center';
+            userDiv.style.flexDirection = 'column';
+            userDiv.style.zIndex = '1000';
+            userDiv.style.opacity = '0';
+            userDiv.style.transition = 'opacity 3s';
+            console.log("User:", user);
+            console.log("User sted:", user.sted);
+            var [romNr, Fagkode] = user.sted.split("#");
+
+            // Add the user's name, place, and profile picture to the div
+            userDiv.innerHTML = `
+                <h2>A moment of silence, brave scholars, as they embark on the journey of examination...</h2>
+                <h1>${user.fornavn}</h1>
+                <p>${Fagkode}</p>
+                <p>${romNr}</p>
+                <img src="${user.profilbilde}" style="width: 200px; height: 200px; border-radius: 50%; margin-top: 20px;">
+            `;
+            if (complete){
+                userDiv.innerHTML = `
+                <h2>🎉🎉🎉 Congratulations! ${user.fornavn} triumphantly finished the exam! 🎉🎉🎉</h2>
+                <p>Finish Time: ${user.finished}</p>
+                <p>${Fagkode}</p>
+                <img src="${user.profilbilde}" style="width: 200px; height: 200px; border-radius: 50%; margin-top: 20px;">
+            `;
+            }
+
+            // Add the div to the page
+            document.body.appendChild(userDiv);
+
+
+            // Fade out and remove the div after 30 seconds
+            setTimeout(() => {
+                userDiv.style.opacity = '1';
+            }, 100);
+    
+            // Fade out and remove the div after 10 seconds
+            setTimeout(() => {
+                userDiv.style.opacity = '0';
+                setTimeout(() => {
+                    userDiv.remove();
+                }, 3000); // Wait for the fade out transition to finish before removing the div
+            }, 7000); // Start the fade out transition 1 second before the div is removed to allow time for the transition
+        }, index * 10000);
+    });
 }

@@ -6,6 +6,7 @@ const io = require('../bin/socket').getIO();
 const logger = require('./logger');
 const fs = require('fs');
 const { get } = require('http');
+const { exec } = require('child_process');
 
 let sendNotificationToAll;
 
@@ -39,7 +40,8 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                 let imageRef;
                                     // Only update the status field of the user's document if it's not already true
                 if (userStatus != loginData.status) {
-                    const updateData = { status: loginData.status };
+                    let updateData = { status: loginData.status };
+
                     if (loginData.status) {
                         updateData.timeEntered = new Date();
                     }
@@ -53,8 +55,21 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
                         
                     }
                 }
+
   
                 if (loginData.status) {
+                    if(loginData.metode==="eksamen"){
+                        db.collection('brukere').doc(loginData.userID).update({eksamen: true});
+                        examInfo = {
+                            sted: loginData.sted,
+                            userID: loginData.userID,
+                            profilbilde: profilbildePath,
+                            fornavn: userData.fornavn,
+                            finished: "?"
+                        };
+                        db.collection('examUsers').doc(examInfo.userID).set(examInfo);
+    
+                    }
                     const data = {
                         type: 'welcome',
                         fornavn: userData.fornavn,
@@ -78,6 +93,14 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
 
                 }
                 else {
+                    if (userData.eksamen===true){
+                        db.collection('brukere').doc(loginData.userID).update({eksamen: false});
+                        let date = new Date();
+                        let hours = String(date.getHours()).padStart(2, '0');
+                        let minutes = String(date.getMinutes()).padStart(2, '0');
+                        let finished = `${hours},${minutes}`;
+                        db.collection('examUsers').doc(userData.userID).update({ finished: finished });
+                    }
                     const data = {
                         type: 'goodbye',
                         userID: loginData.userID,
@@ -492,3 +515,73 @@ cron.schedule('0 4 * * *', function() {
 });
 setInterval(updateLeaderboard, 60000);
 
+const fetchExamUsers = () => {
+    // Fetch all users who are currently taking an exam
+    db.collection('examUsers').get().then(snapshot => {
+        const examUsers = snapshot.docs.map(doc => doc.data());
+        if (examUsers.length === 0) {
+            console.log('No exam users found.');
+            return;
+        }
+        const data = {
+            type: 'examUsers',
+            examUsers
+        };
+        const time = examUsers.length * 10000;
+        io.sockets.emit('message', data);
+
+        // Start playing the audio file
+        exec('cvlc --play-and-exit --loop tribute.mp3');
+
+        // Stop playing the audio file after the specified time
+
+        setTimeout(() => {
+            exec('pkill vlc');
+        }, time);
+    });
+};
+
+
+// Schedule fetchExamUsers to run every day at 09:00
+cron.schedule('0 9 * * *', fetchExamUsers);
+cron.schedule('0 15 * * *', fetchExamUsers);
+
+const examFinished= () =>{
+    let examUsersRef = db.collection('examUsers');
+    let batch = db.batch();
+    let examUsers;
+
+    examUsersRef.get().then(snapshot => {
+        examUsers = snapshot.docs.map(doc => doc.data());
+        if (examUsers.length === 0) {
+            console.log('No exam users found.');
+            return;
+        }
+        snapshot.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        return batch.commit();
+    }).then(() => {
+        if (!examUsers || examUsers.length === 0) {
+            return;
+        }
+        const data = {
+            type: 'examUsersFinish',
+            examUsers
+        };
+        io.sockets.emit('message', data);
+        console.log('Deleted all documents in examUsers collection.');
+        const time = examUsers.length * 10000;
+        exec('cvlc --play-and-exit --loop finish.mp3');
+        setTimeout(() => {
+            exec('pkill vlc');
+        }, time);
+
+    }).catch((error) => {
+        console.error('Error deleting documents in examUsers collection: ', error);
+    });
+}
+
+cron.schedule('0 13 * * *', examFinished);
+cron.schedule('0 19 * * *', examFinished);

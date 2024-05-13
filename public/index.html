@@ -150,6 +150,44 @@
         justify-content: space-between; 
         padding: 0 20px; 
     }
+    .flex-container {
+        display: flex;
+        align-items: center;
+    }
+    js-contEksam {
+        display: flex;
+        width: 100%; 
+        align-items: center; 
+        justify-content: space-between; 
+        padding: 0 20px; 
+    }
+    @keyframes moveDown {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(100%); }
+    }
+    @keyframes fadeOut {
+        0% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .skull-container{
+        overflow: hidden;
+        display:none
+    }
+    .user-info {
+        animation: fadeIn 3s forards; 
+    }
+
+    .skull {
+        position: absolute;
+        animation: fadeIn 1s linear forwards, moveDown 3s linear infinite, fadeOut 3s linear 3s forwards;
+
+
+        
+    }
     .hidden {display: none;}
 
     .text-container {
@@ -180,6 +218,29 @@
         border: 2px solid #4CAF50;
     }
 
+    @keyframes flash {
+        0% {background-color: purple; border: 2px solid red; box-shadow: 0 0 10px red;}
+        50% {background-color: red; border: 2px solid purple; box-shadow: 0 0 20px purple;}
+        100% {background-color: purple; border: 2px solid red; box-shadow: 0 0 10px red;}
+    }
+
+    .exam-button {
+        padding: 20px;
+        background-color: purple;
+        color: white;
+        text-align: center;
+        font-size: 20px;
+        border: 2px solid red;
+        box-shadow: 0 0 10px red;
+        animation: flash 2s infinite;
+    }
+
+    .exam-button:hover {
+        background-color: red;
+        color: white;
+        border: 2px solid purple;
+        box-shadow: 0 0 20px purple;
+    }
     h1 {
         font-size: 90px;
         text-align: center;
@@ -235,6 +296,17 @@
           <button id="closeBtn">Not now</button>
         </div>
       </div>
+      <div id="EksamensSide" class="js-contEksam container1 hidden">
+        <div class="flex-container">
+            <div class="text-container">
+                <h1 id="eksamenstekst" style="margin-left: 50px;"></h1>
+            </div>
+            <div class="login-container">
+                <h1 id="eksamenslogin"></h1>
+            </div>
+            <img src="" id="eksamensbilde" style="margin-right: 20px;">
+        </div>
+    </div>
     <div id="velkommenSide" class="js-container container1 hidden">
         <div class="text-container">
             <h1 id="velkommenText" style="margin-left: 50px;"></h1>
@@ -244,6 +316,7 @@
         </div>
         <img src="" id="profileImage" style="margin-right: 20px;">
     </div>
+
     <div class="menu-container">
         <div class="hamburger-menu">
             <button class="menyknapp" style="background-color: var(--white);" onclick="toggleMenu()">&#9776;</button>
@@ -359,7 +432,12 @@
     <article>
         <div class="container">
             <div class="box" id="leaderContent" style="width: 50%; background-color: var(--white);">
-                <h1 style="font-size: 30px;">LEADERBOARD!!!</h1>
+                <div style="display: flex; justify-content: center; align-items: center; gap:40px;">
+                    <h1 style="font-size: 30px;">LEADERBOARD!!!</h1>
+                    <div id="exam" class="hidden">
+                        <button class="exam-button">Exam in Progress</button>
+                    </div>
+                </div>
                 <div class="leaderboard" style="background-color: var(--white);">
                 <div class="leaderboardsplit" style="width: 5%; font-weight: 700; background-color: var(--white);">RANK</div>
                 <div class="leaderboardsplit" style="width: 10%; font-weight: 700; background-color: var(--white);">TOTALT</div>
@@ -372,6 +450,7 @@
             </div>
         <div class="box" id="leaderContent" style="background-color: var(--white); width: 45%;">
             <div class="leaderboard" id="leaderClass" style="background-color: var(--white); align-items: center;">
+
                 <div class="row" id="birdies" style="display: flex; justify-content: space-between;">
                     <div class="column" id="earlybirdies" style="width: 50%;">
                         <h1 style="color: var(--grey); font-size: 22px;"> DAGENS EARLYBIRD 🥇☀️</h1>
@@ -500,6 +579,7 @@ function toggleRules() {
 <script src="/socket.io/socket.io.js"></script>
 <script src="javascripts/index.js"></script>
 <script src="javascripts/confetti.js"></script>
+<script src="javascripts/skull.js"></script>
 
 </body>
 </html>

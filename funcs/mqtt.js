@@ -1,7 +1,7 @@
 const mqtt= require('mqtt');
 const {db,storage} = require('./firebase');
 const logger = require('./logger');
-const { spawn } = require('child_process');
+const { spawn, exec} = require('child_process');
 const admin = require('firebase-admin');
 const io=require('../bin/socket').getIO();
 
