@@ -138,7 +138,10 @@
         #birdies { flex-direction: column;}
         #earlybirdies, #latebirdies {width: 90% !important;}
         .leaderboardsplit, .leaders {font-size: 10px !important;}
-        #atSchoolBox {flex-direction: column !important;}
+        #atSchoolBox, #ruleBox {flex-direction: column !important; width: 90% !important;}
+        #ruleBox {width: 90% !important;}
+        .earlyBirds {align-items: baseline !important;}
+        #listStyle {padding-inline-start: 15px;}
     }
     .js-container {
         display: flex;
@@ -276,43 +279,43 @@
         </div>
         </div>
         <div class="container" id="ruleSection" style="width: 90%; display: none; padding: 20px; font-weight: 400; justify-content: center;  flex-direction: column; align-items: center;">
-            <div class="box" style="text-align: left; width: 50%; display:flex; flex-direction: column; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div class="box" id="ruleBox" style="text-align: left; width: 50%; display:flex; flex-direction: column; justify-content:flex-start; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h1 style="font-size: 20px; text-align: left;">Regler</h1>
             <ol>
                 <li>Generelt</li>
-                <ol type="a">
+                <ol type="a" id="listStyle">
                     <li>Du stempler inn når du er på (gyldig) Campus og gjør <strong>skolearbeid</strong>.</li>
-                    <ol type="i">
+                    <ol type="i" id="listStyle">
                     <li>Gyldige campuser: NTNUs campuser i Trondheim.</li>
                     </ol>
                     <li>Innstempling</li>
-                    <ol type="i">
+                    <ol type="i" id="listStyle">
                         <li>Utføres enten via RFID eller fra din brukerside.</li>
                         <li>Overholder regel 1a, eller unntaksreglene (se 2), for gyldige aktiviteter.</li>
                     </ol>
                     <li>Utstempling</li>
-                    <ol type="i">
+                    <ol type="i" id="listStyle" >
                         <li>Utføres enten via RFID eller fra din brukerside.</li>
                         <li>Hvis du glemmer å stemple ut blir du automatisk stemplet ut kl 04:00 og trukket 600 minutter #sugeråsuge.</li>
                     </ol>
                 </ol>
                 <li>Unntaksregler</li>
-                <ol type="a">
+                <ol type="a"  id="listStyle">
                     <li>Gyldige aktiviteter som overskrider regel 1</li>
-                    <ol type="i">
+                    <ol type="i" id="listStyle">
                         <li>Eksamen</li>
-                        <ol type="a">
+                        <ol type="a" id="listStyle">
                             <li>Du kan stemple inn manuelt fra Sluppen/Dragvoll når du har eksamen. Da må du huske på å stemple ut når du forlater eksamenslokalet.</li>
                         </ol>
                         <li>Pause</li>
-                        <ol type="a">
+                        <ol type="a" id="listStyle">
                             <li>Et pauseintervall kan ikke overskride 1 time.</li>
                             <li>Utenom dette skal regelen vurderes etter skjønn for hva du selv anser som "pauseaktivitet".</li>
                         </ol>
                         <li>Pils på Loftet</li>
-                        <ol type="a">
+                        <ol type="a" id="listStyle">
                             <li>Gjelder kun som gyldig aktivitet dersom</li>
-                            <ol type="i">
+                            <ol type="i" id="listStyle">
                                 <li>Du allerede er stemplet inn og regel 1 er overholdt.</li>
                                 <li>Du har tenkt til å ta opp skolearbeidet igjen. Ergo, skal du ta en pils på Loftet før du drar hjem, stempler du ut.</li>
                             </ol>
@@ -320,12 +323,12 @@
                     </ol>
                 </ol>
                 <li>Kaffe</li>
-                <ol type="a">
+                <ol type="a" id="listStyle">
                     <li>Gjelder kun felleskannen som står på Mortensine.</li>
                     <li>Registrering av kaffe</li>
-                    <ol type="i">
+                    <ol type="i" id="listStyle">
                         <li>Det trengs ikke flere personer for å trakte en kanne kaffe. Ergo, har du tatt initiativ på å trakte kaffe, registrerer du én kanne.</li>
-                        <ol type="a">
+                        <ol type="a" id="listStyle">
                             <li><strong>Unntak:</strong> To personer kan samarbeide om å trakte én kanne kaffe: Én fyller vann og én fyller på kaffepulver. Da kan begge registrere én kanne hver.</li>
                             <li>Du har <strong>ikke</strong> lagd kaffe dersom du har vært med ned på Loftet og sett på noen andre lage.</li>
                         </ol>
@@ -333,17 +336,17 @@
                     </ol>
                 </ol>
                 <li>Pils</li>
-                <ol type="a">
+                <ol type="a" id="listStyle">
                     <li>Gjelder <strong>kun</strong> pils på Loftet.</li>
                     <li>Gjelder fra 01.05.2024.</li>
-                    <ol type="a">
+                    <ol type="i" id="listStyle">
                         <li>Du kan etterregistrere pils f.o.m denne datoen.</li>
                     </ol>
                     <li>Registrering gjelder for hver pils. Ergo 3 pils = 3 registreringer.</li>
                     <li>Øvrige regler, som spesifisert i "Pils på Loftet"-gruppen på Facebook, må også overholdes.</li>
                 </ol>
                 <li>Earlybird og Latebird</li>
-                <ol type="a">
+                <ol type="a" id="listStyle">
                     <li>Gjelder <strong>kun</strong> inn- og utstempling via RFID.</li>
                 </ol>
             </ol>
