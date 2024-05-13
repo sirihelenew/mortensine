@@ -18,6 +18,7 @@ var pushSubRouter = require("./routes/pushSub");
 const { execSync } = require('child_process');
 const updateUserTime = require("./funcs/updateUsertime");
 
+const fs = require('fs');
 setInterval(updateUserTime, 60 * 1000);
 
   
@@ -72,8 +73,20 @@ app.on('unhandledRejection', (reason, promise) => {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.status(404).sendFile(path.join(__dirname, '/public/404.html'));
-  //next(createError(404));
+  let filePath = path.join(__dirname, 'public', req.path);
+
+  // If the path does not already end with '.html', append '.html' to it
+  if (!filePath.endsWith('.html')) {
+      filePath += '.html';
+  }
+
+  // If the file exists, send it
+  if (fs.existsSync(filePath)) {
+      res.sendFile(filePath);
+  } else {
+      // If the file does not exist, send the 404 page
+      res.status(404).sendFile(path.join(__dirname, '/public/404.html'));
+  }
 });
 
 // error handler
