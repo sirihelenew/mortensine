@@ -5,7 +5,10 @@ var { exec } = require('child_process');
 router.get('/:action', (req, res) => {
   if (req.params.action === 'start') {
       res.send('Starting VLC...');
-      exec("vlc --fullscreen --play-and-exit order.mp4");
+      exec("vlc --fullscreen --alsa-volume 512 --play-and-exit order.mp4");
+      exec("vlc --qt-fullscreen-screennumber=1 -f order.mp4");
+      exec("vlc --qt-fullscreen-screennumber=0 -f order.mp4");
+      exec("vlc --qt-fullscreen-screennumber=2 -f order.mp4");
       console.log("Playing video: order.mp4");
   } else if (req.params.action === 'stop') {
       res.send('Stopping VLC...');
