@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const brukernavn = document.getElementById('brukernavn');
                 const profilbilde = document.getElementById('profilbilde');
                 const kaffeCount = document.getElementById('kaffeStatistikk');
+                const pilsCount = document.getElementById('pilsStatistikk');
                 const profilbildePath = userData.profilbilde;
                 const tidsStats = document.getElementById('timestatistikk');
                 const hours= Math.floor(userData.totalMinutes/60);
@@ -25,6 +26,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     kaffeCount.textContent = 'Antall kaffekanne traktet: 0';
                 } else {
                     kaffeCount.textContent = 'Antall kaffekanner traktet: ' + userData.kaffeCount;
+                }
+                if(userData && !userData.pils) {
+                    pilsCount.textContent = 'Antall pils på Loftet: 0';
+                } else {
+                    pilsCount.textContent = 'Antall pils på Loftet: ' + userData.pils;
                 }
 
             } else {
@@ -156,7 +162,7 @@ document.getElementById('byttpb').addEventListener('click', function() {
                 storageRef.put(picture)
                     .then((snapshot) => {
                         console.log('File uploaded successfully');
-                        return snapshot.ref.getDownloadURL(); // Get URL of uploaded file
+                        return snapshot.ref.getDownloadURL(); 
                     })
                     .then((downloadURL) => {
                         const user = firebase.auth().currentUser;
@@ -185,9 +191,6 @@ document.getElementById('byttpb').addEventListener('click', function() {
 
     
     function stempleInnManuelt() {
-        // const iceStafett = document.querySelector('.ice-stafett');
-        // iceStafett.classList.toggle('hidden');
-        
         const stempling = document.querySelector('.stemple-inn');
         stempling.classList.toggle('hidden');
         document.querySelector('#stempling-inn').addEventListener('submit', function(event) {
@@ -242,14 +245,10 @@ function stempleUtManuelt () {
 }
 
 
-
-
-
-
 function loggut() {
     firebase.auth().signOut().then(() => {
         console.log('User signed out successfully');
-        window.location.href = "../index.html";
+        window.location.href = "index.html";
     }).catch((error) => {
         console.error("Error signing out: ", error);
     });

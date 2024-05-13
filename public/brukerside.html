@@ -60,7 +60,7 @@
     }
 
         
-    .stemple-inn, .kaffe, .quote {
+    .stemple-inn, .kaffe, .quote, .pils {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -74,12 +74,12 @@
     }
 
     
-    #stempling-inn, #kaffeStats, #quoteForm {
+    #stempling-inn, #kaffeStats, #quoteForm, #pilsStats {
         display: flex;
         flex-direction: column;
         width: 100%;
     }
-    #kaffeStats {
+    #kaffeStats, #pilsStats {
         align-items: center;
         justify-content: center;
     }
@@ -89,7 +89,7 @@
         margin-bottom: 10px; 
         text-align: center;
     }
-    #kaffeStats label, #quoteForm label {
+    #kaffeStats label, #quoteForm label, #pilsStats label {
         font-weight: var(--bold); 
         text-align: center;
     }
@@ -97,7 +97,8 @@
     #stempling-inn input[type="text"], 
     #kaffeStats input[type="submit"],
     #quoteForm input[type="text"],
-    #quoteForm input[type="submit"]{
+    #quoteForm input[type="submit"],
+    #pilsStats input[type="submit"]{
         padding: 10px;
         margin-bottom: 20px; 
         border: 1px solid var(--white);
@@ -106,7 +107,7 @@
     }
 
     
-    #stempling-inn input[type="submit"], #kaffeStats input[type="submit"]{
+    #stempling-inn input[type="submit"], #kaffeStats input[type="submit"], #pilsStats input[type="submit"]{
         padding: 10px;
         border: none;
         border-radius: 4px;
@@ -123,7 +124,7 @@
 
     /* MOBIL */
     @media (max-width: 600px) { 
-    .stemple-inn, .kaffe { width: 100%; margin: auto; }
+    .stemple-inn, .kaffe, .pils { width: 100%; margin: auto; }
     .topnav { 
         display: flex; flex-wrap: wrap; flex-direction: column;
         justify-content:left; 
@@ -131,7 +132,7 @@
         background-color: #F6F5F2;}
     #stempling-inn input[type="text"],
     #stempling-inn input[type="submit"], 
-    #kaffeStats input[type="submit"] { width: 100%; box-sizing: border-box; }
+    #kaffeStats input[type="submit"], #pilsStats input[type="submit"] { width: 100%; box-sizing: border-box; }
     #articleContainer {flex-direction: column; align-items: center;}
     #profilbildeSection, #profilInfo { width: 80% !important;}
     #pcBreak {display: none;}
@@ -139,7 +140,7 @@
 </style>
 </head>
 <body>
-    <a href="../index.html" class="home-button"><i class="fas fa-arrow-left"></i> Hjem</a>
+    <a href="index.html" class="home-button"><i class="fas fa-arrow-left"></i> Hjem</a>
     <div class="header" style="background-color: var(--white);">
         <h1 style="color: var(--grey); font-size: 50px;" id="brukernavn"></h1>
     </div>
@@ -149,6 +150,7 @@
         <a href="#" onclick="stempleUtManuelt()"> STEMPLE UT MANUELT</a>
         <a href="#" onclick="kaffe()"> REGISTRER TRAKTING AV KAFFE ☕️</a>
         <a href="javascript:void(0)" onclick="oppdaterQuote()"> OPPDATER DIN STATUS</a>
+        <a href="javascript:void(0)" onclick="oppdaterPils()"> REGISTRER PILS PÅ LOFTET 🍻</a>
         <a href="#" onclick="loggut()"> Logg ut</a>
     </div>
     <div class="stemple-inn hidden">
@@ -173,6 +175,13 @@
             <input type="submit" id="quoteSubmit" value="Oppdater" style="font-size: 20px; text-align: center;">
         </form>
     </div>
+    <div class="pils hidden">
+        <form id="pilsStats" style="text-align: center;">
+            <label for="pilsInkrement" style="width: auto;">Trykk på knappen hvis du har pilsa på Loftet😍</label>
+            <br>
+            <input type="submit" id="pilsInkrement" value="PILS 🍻" style="font-size: 20px; text-align: center;">
+        </form>
+    </div>
     <!-- <div class="topnav" style="background-color: var(--blue2); color: var(--white);">
         <a href="minbruker.html" style="color: var(--white);">Min bruker</a>
         <a href="dagenssyndere.html" style="color: var(--white);">Dagens syndere</a>
@@ -193,25 +202,16 @@
                 </div>
             </div>
             <div class="box" id="profilInfo" style="width: 50%; background-color: var(--white);">
-                <!-- <button class="knapp" style="background-color: var(--blue2);"><a href="#" style="font-size: 25px; color: var(--grey);">Stemple inn fra et annet sted</a></button><br> -->
-                <h1 style="color: var(--grey);" id="timestatistikk">Antall timer på skolen:</h1><br id="pcBreak">
-                <h1 style="color: var(--grey);" id="kaffeStatistikk"></h1>
-                <div class="box" style="width: 90%; background-color: var(--blue2);box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-                    <h1  style="color: var(--grey); font-size: 35px;">
-                        Last opp lyd:
-                    </h1>
-                    <p style="color: var(--grey); text-align: left;">NB: Lydfil må være i .mp3 eller .wav format og det er kun de første 15 sekundene som spilles.</p>
-                    <p style="color: var(--grey); text-align: left;">Lyd legges til i valgt person sin randome pool. Ved scanning plukkes ut en fil randomly.</p>
-                    <br>
-                    <select id="userSelect"></select>
-                    <input type="file" id="mp3Upload" accept=".mp3,.wav">
-                    <button id="uploadButton">Upload</button>
-                    <!-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1lMcrRsRphljbTorQk8Nav?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                        <button class="knapp"><a href="#">Bytt introsang</a></button>  -->
-                </div>
+                <h1 style="color: var(--grey); font-size: 30px;" id="timestatistikk">Antall timer på skolen:</h1><br id="pcBreak">
+                <h1 style="color: var(--grey); font-size: 30px;" id="kaffeStatistikk"></h1>
+                <h1 style="color: var(--grey); font-size: 30px;" id="pilsStatistikk"></h1>
             </div>
         </div>
-        <form id="notification-preferences" style="width: 50%; margin: auto; padding: 20px;  border-radius: 10px;">
+        <!-- <hr style="margin: 0; border-top: 3px solid black;"> -->
+        <div class="container" id="articleContainer" style="background-color: var(--white); ">
+        <div class="box" id="profilInfo" style="width: 50%; background-color: var(--gul);">
+        <form id="notification-preferences" style="width: 90%; margin: auto; padding: 20px; background-color: var(--white);box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+            <h1 style="color: var(--grey); font-size: 30px; display: flex;">Preferanser for notifikasjoner</h1>
             <label style="display: flex; align-items: center; margin-bottom: 10px;">
                 Absolutt alt av notifikasjoner (aids, ikke anbefalt)
                 <input type="checkbox" id="notif_mov" style="margin-left: 10px;">
@@ -220,8 +220,25 @@
                 Kunngjøringer (Anbefalt)
                 <input type="checkbox" id="notif_ann" style="margin-left: 10px;">
             </label>
-            <button type="submit" style="background-color: var(--gul); color: var(--grey); padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-align: center;">Lagre</button>
+            <button type="submit" style="background-color: var(--grey); color: var(--white); padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-align: center;">Lagre</button>
         </form>
+    </div>
+        <div class="box" id="profilInfo" style="width: 50%; background-color: var(--gul);">
+        <div class="box" style="margin: auto; width: 90%; background-color: var(--white);box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+            <h1  style="color: var(--grey); font-size: 35px;">
+                Last opp lyd:
+            </h1>
+            <p style="color: var(--grey); text-align: left;">NB: Lydfil må være i .mp3 eller .wav format og det er kun de første 15 sekundene som spilles.</p>
+            <p style="color: var(--grey); text-align: left;">Lyd legges til i valgt person sin randome pool. Ved scanning plukkes ut en fil randomly.</p>
+            <br>
+            <select id="userSelect"></select>
+            <input type="file" id="mp3Upload" accept=".mp3,.wav">
+            <button id="uploadButton">Upload</button>
+            <!-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1lMcrRsRphljbTorQk8Nav?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <button class="knapp"><a href="#">Bytt introsang</a></button>  -->
+        </div>
+    </div>
+    </div>
     </article>
 
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
@@ -237,37 +254,74 @@
     const storage = firebase.storage();
     const auth = firebase.auth();
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
     function oppdaterQuote() {
-    const quoteField = document.querySelector('.quote');
-    quoteField.classList.toggle('hidden');
-    document.getElementById('quoteForm').classList.remove('hidden');
+        const quoteField = document.querySelector('.quote');
+        quoteField.classList.toggle('hidden');
+        document.getElementById('quoteForm').classList.remove('hidden');
 
-    document.getElementById('quoteForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+        document.getElementById('quoteForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let quote = document.getElementById('quoteInput').value;
 
-        let quote = document.getElementById('quoteInput').value;
-
-        const maxWords = 20;
-        const words = quote.split(' ');
-        if (words.length > maxWords) {
-            quote = words.slice(0, maxWords).join(' ');
-            alert(`Status er begrenset til ${maxWords} ord. De ekstra ordene er gone🥷🏼 `);
-        }
-
-        const userID = firebase.auth().currentUser.uid;
-
-        db.collection('brukere').doc(userID).set({
-            quote: quote
-        }, { merge: true })
-        .then(() => {
-            console.log("Quote successfully updated!");
-            quoteField.classList.toggle('hidden');
-            document.getElementById('quoteForm').classList.add('hidden');
-            alert("Status oppdatert!")
-        })
-        .catch((error) => {
-            console.error("Error updating quote: ", error);
+            const maxWords = 20;
+            const words = quote.split(' ');
+            if (words.length > maxWords) {
+                quote = words.slice(0, maxWords).join(' ');
+                alert(`Status er begrenset til ${maxWords} ord. De ekstra ordene er gone🥷🏼 `);
+            }
+            const userID = firebase.auth().currentUser.uid;
+            db.collection('brukere').doc(userID).set({
+                quote: quote
+            }, { merge: true })
+            .then(() => {
+                console.log("Quote successfully updated!");
+                quoteField.classList.toggle('hidden');
+                document.getElementById('quoteForm').classList.add('hidden');
+                alert("Status oppdatert!")
+            })
+            .catch((error) => {
+                console.error("Error updating quote: ", error);
+            });
         });
+    }
+    function oppdaterPils() {
+        const pilsStats = document.querySelector('.pils');
+        pilsStats.classList.toggle('hidden');
+        document.querySelector('#pilsStats').addEventListener('submit', function(event) {
+        event.preventDefault();
+        pilsStats.classList.toggle('hidden');
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            console.log("Ingen bruker logget inn");
+            return;
+        }
+        const brukereRef = db.collection('brukere').doc(user.uid);
+        brukereRef.get().then((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                let pils = data.pils;
+                if (!pils) {
+                    pils = 0;
+                }
+                pils++;
+                brukereRef.set({
+                    pils: pils
+                }, { merge: true })
+                .then(() => {
+                    console.log("Pils successfully updated!");
+                    alert("Pils registrert!");
+                })
+                .catch((error) => {
+                    console.error("Error updating pils: ", error);
+                });
+            } else {
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.error("Error getting document:", error);
+        });
+        
     });
 }
 

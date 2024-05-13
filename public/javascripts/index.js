@@ -318,6 +318,7 @@ function loadLeaderboard(usersData) {
         const totalHours = Math.floor(totalMinutes / 60);
         const totalMinutesLeft = totalMinutes % 60;
         const totalHoursToday = userData.totalHoursToday || 0;
+        const pilsCount = userData.pils || 0;
         // Check if the user has punched in today
         const hasPunchedInToday = userData.status === true;
 
@@ -328,7 +329,7 @@ function loadLeaderboard(usersData) {
 
         // Determine the arrow based on the changedPosition value
         let arrow;
-let arrowClass;
+    let arrowClass;
 
     if (changedPosition > 0) {
         arrow = `<i class="fa-solid fa-arrow-up"></i> ${Math.abs(changedPosition)}`;
@@ -343,10 +344,11 @@ let arrowClass;
 
         htmlContent += `
             <div class="leaderboard" >
-                <div class="leaderboardsplit">${rank++}</div>
-                <div class="leaderboardsplit" style="width: 15%;">${totalHours}t ${totalMinutesLeft}m</div>
+                <div class="leaderboardsplit" style="width: 5%;">${rank++}</div>
+                <div class="leaderboardsplit" style="width: 10%;">${totalHours}t ${totalMinutesLeft}m</div>
                 <div class="leaderboardsplit" style="width: 15%;">${Math.floor(totalHoursToday)}t, ${Math.round((totalHoursToday % 1) * 60)}m i dag</div>
-                <div class="leaderboardsplit" style="width: 8%;">${kaffeCount} ☕️</div>
+                <div class="leaderboardsplit" style="width: 5%;">${kaffeCount} ☕️</div>
+                <div class="leaderboardsplit" style="width: 5%;">${pilsCount} 🍻</div>
                 <div class="leaders" style="background-color: ${rowColor}; width=25%;">
                     <span class="name" style="margin-right: 20px;">${userData.fornavn + ' ' + userData.etternavn || 'Unknown'}</span>
                     <span class="quote">${quote}</span></div>
@@ -488,6 +490,7 @@ function setupEarlybirdListener(data) {
     });
     localStorage.setItem('earlybird', JSON.stringify(data));
 }
+
 function updateProfilePicture(path) {
     const imgElement = document.getElementById('earlybirdPic');
     imgElement.src = path;
