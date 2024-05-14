@@ -63,14 +63,14 @@
   width: 150px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-.ice-stafett, .stemple-inn, .kaffe {
+/* .ice-stafett, .stemple-inn, .kaffe {
   background-color: var(--white);
   position: absolute;
   top: 35px;
   left: 5px;
   width: 25%;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+} */
 
 
 .container {

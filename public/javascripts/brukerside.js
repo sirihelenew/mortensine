@@ -231,7 +231,12 @@ document.getElementById('byttpb').addEventListener('click', function() {
     
     function stempleInnManuelt() {
         const stempling = document.querySelector('.stemple-inn');
-        stempling.classList.toggle('hidden');
+        if (!stempling.classList.contains('hidden')) {
+            stempling.classList.add('hidden');
+        } else {
+            hideAllDivs();
+            stempling.classList.remove('hidden');
+        }
         document.querySelector('#stempling-inn').addEventListener('submit', function(event) {
             event.preventDefault();
             const user = firebase.auth().currentUser;

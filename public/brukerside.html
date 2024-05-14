@@ -248,7 +248,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
-    <script src="javascripts/leaderBoardKaffe.js"></script>
     <script src="javascripts/config.js"></script>
     <script>
 
@@ -258,15 +257,29 @@
     const auth = firebase.auth();
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
+    const divs = ['.stemple-inn', '.kaffe', '.quote', '.pils'];
+
+    function hideAllDivs() {
+        divs.forEach(div => {
+            const element = document.querySelector(div);
+            if (!element.classList.contains('hidden')) {
+                element.classList.add('hidden');
+            }
+        });
+    }
     function oppdaterQuote() {
         const quoteField = document.querySelector('.quote');
-        quoteField.classList.toggle('hidden');
+        if (!quoteField.classList.contains('hidden')) {
+            quoteField.classList.add('hidden');
+        } else {
+            hideAllDivs();
+            quoteField.classList.remove('hidden');
+        }
         document.getElementById('quoteForm').classList.remove('hidden');
 
         document.getElementById('quoteForm').addEventListener('submit', function(event) {
             event.preventDefault();
             let quote = document.getElementById('quoteInput').value;
-
             const maxWords = 20;
             const words = quote.split(' ');
             if (words.length > maxWords) {
@@ -290,10 +303,15 @@
     }
     function oppdaterPils() {
         const pilsStats = document.querySelector('.pils');
-        pilsStats.classList.toggle('hidden');
+        if (!pilsStats.classList.contains('hidden')) {
+            pilsStats.classList.add('hidden');
+        } else {
+            hideAllDivs();
+            pilsStats.classList.remove('hidden');
+        }
         document.querySelector('#pilsStats').addEventListener('submit', function(event) {
         event.preventDefault();
-        pilsStats.classList.toggle('hidden');
+        pilsStats.classList.add('hidden');
         const user = firebase.auth().currentUser;
         if (!user) {
             console.log("Ingen bruker logget inn");
@@ -327,6 +345,54 @@
         });
         
     });
+}
+
+function kaffe () {
+    const kaffeDiv = document.querySelector('.kaffe');
+    if (!kaffeDiv.classList.contains('hidden')) {
+        kaffeDiv.classList.add('hidden');
+    } else {
+        hideAllDivs();
+        kaffeDiv.classList.remove('hidden');
+    }
+    document.querySelector('#kaffeStats').addEventListener('submit', function(event) {
+        event.preventDefault();
+        kaffeStats.classList.toggle('hidden');
+
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            console.log("Ingen bruker logget inn");
+            return;
+        }
+        const brukereRef = db.collection('brukere').doc(user.uid);
+        brukereRef.get().then((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                let kaffe = data.kaffeCount;
+                if (!kaffe) {
+                    kaffe = 0;
+                }
+                kaffe++;
+                brukereRef.set({
+                    kaffeCount: kaffe
+                }, { merge: true })
+                .then(() => {
+                    console.log("Kaffe-count updated");
+                    alert("Trakting av kaffe registrert! Bra jobba:)");
+                    window.location.href = "brukerside.html";
+                })
+                .catch((error) => {
+                    console.error("Error updating kaffe: ", error);
+                });
+            } else {
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.error("Error getting document:", error);
+        });
+        
+    });
+
 }
 
     </script>
