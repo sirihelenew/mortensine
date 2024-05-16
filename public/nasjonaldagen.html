@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min bruker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="static/homebutton.css"> 
+    <link rel="stylesheet" href="static/loginform.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c110f170bd.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="static/mortensina.svg">
+<style>
+    :root {
+        --bold: 700;
+        --light: 400;
+        --red: #CF0101;
+        --darkblue: #011964;
+
+    }
+    body {
+        background-color: var(--white);
+        font-family: "PT Sans Narrow", sans-serif;
+        font-weight: var(--bold);
+        box-sizing: border-box;
+        margin: 0;
+    }
+    .topnav {
+        overflow: hidden;
+        background-color: var(--darkblue);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .topnav a {
+        display: block;
+        color: var(--white);
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: large;
+    }
+
+    .topnav a:hover {color: var(--red);}
+    @media (max-width: 600px) {
+        .container, .box {width: 100% !important;}
+    }
+    #challengeContainer {
+        margin: 20px auto;
+        width: 90%; /* make the container take up most of the screen on small devices */
+        max-width: 600px; /* limit the maximum width for larger devices */
+    }
+
+    #userDropdown, #guessInput, #enterButton {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    #enterButton {
+        background-color: var(--darkblue); /* green */
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    /* Styles for screens that are 600px or larger */
+    @media screen and (min-width: 600px) {
+        #challengeContainer {
+            width: 50%; /* make the container take up half the screen on larger devices */
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="header" style="background-color: var(--red);">
+        <h1 style="color: var(--white); font-size: 70px;">17. mai 🇳🇴</h1>
+    </div>
+    <div class="topnav">
+        <a href="#" onclick="gjettChallenge()"> Gjett challenge </a>
+        <!-- <a href="#" onclick="stempleUtManuelt()"> STEMPLE UT MANUELT</a>
+        <a href="#" onclick="kaffe()"> REGISTRER TRAKTING AV KAFFE ☕️</a>
+        <a href="javascript:void(0)" onclick="oppdaterQuote()"> OPPDATER DIN STATUS</a>
+        <a href="javascript:void(0)" onclick="oppdaterPils()"> REGISTRER PILS PÅ LOFTET 🍻</a>-->
+        <a href="#" onclick="loggut()"> Logg ut</a> 
+    </div>
+    <div id="challengeContainer">
+        <!-- Dropdown and input field will be created here by JavaScript -->
+    </div>
+    <div class="header" style="background-color: var(--white);">
+        <h1 style="color: var(--grey); font-size: 50px;" id="brukernavn"></h1>
+    </div>
+    <article>
+        <div class="container" style=" padding: 20px;">
+        <div class="box" style="background-color: var(--red); padding: 20px; border-radius: 5px;">
+            <h2 style="font-size: 30px;">Din challenge!</h2>
+            <p id="challengeText" style="color: var(--white); font-size: 20px;">Dra hjem </p>
+        </div>
+    </div>
+    </article>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="javascripts/config.js"></script>
+    <script>
+
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    const storage = firebase.storage();
+    const auth = firebase.auth();
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // User is signed in.
+            setUserName();
+            db.collection('brukere').doc(user.uid).get()
+            .then((doc) => {
+                const user = doc.data();
+                const challenge = user.challenge; // Replace 'challenge' with the name of the field that contains the challenge
+                document.getElementById('challengeText').textContent = challenge;
+            });
+        } else {
+            // No user is signed in.
+            console.log('User is not logged in');
+        }
+    });
+    // Replace 'currentUserId' with the ID of the current user
+    
+
+    function setUserName() {
+        const user = firebase.auth().currentUser;
+        if (user) {
+            const userID = user.uid;
+            db.collection('brukere').doc(userID).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        const firstName = data.fornavn;
+                        const lastName = data.etternavn;
+                        document.getElementById('brukernavn').textContent = `${firstName} ${lastName}`;
+                    } else {
+                        console.log("No such document!");
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error getting document:", error);
+                });
+        }
+    }
+
+    function gjettChallenge() {
+        // Clear existing dropdown
+        const existingDropdown = document.getElementById('userDropdown');
+        if (existingDropdown) existingDropdown.remove();
+
+        // Query Firestore for users where tilAnita is true
+        db.collection('brukere').where('tilAnita', '==', true).get()
+            .then((querySnapshot) => {
+                // Create dropdown
+                const dropdown = document.createElement('select');
+                dropdown.id = 'userDropdown';
+                document.getElementById('challengeContainer').appendChild(dropdown);
+
+                // Add default option
+                const defaultOption = document.createElement('option');
+                defaultOption.textContent = '';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                dropdown.appendChild(defaultOption);
+
+                // Populate dropdown with users
+                querySnapshot.forEach((doc) => {
+                    const user = doc.data();
+                    const option = document.createElement('option');
+                    option.value = doc.id; // Save user ID for later use
+                    option.textContent = `${user.fornavn} ${user.etternavn}`;
+                    dropdown.appendChild(option);
+                });
+
+                // Add event listener to dropdown
+                dropdown.addEventListener('change', function() {
+                    // Clear existing input field and button
+                    const existingInput = document.getElementById('guessInput');
+                    const existingButton = document.getElementById('enterButton');
+                    if (existingInput) existingInput.remove();
+                    if (existingButton) existingButton.remove();
+
+                    // Create input field
+                    const input = document.createElement('input');
+                    input.id = 'guessInput';
+                    document.getElementById('challengeContainer').appendChild(input);
+
+                    // Create enter button
+                    const button = document.createElement('button');
+                    button.id = 'enterButton';
+                    button.textContent = 'Enter';
+                    document.getElementById('challengeContainer').appendChild(button);
+
+                    // Function to save input to challengeGuesses array of selected user
+                    const saveGuess = function() {
+                        const selectedUserId = dropdown.value;
+                        const guess = input.value;
+                        db.collection('brukere').doc(selectedUserId).update({
+                            challengeGuesses: firebase.firestore.FieldValue.arrayUnion(guess)
+                        });
+
+                        // Remove dropdown, input field, and button
+                        dropdown.remove();
+                        input.remove();
+                        button.remove();
+                    };
+
+                    // Add event listener to input field
+                    input.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                            saveGuess();
+                        }
+                    });
+
+                    // Add event listener to button
+                    button.addEventListener('click', saveGuess);
+                });
+            });
+    }
+
+    function loggut() {
+    firebase.auth().signOut().then(() => {
+        console.log('User signed out successfully');
+        window.location.href = "../";
+    }).catch((error) => {
+        console.error("Error signing out: ", error);
+    });
+}
+
+</script>
+</body>

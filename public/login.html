@@ -102,28 +102,44 @@
     };
 
         
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const brukernavn = document.getElementById('login-brukernavn').value;
-            const password = document.getElementById('login-password').value;
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const brukernavn = document.getElementById('login-brukernavn').value;
+    const password = document.getElementById('login-password').value;
 
-            firebase.auth().signInWithEmailAndPassword(brukernavn, password)
-            .then((userCredential) => {
-                var user = userCredential.user;
-                window.location.href = "../brukerside"; 
-            })
-            .catch((error) => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-
-                if (errorCode === 'auth/wrong-password') {
-                    errorMessage = 'Feil passord.';
-                } else if (errorCode === 'auth/user-not-found') {
-                    errorMessage = 'Ingen bruker funnet med denne eposten.';
+    firebase.auth().signInWithEmailAndPassword(brukernavn, password)
+    .then((userCredential) => {
+        var user = userCredential.user;
+        // Get the user document from Firestore
+        db.collection('brukere').doc(user.uid).get()
+        .then((doc) => {
+            if (doc.exists) {
+                // Check if tilAnita is true
+                if (doc.data().tilAnita) {
+                    // Redirect to a different page
+                    window.location.href = "nasjonaldagen.html";
+                } else {
+                    window.location.href = "brukerside.html";
                 }
-                document.getElementById('error-message').innerHTML = errorMessage;
-                });
+            } else {
+                console.log("No such document!");
+            }
+        })
+        .catch((error) => {
+            console.log("Error getting document:", error);
         });
+    })
+    .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+            errorMessage = 'Feil passord.';
+        } else if (errorCode === 'auth/user-not-found') {
+            errorMessage = 'Ingen bruker funnet med denne eposten.';
+        }
+        document.getElementById('error-message').innerHTML = errorMessage;
+    });
+});
 
         document.getElementById('register-form').addEventListener('submit', function(event) {
             event.preventDefault();
