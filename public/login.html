@@ -110,24 +110,8 @@
     firebase.auth().signInWithEmailAndPassword(brukernavn, password)
     .then((userCredential) => {
         var user = userCredential.user;
+        window.location.href = "brukerside.html";
         // Get the user document from Firestore
-        db.collection('brukere').doc(user.uid).get()
-        .then((doc) => {
-            if (doc.exists) {
-                // Check if tilAnita is true
-                if (doc.data().tilAnita) {
-                    // Redirect to a different page
-                    window.location.href = "nasjonaldagen.html";
-                } else {
-                    window.location.href = "brukerside.html";
-                }
-            } else {
-                console.log("No such document!");
-            }
-        })
-        .catch((error) => {
-            console.log("Error getting document:", error);
-        });
     })
     .catch((error) => {
         var errorCode = error.code;
