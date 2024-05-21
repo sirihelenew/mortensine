@@ -93,14 +93,16 @@ db.collection('Innlogginger').orderBy('tid', 'desc').limit(1).onSnapshot((snapsh
 
                 }
                 else {
-                    if (userData.eksamen===true){
-                        db.collection('brukere').doc(loginData.userID).update({eksamen: false});
-                        let date = new Date();
-                        let hours = String(date.getHours()).padStart(2, '0');
-                        let minutes = String(date.getMinutes()).padStart(2, '0');
-                        let finished = `${hours},${minutes}`;
-                        db.collection('examUsers').doc(userData.userID).update({ finished: finished });
-                    }
+                    db.collection('examUsers').doc(loginData.userID).get().then(doc => {
+                        if (doc.exists) {
+                            db.collection('brukere').doc(loginData.userID).update({eksamen: false});
+                            let date = new Date();
+                            let hours = String(date.getHours()).padStart(2, '0');
+                            let minutes = String(date.getMinutes()).padStart(2, '0');
+                            let finished = `${hours}:${minutes}`;
+                            db.collection('examUsers').doc(loginData.userID).update({ finished: finished });
+                        }
+                    });
                     const data = {
                         type: 'goodbye',
                         userID: loginData.userID,
