@@ -25,7 +25,7 @@ const skull = function (el) {
   skull.prototype._renderskull = function () {
     this.skullInterval = setInterval(() => {
       const skullEl = document.createElement('img');
-     skullEl.src = 'https://tmpfiles.nohat.cc/1574822379Skull_and_Crossbones.svg';
+     skullEl.src = 'https://upload.wikimedia.org/wikipedia/commons/0/06/Skull_and_Crossbones.svg';
       const skullSize = Math.floor(Math.random() * 3) + 50 + 'px';
       const skullLeft = Math.floor(Math.random() * this.el.offsetWidth) + 'px';
       const skullTop = Math.floor(Math.random() * this.el.offsetHeight) + 'px';
