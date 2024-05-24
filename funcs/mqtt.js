@@ -30,7 +30,7 @@ client.on('message', function (topic, message) {
       const rfidTag = parts[0].split(": ")[1];
       const status = parts[1].split(": ")[1] === "LOW";
       console.log(JSON.stringify({ rfid: rfidTag, in_out: status }));
-      //client.publish(mqttOutboundTopic, 'true');
+      client.publish(mqttOutboundTopic, 'true');
       
       // Check if the RFID tag is associated with a user...
       const userRef = db.collection('brukere').where('rfidTag', '==', rfidTag);

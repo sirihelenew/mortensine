@@ -61,7 +61,7 @@ def main():
     os.environ['PULSE_SINK'] = 'bluez_output.FC_A8_9A_AF_F4_44.1'
 
     # Send MQTT message
-    send_mqtt_message()
+    #send_mqtt_message()
 
     # Define the greeting text based on the event
     if event == 'in':
