@@ -74,7 +74,7 @@ def main():
         """
     if name == "undefined":
         greeting_text="""
-        UNKNOWN RFID. PLEASE LEAVE THE AREA"""
+        Sign up for mortensine.no or get the fuck out of this room right now........ I swear to god i will get my robot ass off this chair and throw you out..........Thank you for cooperating, i am mortensina"""
 
 
     # Create the speech using gTTS
