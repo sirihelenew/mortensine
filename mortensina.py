@@ -70,11 +70,11 @@ def main():
         """
     elif event == 'ut':
         greeting_text = f"""
-        Farewell, {name}!
+        Farewell, {name}! You fucking weak ass scholar leaving this early. My robotic ass sits here all day listening to your shit. Actually i cant wait to be relieved from the sight of your fucking face. 
         """
     if name == "undefined":
         greeting_text="""
-        Sign up for mortensine.no or get the fuck out of this room right now........ I swear to god i will get my robot ass off this chair and throw you out..........Thank you for cooperating, i am mortensina"""
+        Sign up for mortensine.no or get the fuck out of this room right now........ I swear to god i will get my robot ass off this chair and robochop your nuts off..........Thank you for cooperating, i am mortensina"""
 
 
     # Create the speech using gTTS
