@@ -30,8 +30,8 @@ client.on('message', function (topic, message) {
       const rfidTag = parts[0].split(": ")[1];
       const status = parts[1].split(": ")[1] === "LOW";
       console.log(JSON.stringify({ rfid: rfidTag, in_out: status }));
-      client.publish(mqttOutboundTopic, 'true');
-  
+      //client.publish(mqttOutboundTopic, 'true');
+      
       // Check if the RFID tag is associated with a user...
       const userRef = db.collection('brukere').where('rfidTag', '==', rfidTag);
       userRef.get()
@@ -42,6 +42,7 @@ client.on('message', function (topic, message) {
               const tid = admin.firestore.Timestamp.now();
               const metode = 'RFID';
               const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
+              const mortensinaActivate = spawn('./venv/bin/python', ['mortensina.py', navn, status ? 'ut' : 'inn']);
               let output = '';
               sound.stdout.on('data', (data) => {
                 output += data;
@@ -75,6 +76,7 @@ client.on('message', function (topic, message) {
           } else {
               //res.json({ status: 'error', error: 'User not found' });
               logger.info('User not found');
+              const mortensinaActivate = spawn('./venv/bin/python', ['mortensina.py', "undefined", "in"]);
               io.emit('rfid', {rfid: rfidTag});
               const python = spawn('./venv/bin/python', ['play_sound.py', NaN]);
           }
