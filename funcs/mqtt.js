@@ -42,7 +42,7 @@ client.on('message', function (topic, message) {
               const tid = admin.firestore.Timestamp.now();
               const metode = 'RFID';
               const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
-              const mortensinaActivate = spawn('./venv/bin/python', ['mortensina.py', navn, status ? 'ut' : 'inn']);
+              const mortensinaActivate = spawn('./venv/bin/python', ['mortensina.py', navn, status ? 'in' : 'ut']);
               let output = '';
               sound.stdout.on('data', (data) => {
                 output += data;
