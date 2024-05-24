@@ -41,7 +41,6 @@ client.on('message', function (topic, message) {
               const navn=querySnapshot.docs[0].data().fornavn+' '+querySnapshot.docs[0].data().etternavn;
               const tid = admin.firestore.Timestamp.now();
               const metode = 'RFID';
-              const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
               const mortensinaActivate = spawn('./venv/bin/python', ['mortensina.py', navn, status ? 'in' : 'ut']);
 
               mortensinaActivate.on('close', (code) => {
