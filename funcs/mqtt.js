@@ -104,8 +104,7 @@ client.on('error', function (error) {
             }
         } else {
             logger.info('Attempting to reconnect client...');
-            client.end();
-            client = mqtt.connect(mqttBroker);
+            client.reconnect();
         }
     }, 5000); // Try to reconnect every 5 seconds
 });
