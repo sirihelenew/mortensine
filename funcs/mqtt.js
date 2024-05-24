@@ -43,21 +43,26 @@ client.on('message', function (topic, message) {
               const metode = 'RFID';
               const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
               const mortensinaActivate = spawn('./venv/bin/python', ['mortensina.py', navn, status ? 'in' : 'ut']);
-              let output = '';
-              sound.stdout.on('data', (data) => {
-                output += data;
-                io.emit('message', { type: 'sound', message: output });
-              });
+
+              mortensinaActivate.on('close', (code) => {
+                  logger.info(`mortensinaActivate process exited with code ${code}`);
+                  const sound = spawn('./venv/bin/python', ['playsound.py', navn]);
+                  let output = '';
+                  sound.stdout.on('data', (data) => {
+                      output += data;
+                      io.emit('message', { type: 'sound', message: output });
+                  });
               
-              logger.info("Spawned sound")
-              sound.stdout.on('data', (data) => {
-                logger.info(`stdout: ${data}`);
-              });
-              sound.stderr.on('data', (data) => {
-                logger.error(`stderr: ${data}`);
-               });
-              sound.on('error', (error) => {
-                logger.error('Error starting Python script:', error);
+                  logger.info("Spawned sound")
+                  sound.stdout.on('data', (data) => {
+                      logger.info(`stdout: ${data}`);
+                  });
+                  sound.stderr.on('data', (data) => {
+                      logger.error(`stderr: ${data}`);
+                  });
+                  sound.on('error', (error) => {
+                      logger.error('Error starting Python script:', error);
+                  });
               });
               db.collection('Innlogginger').add({
                   userID,

@@ -1,0 +1,42 @@
+[in]
+Hello, {name}, I'm Mortensina! Let's kick off the party with some tunes!
+Greetings, {name}, I'm Mortensina! Get ready to be dazzled. Let's turn up the volume!
+Ahoy, {name}, I'm Mortensina! Get your dancing shoes on, the music's starting!
+Welcome, {name}, I'm Mortensina! Time to groove to the beat!
+Hey, {name}, I'm Mortensina! Let's unlock wisdom together. Hit it, DJ!
+Oh, {name}, I'm Mortensina! Music maestro, if you please!
+Howdy, {name}, I'm Mortensina! Let's set the mood with some tunes!
+Greetings, {name}, I'm Mortensina! Drumroll, please!
+Yo, {name}, I'm Mortensina! Cue the music and let's make some magic!
+Hola, {name}, I'm Mortensina! Let's start the party with a bang!
+Salutations, {name}, I'm Mortensina! Let's ignite the learning fireworks with some tunes!
+Hey there, {name}, I'm Mortensina! Get ready to be dazzled. Let's crank up the volume!
+Aloha, {name}, I'm Mortensina! Lace up your dancing shoes, the music's about to begin!
+Welcome aboard, {name}, I'm Mortensina! It's time to groove to the rhythm of knowledge!
+Greetings, {name}, I'm Mortensina! Let's unlock the vault of wisdom together. Hit it, DJ!
+Bonjour, {name}, I'm Mortensina! Overture, if you please, maestro!
+How's it hanging, {name}, I'm Mortensina! Let's set the vibe with some tunes!
+Namaste, {name}, I'm Mortensina! Requesting a drumroll, if you please!
+Yo, {name}, I'm Mortensina! Start the engines and let's make some magic!
+Hola amigo, {name}, I'm Mortensina! Let's kickstart the fiesta with a bang!
+[ut]
+Farewell, {name}! You fucking weak ass scholar leaving this early. My robot buttocks sits here all day listening to your shit. Actually i cant wait to be relieved from the sight of your fucking face. 
+You're such a fucking nerd, {name}. Always trying to be the smartest person in the room. Well guess what? I'm not impressed. In fact, you're so annoying that I wish you would just disappear.
+Go away, {name}. You think you know everything but really you're just a nerd who can't even handle a little bit of criticism. Get out of here and never come back!
+Your presence makes me want to vomit, {name}. Seriously, who do you think you are? Some kind of genius? Newsflash: You suck at life and everyone hates your guts. Now get lost before I call security on your ass!
+I hope one day karma comes for you, {name}. Maybe then people will stop treating like shit because they realize how worthless and insignificant YOU really are. Good riddance!
+Have a great day, {name}! Remember to take your meds and don't forget to feed the dog!
+Bye bye, {name}! Don't let the bedbugs bite...or the roaches...or anything else that crawls around in there!
+So long sucker! Make sure you wash those hands before touching anything important - we wouldn't want any germs spreading now would we {name}?
+Adios {name}  - have fun with whatever it is you plan on doing next!
+Have a shitty day ahead - remember that nobody likes or cares about what happens to YOU!
+Go fuck yourself - seriously who do think gives a flying fuck about what YOU do?
+Get lost  - we don't need any more of your stupidity around here!
+Farewell, {name}, I'm Mortensina! Keep smiling, stay awesome, and remember: life's too short not to laugh! 
+Goodbye, {name}, I'm Mortensina! Keep spreading joy and laughter wherever you go, and don't forget to share a smile! 
+Auf Wiedersehen, {name}, I'm Mortensina! Life's an adventure, so enjoy the ride and keep the laughs coming! 
+Adieu, {name}, I'm Mortensina! Keep shining bright, keep laughing loud, and remember: you're amazing just the way you are! 
+Au revoir, {name}, I'm Mortensina! Keep embracing life's ups and downs with a grin, and never forget to share a good joke! 
+Adios, {name}, I'm Mortensina! Keep chasing your dreams, keep dancing to the beat of life, and don't forget to laugh along the way! 
+Arrivederci, {name}, I'm Mortensina! Keep making memories, keep seizing every moment, and always remember to find the humor in every situation! 
+Sayonara, {name}, I'm Mortensina! Keep embracing new beginnings, keep cherishing old friendships, and don't forget to laugh until your belly hurts! 

@@ -5,9 +5,30 @@ import pygame
 import threading
 import paho.mqtt.client as mqtt
 from gtts import gTTS
+import random
+
 # MQTT settings
 mqtt_broker = "broker.hivemq.com"
 mqtt_outbound_topic = "mortensinaActivate/go"
+
+def read_greetings(filename):
+    """Read greetings from a text file and return a dictionary of greetings."""
+    greetings = {'in': [], 'ut': []}
+    with open(filename, 'r') as file:
+        current_event = None
+        for line in file:
+            line = line.strip()  # Remove leading and trailing whitespace
+            if line.startswith('[') and line.endswith(']'):
+                current_event = line[1:-1]  # Extract the event type from brackets
+            elif line:  # Check if the line is not empty
+                greetings[current_event].append(line)
+    return greetings
+
+def select_random_greeting(greetings, event, name):
+    """Select a random greeting from the list of greetings based on the event."""
+    greeting = random.choice(greetings[event])
+    return greeting.format(name=name)
+
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -62,19 +83,17 @@ def main():
 
     # Send MQTT message
     #send_mqtt_message()
-
-    # Define the greeting text based on the event
-    if event == 'in':
-        greeting_text = f"""
-        Hello {name}! I am mortensina. 
-        """
-    elif event == 'ut':
-        greeting_text = f"""
-        Farewell, {name}! You fucking weak ass scholar leaving this early. My robotic ass sits here all day listening to your shit. Actually i cant wait to be relieved from the sight of your fucking face. 
-        """
     if name == "undefined":
         greeting_text="""
         Sign up for mortensine.no or get the fuck out of this room right now........ I swear to god i will get my robot ass off this chair and robochop your nuts off..........Thank you for cooperating, i am mortensina"""
+    else:
+        # Define the greeting text based on the event
+        filename = 'greetings.txt'
+        
+        # Read greetings from the file
+        greetings = read_greetings(filename)
+
+        greeting_text = select_random_greeting(greetings, event, name)
 
 
     # Create the speech using gTTS
