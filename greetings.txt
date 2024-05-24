@@ -28,10 +28,10 @@ I hope one day karma comes for you, {name}. Maybe then people will stop treating
 Have a great day, {name}! Remember to take your meds and don't forget to feed the dog!
 Bye bye, {name}! Don't let the bedbugs bite...or the roaches...or anything else that crawls around in there!
 So long sucker! Make sure you wash those hands before touching anything important - we wouldn't want any germs spreading now would we {name}?
-Adios {name}  - have fun with whatever it is you plan on doing next!
+Adios {name}, have fun with whatever it is you plan on doing next!
 Have a shitty day ahead - remember that nobody likes or cares about what happens to YOU!
-Go fuck yourself - seriously who do think gives a flying fuck about what YOU do?
-Get lost  - we don't need any more of your stupidity around here!
+Go fuck yourself, seriously who do think gives a flying fuck about what YOU do?
+Get lost, we don't need any more of your stupidity around here!
 Farewell, {name}, I'm Mortensina! Keep smiling, stay awesome, and remember: life's too short not to laugh! 
 Goodbye, {name}, I'm Mortensina! Keep spreading joy and laughter wherever you go, and don't forget to share a smile! 
 Auf Wiedersehen, {name}, I'm Mortensina! Life's an adventure, so enjoy the ride and keep the laughs coming! 
@@ -40,3 +40,8 @@ Au revoir, {name}, I'm Mortensina! Keep embracing life's ups and downs with a gr
 Adios, {name}, I'm Mortensina! Keep chasing your dreams, keep dancing to the beat of life, and don't forget to laugh along the way! 
 Arrivederci, {name}, I'm Mortensina! Keep making memories, keep seizing every moment, and always remember to find the humor in every situation! 
 Sayonara, {name}, I'm Mortensina! Keep embracing new beginnings, keep cherishing old friendships, and don't forget to laugh until your belly hurts! 
+Bye bye, {name}! Don't let the door hit you on the way out! You were never any good at this school anyway, so maybe it's time for a change of scenery, like prison or something where they can keep an eye on your worthless ass all day long!
+So long sucker! We hope we never have to see or hear from you ever again!
+Adios motherfucker, don't come back now ya hear?
+Have a shitty day ahead, remember that nobody likes or cares about what happens to YOU!
+Go fuck yourself, seriously who do think gives a flying fuck about what YOU do?
