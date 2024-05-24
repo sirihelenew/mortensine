@@ -22,6 +22,9 @@ def read_greetings(filename):
                 current_event = line[1:-1]  # Extract the event type from brackets
             elif line:  # Check if the line is not empty
                 greetings[current_event].append(line)
+        # Shuffle the list of greetings for each event type
+        random.shuffle(greetings['in'])
+        random.shuffle(greetings['ut'])
     return greetings
 
 def select_random_greeting(greetings, event, name):
