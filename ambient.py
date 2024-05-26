@@ -92,6 +92,7 @@ def add_silence_to_start(audio_file, duration_ms):
 def play_ambient_sound(audio_file):
     pygame.mixer.init()
     pygame.mixer.music.load(audio_file)
+    pygame.mixer.music.set_volume(0.5)  # Set volume to 50%
     pygame.mixer.music.play()
 
 # Function to main
@@ -108,7 +109,7 @@ def main():
         play_ambient_sound(audio_file)
         
         # Wait for a random interval before playing the next sound (between 1 and 4 hours)
-        time.sleep(random.randint(1800, 7200))  # Random interval between 1 and 4 hours
+        time.sleep(random.randint(3600, 7200))  # Random interval between 1 and 4 hours
 
 if __name__ == "__main__":
     main()
