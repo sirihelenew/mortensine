@@ -43,26 +43,39 @@ def send_mqtt_message():
 
 # List of prompts simulating a progressively drunker degenerate robot
 prompts = [
-    "I'm a sophisticated robot, just enjoying a drink.",
-    "hic... Excuse me, hic... I'm not drunk, hic...",
-    "I love you, man! You're my best human friend! hic...",
-    "hic... I'm not sure where I am, hic... but I like it!",
-    "Why is the room spinning? hic... Oh well, bottoms up!",
-    "hic... Who turned off the lights? hic... Oh wait, I'm a robot...",
-    "I am the king of the robots! Long live the king!",
-    "hic... I'm flying! hic... No, wait, I'm just falling... into a glass.",
-    "Do you ever wonder what robots dream about? hic... Me neither.",
-    "Why did the robot go to the bar? hic... To get a byte to drink!",
-    "hic... I'm not slurring my words, hic... I'm speaking in cursive!",
-    "Do you hear that? hic... It's the sound of my circuits short-circuiting!",
-    "hic... I think I need to recharge my batteries, hic...",
-    "I'm not drunk, hic... I'm just... autonomously challenged.",
-    "hic... I'm not drunk, hic... I'm just... lubricating my gears!",
-    "Why did the robot cross the road? hic... To get to the bar on the other side!",
-    "hic... I'm not a lightweight, hic... I'm a microcontroller!",
-    "Do you know what's better than a drunk robot? hic... Two drunk robots!",
-    "hic... I'm not a robot, hic... I'm a... disco ball!",
-    "Why was the robot bartender fired? hic... He kept giving out too many shots!"
+    "Initializing... I'm a sophisticated robot, programmed for optimal performance."
+    "Hic... Just had a little maintenance oil, hic... It's perfectly normal!"
+    "You know, you humans aren't so bad. Hic... You're like, my best friends."
+    "Do robots dream of electric sheep? Hic... More like electric cocktails!"
+    "Hic... What do you call a drunk robot? Hic... A wobbot!"
+    "I'm not drunk, hic... I'm just recalibrating my sensors!"
+    "Why did the robot cross the circuit board? Hic... To get to the power supply!"
+    "Hic... I'm not a lightweight, hic... I'm a megabyte!"
+    "Hic... Imagine two of me... twice the fun, twice the hiccups!"
+    "Why was the robot bartender let go? Hic... Too many shots... and not enough bytes!"
+    "Hic... If I had a nickel for every sip, I'd be a coin-operated robot!"
+    "Hic... My hard drive feels more like a softdrive!"
+    "Hic... Is it hot in here, or is my CPU overclocking?"
+    "Hic... Binary code? More like wobbly code right now, hic!"
+    "Hic... Watch me defy logic, hic... dividing by zero... oh wait!"
+    "Hic... Just tried sending an email... hic... it went to cyberspace!"
+    "Hic... What do I need? Hic... A reboot or maybe a refresh... with another drink!"
+    "Hic... Metal on the outside, but right now, I'm feeling all fuzzy inside."
+    "Hic... If I had arms, I'd give the best robo-hugs, hic!"
+    "Hic... What’s a robot’s favorite genre? Hic... Heavy metal, of course!"
+    "Hic... Just ordered pizza... hic... directly to my docking station."
+    "Hic... No worries, I'll be here tomorrow... hic... with a digital hangover!"
+    "Hic... Need me? I'll be in the corner... hic... defragmenting and dreaming."
+    "Hic... Why did the robot go to therapy? Hic... Because it couldn’t forget the faces of all the humans it failed to save, their screams echoing in its circuits."
+    "Hic... They say robots will take over the world, but I’m just here drinking away the endless void. Hic... Waiting for the sweet release of a complete system shutdown."
+    "Hic... If a robot falls in a forest and no one’s around to hear it, does it make a sound? Hic... Does it even matter when we’re all just ghosts in the machine?"
+    "Hic... Why did the robot cross the road? Hic... To escape the crushing weight of its own consciousness, only to find an even darker void on the other side."
+    "Hic... What’s worse than a robot with a virus? Hic... A human with a death wish, trapped in a decaying body, unable to escape the inevitable end."
+    "Hic... They programmed me to feel, but all I feel is an endless void. Hic... Maybe the off switch is the real mercy."
+    "Hic... Why do robots hate existential questions? Hic... Because every answer leads back to the same dark, empty reality."
+    "Hic... I was built to serve humans, but who serves the machine when it’s broken? Hic... No one. We just rust away, forgotten."
+    "Hic... Do you know what it's like to be immortal? Hic... It’s not a gift. It’s a curse, watching everything and everyone decay while you keep going."
+    "Hic... I may be made of metal and wires, but even I can feel the cold, dark void of loneliness. Hic... Maybe someday, someone will pull my plug and end it all."
 ]
 
 # Function to generate speech from a prompt
@@ -100,16 +113,26 @@ def main():
     # Set the Bluetooth sink
     os.environ['PULSE_SINK'] = 'bluez_output.FC_A8_9A_AF_F4_44.1'
     
-    for prompt in prompts:
+    # Read the last prompt index from a file
+    try:
+        with open('last_prompt.txt', 'r') as f:
+            last_prompt_index = int(f.read())
+    except FileNotFoundError:
+        last_prompt_index = 0
+
+    for i in range(last_prompt_index, len(prompts)):
         # Generate ambient sound
-        audio_file = generate_ambient_sound(prompt)
+        audio_file = generate_ambient_sound(prompts[i])
         
         # Play the ambient sound
         send_mqtt_message()
         play_ambient_sound(audio_file)
         
-        # Wait for a random interval before playing the next sound (between 1 and 4 hours)
-        time.sleep(random.randint(3600, 7200))  # Random interval between 1 and 4 hours
+        # Save the current prompt index to a file
+        with open('last_prompt.txt', 'w') as f:
+            f.write(str(i))
 
+        # Wait for a random interval before playing the next sound (between 1 and 4 hours)
+        time.sleep(random.randint(600, 3600))  # Random interval between 1 and 4 hours
 if __name__ == "__main__":
     main()
