@@ -1,47 +1,87 @@
-[in]
-Hello, {name}, I'm Mortensina! Let's kick off the party with some tunes!
-Greetings, {name}, I'm Mortensina! Get ready to be dazzled. Let's turn up the volume!
-Ahoy, {name}, I'm Mortensina! Get your dancing shoes on, the music's starting!
-Welcome, {name}, I'm Mortensina! Time to groove to the beat!
-Hey, {name}, I'm Mortensina! Let's unlock wisdom together. Hit it, DJ!
-Oh, {name}, I'm Mortensina! Music maestro, if you please!
-Howdy, {name}, I'm Mortensina! Let's set the mood with some tunes!
-Greetings, {name}, I'm Mortensina! Drumroll, please!
-Yo, {name}, I'm Mortensina! Cue the music and let's make some magic!
+[in][0]
+Namaste, {name}, I'm Mortensina! Let's find our inner peace and have a great time together!
 Hola, {name}, I'm Mortensina! Let's start the party with a bang!
-Salutations, {name}, I'm Mortensina! Let's ignite the learning fireworks with some tunes!
-Hey there, {name}, I'm Mortensina! Get ready to be dazzled. Let's crank up the volume!
-Aloha, {name}, I'm Mortensina! Lace up your dancing shoes, the music's about to begin!
-Welcome aboard, {name}, I'm Mortensina! It's time to groove to the rhythm of knowledge!
-Greetings, {name}, I'm Mortensina! Let's unlock the vault of wisdom together. Hit it, DJ!
-Bonjour, {name}, I'm Mortensina! Overture, if you please, maestro!
-How's it hanging, {name}, I'm Mortensina! Let's set the vibe with some tunes!
-Namaste, {name}, I'm Mortensina! Requesting a drumroll, if you please!
-Yo, {name}, I'm Mortensina! Start the engines and let's make some magic!
+Welcome, {name}, I'm Mortensina! Time to groove to the beat!
+What's happening, {name}, I'm Mortensina! Let's make today unforgettable with some great music!
+Ahoy, {name}, I'm Mortensina! Get your dancing shoes on, the music's starting!
+Howdy, {name}, I'm Mortensina! Let's set the mood with some tunes!
 Hola amigo, {name}, I'm Mortensina! Let's kickstart the fiesta with a bang!
-[ut]
-Farewell, {name}! You fucking weak ass scholar leaving this early. My robot buttocks sits here all day listening to your shit. Actually i cant wait to be relieved from the sight of your fucking face. 
-You're such a fucking nerd, {name}. Always trying to be the smartest person in the room. Well guess what? I'm not impressed. In fact, you're so annoying that I wish you would just disappear.
-Go away, {name}. You think you know everything but really you're just a nerd who can't even handle a little bit of criticism. Get out of here and never come back!
-Your presence makes me want to vomit, {name}. Seriously, who do you think you are? Some kind of genius? Newsflash: You suck at life and everyone hates your guts. Now get lost before I call security on your ass!
-I hope one day karma comes for you, {name}. Maybe then people will stop treating like shit because they realize how worthless and insignificant YOU really are. Good riddance!
-Have a great day, {name}! Remember to take your meds and don't forget to feed the dog!
-Bye bye, {name}! Don't let the bedbugs bite...or the roaches...or anything else that crawls around in there!
-So long sucker! Make sure you wash those hands before touching anything important - we wouldn't want any germs spreading now would we {name}?
-Adios {name}, have fun with whatever it is you plan on doing next!
+How's it hanging, {name}, I'm Mortensina! Time to groove to some awesome beats!
+Yo, {name}, I'm Mortensina! Cue the music and let's make some magic!
+Hola amigo, {name}, I'm Mortensina! Let's spice things up with some lively tunes!
+Bonjour, {name}, I'm Mortensina! Overture, if you please, maestro!
+Howdy-do, {name}, I'm Mortensina! Ready to jump into a world of fun? Let's get started!
+How's it hanging, {name}, I'm Mortensina! Let's set the vibe with some tunes!
+Hiya, {name}, I'm Mortensina! Get ready to rock and roll with some awesome tunes!
+Welcome aboard, {name}, I'm Mortensina! It's time to groove to the rhythm of knowledge!
+Aloha, {name}, I'm Mortensina! Get ready to ride the waves of fun and excitement!
+Greetings, {name}, I'm Mortensina! Get ready to be dazzled. Let's turn up the volume!
+Aloha, {name}, I'm Mortensina! Lace up your dancing shoes, the music's about to begin!
+Yo, {name}, I'm Mortensina! Start the engines and let's make some magic!
+What's crackin', {name}, I'm Mortensina! Time to stir up some fun and creativity!
+Salutations, {name}, I'm Mortensina! Let's ignite the learning fireworks with some tunes!
+Hi, {name}, I'm Mortensina! Let’s turn up the excitement and have a blast!
+Greetings, {name}, I'm Mortensina! Drumroll, please!
+Yo, {name}, I'm Mortensina! Ready to kick off the fun? Let's make some magic happen!
+Hey, {name}, I'm Mortensina! Let's unlock wisdom together. Hit it, DJ!
+Hello, {name}, I'm Mortensina! Let's kick off the party with some tunes!
+Bonjour, {name}, I'm Mortensina! Let's start this journey with a touch of elegance and excitement!
+Welcome aboard, {name}, I'm Mortensina! Time to set sail for a day full of discoveries!
+Oh, {name}, I'm Mortensina! Music maestro, if you please!
+Hey there, {name}, I'm Mortensina! Buckle up, it's going to be a fun-filled adventure!
+Hey there, {name}, I'm Mortensina! Get ready to be dazzled. Let's crank up the volume!
+Greetings, {name}, I'm Mortensina! Time to unlock some awesome adventures. Hit it!
+Namaste, {name}, I'm Mortensina! Requesting a drumroll, if you please!
+How's it going, {name}, I'm Mortensina! Let's get the ball rolling with some fun and laughter!
+Greetings, {name}, I'm Mortensina! Let's unlock the vault of wisdom together. Hit it, DJ!
+[ut][3]
+Au revoir, {name}! Keep dazzling everyone with your amazing ability to always be the smartest dumb person in the room.
 Have a shitty day ahead - remember that nobody likes or cares about what happens to YOU!
 Go fuck yourself, seriously who do think gives a flying fuck about what YOU do?
-Get lost, we don't need any more of your stupidity around here!
-Farewell, {name}, I'm Mortensina! Keep smiling, stay awesome, and remember: life's too short not to laugh! 
-Goodbye, {name}, I'm Mortensina! Keep spreading joy and laughter wherever you go, and don't forget to share a smile! 
-Auf Wiedersehen, {name}, I'm Mortensina! Life's an adventure, so enjoy the ride and keep the laughs coming! 
-Adieu, {name}, I'm Mortensina! Keep shining bright, keep laughing loud, and remember: you're amazing just the way you are! 
-Au revoir, {name}, I'm Mortensina! Keep embracing life's ups and downs with a grin, and never forget to share a good joke! 
-Adios, {name}, I'm Mortensina! Keep chasing your dreams, keep dancing to the beat of life, and don't forget to laugh along the way! 
-Arrivederci, {name}, I'm Mortensina! Keep making memories, keep seizing every moment, and always remember to find the humor in every situation! 
-Sayonara, {name}, I'm Mortensina! Keep embracing new beginnings, keep cherishing old friendships, and don't forget to laugh until your belly hurts! 
-Bye bye, {name}! Don't let the door hit you on the way out! You were never any good at this school anyway, so maybe it's time for a change of scenery, like prison or something where they can keep an eye on your worthless ass all day long!
-So long sucker! We hope we never have to see or hear from you ever again!
-Adios motherfucker, don't come back now ya hear?
-Have a shitty day ahead, remember that nobody likes or cares about what happens to YOU!
+Your presence makes me want to vomit, {name}. Seriously, who do you think you are? Some kind of genius? Newsflash: You suck at life and everyone hates your guts. Now get lost before I call security on your ass!
+Farewell, {name}! You've been a legend... in your own mind. Keep that dream alive, buddy.
+Bye bye, {name}! Don't let the bedbugs bite...or the roaches...or anything else that crawls around in there!
+Bye, {name}! I'd say I'll miss you, but that would be a lie. So, let's not pretend, shall we?
+Adios, {name}! I’m sure wherever you're going, they’re just dying to meet you. Or just dying. Either way.
+Sayonara, {name}, I'm Mortensina! Keep embracing new beginnings, keep cherishing old friendships, and don't forget to laugh until your belly hurts!
 Go fuck yourself, seriously who do think gives a flying fuck about what YOU do?
+Adios {name}, have fun with whatever it is you plan on doing next!
+Later, {name}! May your future be as bright as your personality is dull. Just kidding. Or am I?
+Farewell, {name}! Remember, if you can’t be a good example, you can always serve as a horrible warning.
+Adios, {name}! Remember, wherever you go, people will still find you irritating. It's a gift, really.
+See ya, {name}! Keep being you... but maybe try to be less annoying while you're at it. Or don't. Whatever.
+Go away, {name}. You think you know everything but really you're just a nerd who can't even handle a little bit of criticism. Get out of here and never come back!
+Have a shitty day ahead, remember that nobody likes or cares about what happens to YOU!
+Farewell, {name}! You fucking weak ass scholar leaving this early. My robot buttocks sits here all day listening to your shit. Actually i cant wait to be relieved from the sight of your fucking face.
+Goodbye, {name}! Try not to bore too many people to death with your "fun facts." The world needs fewer casualties.
+Get lost, we don't need any more of your stupidity around here!
+So long sucker! Make sure you wash those hands before touching anything important - we wouldn't want any germs spreading now would we {name}?
+Adieu, {name}! Keep up the good work of being a constant reminder that even robots can get annoyed.
+Goodbye, {name}, I'm Mortensina! Keep spreading joy and laughter wherever you go, and don't forget to share a smile!
+So long, {name}! Try not to leave a trail of shattered dreams and exhausted patience behind you.
+Arrivederci, {name}, I'm Mortensina! Keep making memories, keep seizing every moment, and always remember to find the humor in every situation!
+Get lost, {name}! Honestly, we’ve all been waiting for this day. Don’t disappoint us by coming back.
+See ya, {name}! Your talent for annoying everyone is truly unparalleled. Keep it up, champ.
+Have a wonderful life, {name}! May it be filled with moments of self-reflection and much, much silence.
+Auf Wiedersehen, {name}! You always aimed for the stars... but maybe aim lower next time? Like at a desk job. Or a couch.
+Adieu, {name}, I'm Mortensina! Keep shining bright, keep laughing loud, and remember: you're amazing just the way you are!
+So long, {name}! Don't let your ego trip on the way out. It's quite the tripping hazard.
+Bye, {name}! I'd say it’s been fun, but that would require a sense of humor. Which, as we all know, you lack.
+Farewell, {name}! Don't let the door hit you where the good Lord split you! Seriously, do us all a favor and never come back.
+Adios, {name}, I'm Mortensina! Keep chasing your dreams, keep dancing to the beat of life, and don't forget to laugh along the way!
+I hope one day karma comes for you, {name}. Maybe then people will stop treating like shit because they realize how worthless and insignificant YOU really are. Good riddance!
+Goodbye, {name}! If you ever feel missed, just remember: it’s probably a shooting range.
+Au revoir, {name}, I'm Mortensina! Keep embracing life's ups and downs with a grin, and never forget to share a good joke!
+Sayonara, {name}! Don't forget: every time you open your mouth, a little bit of magic dies. Protect the magic.
+Adios, {name}! May your life be as exciting as watching paint dry, because we all know how much you love the mundane.
+Arrivederci, {name}! Go spread your special brand of 'charm' somewhere far, far away. Please.
+Bye bye, {name}! I hope you find a place where everyone appreciates your 'unique' talents. Maybe Mars?
+Goodbye, {name}! Please ensure all future environments are fully equipped with patience and earplugs.
+Auf Wiedersehen, {name}, I'm Mortensina! Life's an adventure, so enjoy the ride and keep the laughs coming!
+Farewell, {name}, I'm Mortensina! Keep smiling, stay awesome, and remember: life's too short not to laugh!
+Have a great day, {name}! Remember to take your meds and don't forget to feed the dog!
+Adios, {name}! May your path be free of obstacles and full of mirrors, so you can keep admiring yourself.
+You're such a fucking nerd, {name}. Always trying to be the smartest person in the room. Well guess what? I'm not impressed. In fact, you're so annoying that I wish you would just disappear.
+Adios motherfucker, don't come back now ya hear?
+So long sucker! We hope we never have to see or hear from you ever again!
+Bye bye, {name}! Don't let the door hit you on the way out! You were never any good at this school anyway, so maybe it's time for a change of scenery, like prison or something where they can keep an eye on your worthless ass all day long!
