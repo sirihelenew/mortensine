@@ -10,5 +10,5 @@ logs
 previousLeaderboard.json
 greetings.txt
 ambient_sound
-last_prompt
-ambient_sound
+last_prompt.txt
+ambient_sound.mp3
