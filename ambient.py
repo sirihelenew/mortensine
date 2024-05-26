@@ -112,7 +112,7 @@ def play_ambient_sound(audio_file):
 # Function to main
 def main():
     # Set the Bluetooth sink
-    os.environ['PULSE_SINK'] = 'bluez_output.FC_A8_9A_AF_F4_44.1'
+    os.environ['PULSE_SINK'] = 'bluez_output.28_11_A5_15_75_2F.1'
     
     # Read the last prompt index from a file
     try:
