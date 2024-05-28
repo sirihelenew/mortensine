@@ -4,7 +4,6 @@ const logger = require('./logger');
 const {spawn} = require('child_process');
 const admin = require('firebase-admin');
 const io=require('../bin/socket').getIO();
-var { exec } = require('child_process');
 
 
 
@@ -43,7 +42,6 @@ client.on('message', function (topic, message) {
               const tid = admin.firestore.Timestamp.now();
               const metode = 'RFID';
               const mortensinaActivate = spawn('./venv/bin/python', ['mortensina.py', navn, status ? 'in' : 'ut']);
-              exec("vlc --fullscreen --play-and-exit order.mp4");
 
               mortensinaActivate.on('close', (code) => {
                   logger.info(`mortensinaActivate process exited with code ${code}`);
